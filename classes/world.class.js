@@ -26,12 +26,24 @@ draw() {
 
     this.addObjectsToMap(this.level.backgroundObjects);
     this.addToMap(this.character);
+    this.checkEndbossActivation();
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.level.clouds);
 
     this.ctx.translate(-this.camera_x, 0);
     
     requestAnimationFrame(() => this.draw());
+}
+
+checkEndbossActivation() {
+    this.level.enemies.forEach(enemy => {
+        if (enemy instanceof Endboss && !enemy.isActivated) {
+            let endbossOnScreen = enemy.x < (-this.camera_x + 720);
+            if (endbossOnScreen) {
+                enemy.activate();
+            }
+        }
+    });
 }
 
 addObjectsToMap (objects){
