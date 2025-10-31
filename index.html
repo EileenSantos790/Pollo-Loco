@@ -4,12 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&family=Stardos+Stencil:wght@400;700&display=swap');
+    </style>
     <link rel="stylesheet" href="./css/style.css">
+    <link type="image/png" sizes="32x32" rel="icon" href="components/img_pollo_loco/img/icons8-sombrero-32.png">
 
     <!-- Basis-Klassen -->
     <script src="./classes/movableObject.class.js" defer></script>
     <script src="./classes/keyboard.class.js" defer></script>
-    
+
     <!-- Alle Objekt-Klassen -->
     <script src="./classes/character.class.js" defer></script>
     <script src="./classes/chicken.class.js" defer></script>
@@ -18,16 +22,16 @@
     <script src="./classes/cloud.class.js" defer></script>
     <script src="./classes/backgroundObject.class.js" defer></script>
     <script src="./classes/collectableObject.class.js" defer></script>
-    
+
     <!-- Level-Klassen -->
     <script src="./classes/level.class.js" defer></script>
 
     <!-- Level-Definitionen (nach level1!) -->
     <script src="./levels/level1.js" defer></script>
-    
+
     <!-- World-Klasse (nach level1!) -->
     <script src="./classes/world.class.js" defer></script>
-    
+
     <!-- Spiel-Logik -->
     <script src="./js/main.js" defer></script>
     <script src="./js/game.js" defer></script>
@@ -36,7 +40,7 @@
 
 </head>
 
-<body onload="init()">
+<body class="stardos-stencil-regular" onload="init()">
 
     <section>
         <h1 translate="no">El Pollo Loco</h1>
