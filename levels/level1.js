@@ -15,7 +15,10 @@ const level1 = new Level(
     ],
 
     [
-        new Cloud(),
+        new Cloud('components/img_pollo_loco/img/5_background/layers/4_clouds/2.png', 0),
+        new Cloud('components/img_pollo_loco/img/5_background/layers/4_clouds/1.png', 719),
+        new Cloud('components/img_pollo_loco/img/5_background/layers/4_clouds/2.png', 719*2),
+        new Cloud('components/img_pollo_loco/img/5_background/layers/4_clouds/1.png', 719*3),
     ],
 
     [
@@ -42,4 +45,3 @@ const level1 = new Level(
     ]
 
 );
-
