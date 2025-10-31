@@ -1,7 +1,7 @@
 class CollectableObject extends MoveableObject {
     
-    width = 60;
-    height = 60;
+    width = 80;
+    height = 80;
 
     IMAGES_COINS = [
         'components/img_pollo_loco/img/8_coin/coin_1.png',
@@ -20,13 +20,12 @@ class CollectableObject extends MoveableObject {
         if (type === 'coin') {
             this.loadImage(this.IMAGES_COINS[0]);
             this.loadImages(this.IMAGES_COINS);
-            this.width = 50;
-            this.height = 50;
+            
         } else if (type === 'bottle') {
             this.loadImage(this.IMAGES_BOTTLES[0]);
             this.loadImages(this.IMAGES_BOTTLES);
-            this.width = 80;
-            this.height = 80;
+            this.width = 70;
+            this.height = 70;
         }
         
         this.setRandomPosition();
