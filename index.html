@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/style.css">
+
+    <!-- Basis-Klassen -->
+    <script src="./classes/movableObject.class.js" defer></script>
+    <script src="./classes/keyboard.class.js" defer></script>
+    
+    <!-- Alle Objekt-Klassen -->
+    <script src="./classes/character.class.js" defer></script>
+    <script src="./classes/chicken.class.js" defer></script>
+    <script src="./classes/endboss.class.js" defer></script>
+    <script src="./classes/cloud.class.js" defer></script>
+    <script src="./classes/backgroundObject.class.js" defer></script>
+    
+    <!-- Level-Klassen -->
+    <script src="./classes/level.class.js" defer></script>
+
+    <!-- Level-Definitionen (nach level1!) -->
+    <script src="./levels/level1.js" defer></script>
+    
+    <!-- World-Klasse (nach level1!) -->
+    <script src="./classes/world.class.js" defer></script>
+    
+    <!-- Spiel-Logik -->
+    <script src="./js/main.js" defer></script>
+    <script src="./js/game.js" defer></script>
+
+    <title>El Polo Loco</title>
+
+</head>
+
+<body onload="init()">
+
+    <section>
+        <h1 translate="no">El Pollo Loco</h1>
+        <div>
+            <div>
+                <h2>Tasten</h2>
+                <h3>Laufe Rechts</h3>
+                <h2>Rechts</h2>
+                <h3>Laufe Links</h3>
+                <h2>Links</h2>
+                <h3>Springen</h3>
+                <h2>Leertaste</h2>
+                <h3>Werfen</h3>
+                <h2>F</h2>
+            </div>
+            <canvas id="gameCanvas" width="720" height="480" id="logo-canvas"></canvas>
+            <div>
+                <button>Spiel Starten</button>
+            </div>
+            <button> Neustart </button>
+        </div>
+    </section>
+
+    <section>
+        <h2>Bitte drehen</h2>
+    </section>
+
+    <footer>
+        2025 &copy; Eileen Santos |
+        <a onclick="window.location.href='./privacy-policy.html'">Datenschutzerklärung/Impressum</a>
+    </footer>
+
+</body>
+
+</html>
