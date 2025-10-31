@@ -42,6 +42,23 @@ const level1 = new Level(
         new BackgroundObject('components/img_pollo_loco/img/5_background/layers/3_third_layer/2.png', 719 * 3),
         new BackgroundObject('components/img_pollo_loco/img/5_background/layers/2_second_layer/2.png', 719 * 3),
         new BackgroundObject('components/img_pollo_loco/img/5_background/layers/1_first_layer/2.png', 719 * 3),
+    ],
+
+    [
+        new CollectableObject('coin'),
+        new CollectableObject('coin'),
+        new CollectableObject('coin'),
+        new CollectableObject('coin'),
+        new CollectableObject('coin'),
+        new CollectableObject('coin'),
+        new CollectableObject('coin'),
+        new CollectableObject('coin'),
+        
+        new CollectableObject('bottle'),
+        new CollectableObject('bottle'),
+        new CollectableObject('bottle'),
+        new CollectableObject('bottle'),
+        new CollectableObject('bottle'),
     ]
 
 );

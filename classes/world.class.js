@@ -29,6 +29,7 @@ draw() {
     this.checkEndbossActivation();
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.level.clouds);
+    this.addObjectsToMap(this.level.collectableObjects);
 
     this.ctx.translate(-this.camera_x, 0);
     
