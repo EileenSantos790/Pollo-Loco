@@ -103,7 +103,7 @@ class Character extends MoveableObject {
 
         setInterval(() => {
             this.handlejumpingAnimation();
-        }, 50);
+        }, 100);
 
         setInterval(() => {
             this.handleDeathAnimation();
@@ -186,7 +186,7 @@ class Character extends MoveableObject {
     }
 
     handleHurtAnimation() {
-        if (!this.isDead() && this.energy < 100) {
+        if (!this.isDead() && this.isHurt()) {
             this.playAnimation(this.IMAGES_HURT);
         }
     }
