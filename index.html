@@ -46,8 +46,10 @@
 <body class="stardos-stencil-regular" onload="init()">
 
     <section>
-        <h1 translate="no">El Pollo Loco</h1>
-        <div>
+        <div class="headline">
+            <h1 translate="no">El Pollo Loco</h1>
+        </div>
+        <div class="informationContainer">
             <div>
                 <h2>Tasten</h2>
                 <h3>Laufe Rechts</h3>
@@ -59,11 +61,10 @@
                 <h3>Werfen</h3>
                 <h2>F</h2>
             </div>
-            <canvas id="gameCanvas" width="720" height="480" id="logo-canvas"></canvas>
+            <canvas id="gameCanvas" width="720" height="480"></canvas>
             <div>
-                <button>Spiel Starten</button>
+                <button id="restartButton" onclick="restartGame()" style="display: none;">Neustart</button>
             </div>
-            <button> Neustart </button>
         </div>
     </section>
 

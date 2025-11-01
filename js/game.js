@@ -1,13 +1,70 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
+let ctx;
+let gameState = 'start'; // 'start', 'playing', 'gameOver'
+let startScreenImg;
 
 function init() {
     canvas = document.getElementById("gameCanvas");
-    world = new World(canvas, keyboard);
-
     ctx = canvas.getContext("2d");
+    
+    // Load start screen image
+    startScreenImg = new Image();
+    startScreenImg.src = 'components/img_pollo_loco/img/9_intro_outro_screens/start/startscreen_2.png';
+    startScreenImg.onload = function() {
+        showStartScreen();
+    };
+    
+    // Add click listener to canvas for starting the game
+    canvas.addEventListener('click', handleCanvasClick);
+}
 
+function showStartScreen() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(startScreenImg, 0, 0, canvas.width, canvas.height);
+    
+    // Add pointer cursor
+    canvas.classList.add('start-screen');
+    
+    // Add "Click to start" text with better styling
+    ctx.fillStyle = 'white';
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 3;
+    ctx.font = 'bold 28px "Stardos Stencil", Arial';
+    ctx.textAlign = 'center';
+    
+    // Draw text with outline for better visibility
+    ctx.strokeText('Klicke zum Starten', canvas.width / 2, canvas.height - 50);
+    ctx.fillText('Klicke zum Starten', canvas.width / 2, canvas.height - 50);
+}
+
+function handleCanvasClick() {
+    if (gameState === 'start') {
+        startGame();
+    }
+}
+
+function startGame() {
+    gameState = 'playing';
+    canvas.removeEventListener('click', handleCanvasClick);
+    canvas.classList.remove('start-screen');
+    world = new World(canvas, keyboard);
+    
+    // Show restart button
+    document.getElementById('restartButton').style.display = 'block';
+}
+
+function restartGame() {
+    gameState = 'start';
+    if (world) {
+        world = null;
+    }
+    canvas.addEventListener('click', handleCanvasClick);
+    showStartScreen();
+    
+    // Hide restart button
+    document.getElementById('restartButton').style.display = 'none';
 }
 
 window.addEventListener("keydown", (event) => {
