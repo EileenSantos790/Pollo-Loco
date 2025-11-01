@@ -61,6 +61,12 @@ class Character extends MoveableObject {
         'components/img_pollo_loco/img/2_character_pepe/5_dead/D-57.png',
     ];
 
+    IMAGES_HURT = [
+        'components/img_pollo_loco/img/2_character_pepe/4_hurt/H-41.png',
+        'components/img_pollo_loco/img/2_character_pepe/4_hurt/H-42.png',
+        'components/img_pollo_loco/img/2_character_pepe/4_hurt/H-43.png',
+    ];
+
     world;
     idleTimer = 0;
     isIdle = false;
@@ -73,6 +79,7 @@ class Character extends MoveableObject {
         this.loadImages(this.IMAGES_LONG_IDLE);
         this.loadImages(this.IMAGES_JUMP);
         this.loadImages(this.IMAGES_DEAD);
+        this.loadImages(this.IMAGES_HURT);
         this.applyGravity();
         this.animate();
     }
@@ -101,6 +108,11 @@ class Character extends MoveableObject {
         setInterval(() => {
             this.handleDeathAnimation();
         }, 250);
+
+        setInterval(() => {
+            this.handleHurtAnimation();
+        }, 250);
+
     }
 
     handleMovement() {
@@ -170,6 +182,12 @@ class Character extends MoveableObject {
         if (this.isDead()) {
             this.img = this.imageCache['components/img_pollo_loco/img/2_character_pepe/5_dead/D-51.png'];
             this.playAnimation(this.IMAGES_DEAD);
+        }
+    }
+
+    handleHurtAnimation() {
+        if (!this.isDead() && this.energy < 100) {
+            this.playAnimation(this.IMAGES_HURT);
         }
     }
 
