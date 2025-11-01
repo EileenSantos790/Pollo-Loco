@@ -49,23 +49,36 @@
         <div class="headline">
             <h1 translate="no">El Pollo Loco</h1>
         </div>
-        <div class="informationContainer">
-            <div>
-                <h2>Tasten</h2>
-                <h3>Laufe Rechts</h3>
-                <h2>Rechts</h2>
-                <h3>Laufe Links</h3>
-                <h2>Links</h2>
-                <h3>Springen</h3>
-                <h2>Leertaste</h2>
-                <h3>Werfen</h3>
-                <h2>F</h2>
+        <div class="gameSection">
+            <div class="informationContainer">
+                <div class="controls-board">
+                    <h2>Steuerung</h2>
+                    <div class="control-item">
+                        <div class="key-label">→</div>
+                        <span>Laufe Rechts</span>
+                    </div>
+                    <div class="control-item">
+                        <div class="key-label">←</div>
+                        <span>Laufe Links</span>
+                    </div>
+                    <div class="control-item">
+                        <div class="key-label">Space</div>
+                        <span>Springen</span>
+                    </div>
+                    <div class="control-item">
+                        <div class="key-label">F</div>
+                        <span>Werfen</span>
+                    </div>
+                </div>
             </div>
-            <canvas id="gameCanvas" width="720" height="480"></canvas>
             <div>
-                <button id="restartButton" onclick="restartGame()" style="display: none;">Neustart</button>
+                <canvas id="gameCanvas" width="720" height="480"></canvas>
             </div>
         </div>
+        <div>
+            <button id="restartButton" onclick="restartGame()" style="display: none;">Neustart</button>
+        </div>
+
     </section>
 
     <section>
