@@ -38,13 +38,6 @@ class MoveableObject {
 
     }
 
-    moveRight() {
-        let isMoving = false;
-        this.x += this.speed;
-        this.otherDirection = false;
-        isMoving = true;
-    }
-
     moveLeft() {
         setInterval(() => {
             this.x -= this.speed;

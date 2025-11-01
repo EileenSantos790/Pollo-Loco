@@ -92,11 +92,13 @@ class Character extends MoveableObject {
         let isMoving = false;
 
         if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-            this.moveRight();
+            this.x += this.speed;
+            this.otherDirection = false;
+            isMoving = true;
+
         }
 
         if (this.world.keyboard.LEFT && this.x > 0) {
-            this.moveLeft();
             this.x -= this.speed;
             this.otherDirection = true;
             isMoving = true;
