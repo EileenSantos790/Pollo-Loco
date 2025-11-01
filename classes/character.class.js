@@ -51,6 +51,16 @@ class Character extends MoveableObject {
         'components/img_pollo_loco/img/2_character_pepe/3_jump/J-39.png',
     ];
 
+    IMAGES_DEAD = [
+        'components/img_pollo_loco/img/2_character_pepe/5_dead/D-51.png',
+        'components/img_pollo_loco/img/2_character_pepe/5_dead/D-52.png',
+        'components/img_pollo_loco/img/2_character_pepe/5_dead/D-53.png',
+        'components/img_pollo_loco/img/2_character_pepe/5_dead/D-54.png',
+        'components/img_pollo_loco/img/2_character_pepe/5_dead/D-55.png',
+        'components/img_pollo_loco/img/2_character_pepe/5_dead/D-56.png',
+        'components/img_pollo_loco/img/2_character_pepe/5_dead/D-57.png',
+    ];
+
     world;
     idleTimer = 0;
     isIdle = false;
@@ -62,6 +72,7 @@ class Character extends MoveableObject {
         this.loadImages(this.IMAGES_IDLE);
         this.loadImages(this.IMAGES_LONG_IDLE);
         this.loadImages(this.IMAGES_JUMP);
+        this.loadImages(this.IMAGES_DEAD);
         this.applyGravity();
         this.animate();
     }
@@ -86,6 +97,10 @@ class Character extends MoveableObject {
         setInterval(() => {
             this.handlejumpingAnimation();
         }, 50);
+
+        setInterval(() => {
+            this.handleDeathAnimation();
+        }, 250);
     }
 
     handleMovement() {
@@ -122,7 +137,7 @@ class Character extends MoveableObject {
     }
 
     handleIdleAnimations() {
-        if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT) {
+        if (!this.isDead() && !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT) {
             if (this.isLongIdle) {
                 this.playAnimation(this.IMAGES_LONG_IDLE);
             } else if (this.isIdle) {
@@ -138,7 +153,7 @@ class Character extends MoveableObject {
     }
 
     handleIdleTimer() {
-        if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT) {
+        if (!this.isDead() && !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT) {
             this.idleTimer++;
 
             if (this.idleTimer === 2 && !this.isIdle) {
@@ -148,6 +163,13 @@ class Character extends MoveableObject {
                 this.isLongIdle = true;
                 this.currentImageIndex = 0;
             }
+        }
+    }
+
+    handleDeathAnimation() {
+        if (this.isDead()) {
+            this.img = this.imageCache['components/img_pollo_loco/img/2_character_pepe/5_dead/D-51.png'];
+            this.playAnimation(this.IMAGES_DEAD);
         }
     }
 
