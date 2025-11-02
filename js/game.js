@@ -119,3 +119,14 @@ if (event.keyCode == 39) {
         keyboard.F = false;
     }
 });
+
+function hideOverlay() {
+    const overlay = document.getElementById('gameOverlay');
+    overlay.classList.add('hidden');
+    
+    setTimeout(() => {
+        if (overlay && overlay.parentNode) {
+            overlay.parentNode.removeChild(overlay);
+        }
+    }, 500);
+}
