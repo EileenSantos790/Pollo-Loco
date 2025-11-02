@@ -48,16 +48,16 @@
     <div id="gameOverlay" class="game-overlay">
         <div class="overlay-content">
             <!-- Flip Card für Small Chicken / Legal Board -->
-            <div class="flip-card legalCardNoScrollable" id="legalCard">
+            <div class="flip-card" id="legalCard">
                 <div class="flip-card-inner">
                     <div class="flip-card-front">
+                        <span>Rechtliches</span>
                         <img src="components/img_pollo_loco/img/3_enemies_chicken/chicken_small/1_walk/2_w.png" 
                              alt="Small Chicken" 
                              onclick="flipCard('legalCard')">
                     </div>
-                    <div class="flip-card-back">
+                    <div class="flip-card-back legal-board-container">
                         <div class="legal-board" onclick="flipCard('legalCard')">
-                            <h2>Rechtliches</h2>
                             <div class="legal-item">
                                 <button class="legal-button" onclick="event.stopPropagation(); window.location.href='./privacyPolicy.html'">Datenschutz</button>
                             </div>
@@ -79,6 +79,7 @@
             <div class="flip-card" id="infoCard">
                 <div class="flip-card-inner">
                     <div class="flip-card-front">
+                        <span>Steuerung</span>
                         <img src="components/img_pollo_loco/img/6_salsa_bottle/salsa_bottle.png" 
                              alt="Salsa Bottle" 
                              onclick="flipCard('infoCard')">
@@ -86,7 +87,6 @@
                     <div class="flip-card-back">
                         <div class="informationContainer" onclick="flipCard('infoCard')">
                             <div class="controls-board">
-                                <h2>Steuerung</h2>
                                 <div class="control-item">
                                     <div class="key-label">→</div>
                                     <span>Laufe Rechts</span>
