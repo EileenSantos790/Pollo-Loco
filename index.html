@@ -47,18 +47,20 @@
 
     <div id="gameOverlay" class="game-overlay">
         <div class="overlay-content">
-            <img src="components/img_pollo_loco/img/9_intro_outro_screens/start/startscreen_2.png" alt="El Pollo Loco" class="overlay-image">
-            <h1 class="overlay-title">El Pollo Loco</h1>
-            <p class="overlay-subtitle">Willkommen zum Spiel!</p>
-            <button class="overlay-button" onclick="hideOverlay()">Zum Spiel</button>
-        </div>
-    </div>
-
-    <section>
-        <div class="headline">
-            <h1 translate="no">El Pollo Loco</h1>
-        </div>
-        <div class="gameSection">
+            <div class="legal-board">
+                <h2>Rechtliches</h2>
+                <div class="legal-item">
+                    <button class="legal-button" onclick="window.location.href='./privacyPolicy.html'">Datenschutz</button>
+                </div>
+                <div class="legal-item">
+                    <button class="legal-button" onclick="window.location.href='./legalNotice.html'">Impressum</button>
+                </div>
+            </div>
+            <div>
+                <h1 class="overlay-title">El Pollo Loco</h1>
+                <p class="overlay-subtitle">Willkommen zum Spiel!</p>
+                <button class="overlay-button" onclick="hideOverlay()">Zum Spiel</button>
+            </div>
             <div class="informationContainer">
                 <div class="controls-board">
                     <h2>Steuerung</h2>
@@ -75,11 +77,23 @@
                         <span>Springen</span>
                     </div>
                     <div class="control-item">
-                        <div class="key-label">F</div>
+                        <div class="key-label">↑</div>
+                        <span>Einsammeln</span>
+                    </div>
+                    <div class="control-item">
+                        <div class="key-label">D</div>
                         <span>Werfen</span>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <section>
+        <div class="headline">
+            <h1 translate="no">El Pollo Loco</h1>
+        </div>
+        <div class="gameSection">
             <div class="canvas-frame">
                 <canvas id="gameCanvas" width="720" height="480"></canvas>
             </div>
