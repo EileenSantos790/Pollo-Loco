@@ -41,10 +41,44 @@ class MoveableObject extends DrawableObject {
     }
 
     isColliding(mo) {
-        return this.x + this.width > mo.x &&
-            this.y + this.height > mo.y &&
-            this.x < mo.x + mo.width &&
-            this.y < mo.y + mo.height;
+        let thisX = this.x;
+        let thisY = this.y;
+        let thisWidth = this.width;
+        let thisHeight = this.height;
+        
+        let moX = mo.x;
+        let moY = mo.y;
+        let moWidth = mo.width;
+        let moHeight = mo.height;
+        
+        if (this instanceof Character) {
+            thisX += 30;
+            thisY += 120;
+            thisWidth -= 60;
+            thisHeight -= 140;
+        } else if (this instanceof Chicken || this instanceof smallChicken || this instanceof Endboss) {
+            thisX += 10;
+            thisY += 10;
+            thisWidth -= 20;
+            thisHeight -= 20;
+        }
+        
+        if (mo instanceof Character) {
+            moX += 30;
+            moY += 120;
+            moWidth -= 60;
+            moHeight -= 140;
+        } else if (mo instanceof Chicken || mo instanceof smallChicken || mo instanceof Endboss) {
+            moX += 10;
+            moY += 10;
+            moWidth -= 20;
+            moHeight -= 20;
+        }
+        
+        return thisX + thisWidth > moX &&
+            thisY + thisHeight > moY &&
+            thisX < moX + moWidth &&
+            thisY < moY + moHeight;
     }
 
     hit() {
