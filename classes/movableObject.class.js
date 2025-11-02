@@ -4,6 +4,7 @@ class MoveableObject extends DrawableObject {
     speedY = 0;
     acceleration = 2.5;
     energy = 100;
+    coins = 0;
     lastHit = 0;
 
     applyGravity() {
@@ -58,5 +59,13 @@ class MoveableObject extends DrawableObject {
         let timepassed = new Date().getTime() - this.lastHit;
         timepassed = timepassed / 1000;
         return timepassed < 1;
+    }
+
+    collectCoin() {
+        this.coins++;
+    }
+
+    getCoinPercentage() {
+        return Math.min(this.coins * 10, 100);
     }
 }

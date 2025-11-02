@@ -7,6 +7,7 @@ class World {
     keyboard;
     camera_x = 0;
     statusBar = new StatusBar();
+    coinStatusBar = new CoinStatusBar();
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext("2d");
@@ -29,6 +30,14 @@ class World {
                     this.statusBar.setPercentage(this.character.energy);
                 }
             });
+
+            this.level.collectableObjects.forEach((collectableObject, index) => {
+                if (collectableObject.type === 'coin' && this.character.isColliding(collectableObject)) {
+                    this.character.collectCoin();
+                    this.coinStatusBar.setPercentage(this.character.getCoinPercentage());
+                    this.level.collectableObjects.splice(index, 1);
+                }
+            });
         }, 200);
     }
 
@@ -40,6 +49,7 @@ class World {
         this.addObjectsToMap(this.level.backgroundObjects);
         this.ctx.translate(-this.camera_x, 0);
         this.addToMap(this.statusBar);
+        this.addToMap(this.coinStatusBar);
         this.ctx.translate(this.camera_x, 0);
         this.addToMap(this.character);
         this.checkEndbossActivation();
