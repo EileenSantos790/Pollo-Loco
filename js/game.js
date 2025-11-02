@@ -80,16 +80,12 @@ window.addEventListener("keydown", (event) => {
         keyboard.UP = true;
     }
 
-    if (event.keyCode == 40) {
-        keyboard.DOWN = true;
-    }
-
     if (event.keyCode == 32) {
         keyboard.SPACE = true;
     }
 
-    if (event.keyCode == 70) {
-        keyboard.F = true;
+    if (event.keyCode == 68) {
+        keyboard.D = true;
     }
 });
 
@@ -107,16 +103,12 @@ if (event.keyCode == 39) {
         keyboard.UP = false;
     }
 
-    if (event.keyCode == 40) {
-        keyboard.DOWN = false;
-    }
-
     if (event.keyCode == 32) {
         keyboard.SPACE = false;
     }
 
-    if (event.keyCode == 70) {
-        keyboard.F = false;
+    if (event.keyCode == 68) {
+        keyboard.D = false;
     }
 });
 

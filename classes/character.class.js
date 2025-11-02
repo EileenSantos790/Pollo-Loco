@@ -71,6 +71,10 @@ class Character extends MoveableObject {
     idleTimer = 0;
     isIdle = false;
     isLongIdle = false;
+    bottles = 0;
+    maxBottles = 5;
+    lastThrowTime = 0;
+    throwCooldown = 500;
 
     constructor() {
         super().loadImage('components/img_pollo_loco/img/2_character_pepe/1_idle/idle/I-1.png');
@@ -82,6 +86,7 @@ class Character extends MoveableObject {
         this.loadImages(this.IMAGES_HURT);
         this.applyGravity();
         this.animate();
+        this.bottles = 0;
     }
 
     animate() {
@@ -195,5 +200,27 @@ class Character extends MoveableObject {
         this.idleTimer = 0;
         this.isIdle = false;
         this.isLongIdle = false;
+    }
+
+    collectBottle() {
+        if (this.bottles < this.maxBottles) {
+            this.bottles++;
+        }
+    }
+
+    canThrowBottle() {
+        let currentTime = new Date().getTime();
+        return this.bottles > 0 && (currentTime - this.lastThrowTime) > this.throwCooldown;
+    }
+
+    throwBottle() {
+        if (this.canThrowBottle()) {
+            this.bottles--;
+            this.lastThrowTime = new Date().getTime();
+        }
+    }
+
+    getBottlePercentage() {
+        return (this.bottles / this.maxBottles) * 100;
     }
 }
