@@ -24,14 +24,14 @@ function showStartScreen() {
     
     canvas.classList.add('start-screen');
     
-    ctx.fillStyle = 'white';
+    ctx.fillStyle = 'black';
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 3;
-    ctx.font = 'bold 28px "Stardos Stencil", Arial';
+    ctx.font = 'bold 36px "Stardos Stencil", Arial';
     ctx.textAlign = 'center';
     
-    ctx.strokeText('Klicke zum Starten', canvas.width / 2, canvas.height - 50);
-    ctx.fillText('Klicke zum Starten', canvas.width / 2, canvas.height - 50);
+    ctx.strokeText('Klicke zum Starten', canvas.width / 2, canvas.height - 390);
+    ctx.fillText('Klicke zum Starten', canvas.width / 2, canvas.height - 390);
 }
 
 function handleCanvasClick() {
@@ -114,4 +114,11 @@ function hideOverlay() {
             overlay.parentNode.removeChild(overlay);
         }
     }, 500);
+}
+
+function flipCard(cardId) {
+    const card = document.getElementById(cardId);
+    if (card) {
+        card.classList.toggle('flipped');
+    }
 }
