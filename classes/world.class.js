@@ -8,6 +8,7 @@ class World {
     camera_x = 0;
     statusBar = new StatusBar();
     coinStatusBar = new CoinStatusBar();
+    bottleStatusBar = new BottleStatusBar();
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext("2d");
@@ -36,6 +37,10 @@ class World {
                     this.character.collectCoin();
                     this.coinStatusBar.setPercentage(this.character.getCoinPercentage());
                     this.level.collectableObjects.splice(index, 1);
+                } else if (collectableObject.type === 'bottle' && this.character.isColliding(collectableObject) && this.keyboard.UP) {
+                    this.character.collectBottle();
+                    this.bottleStatusBar.setPercentage(this.character.getBottlePercentage());
+                    this.level.collectableObjects.splice(index, 1);
                 }
             });
         }, 200);
@@ -50,6 +55,7 @@ class World {
         this.ctx.translate(-this.camera_x, 0);
         this.addToMap(this.statusBar);
         this.addToMap(this.coinStatusBar);
+        this.addToMap(this.bottleStatusBar);
         this.ctx.translate(this.camera_x, 0);
         this.addToMap(this.character);
         this.checkEndbossActivation();

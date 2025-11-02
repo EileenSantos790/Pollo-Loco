@@ -5,6 +5,7 @@ class MoveableObject extends DrawableObject {
     acceleration = 2.5;
     energy = 100;
     coins = 0;
+    bottles = 0;
     lastHit = 0;
 
     applyGravity() {
@@ -67,5 +68,13 @@ class MoveableObject extends DrawableObject {
 
     getCoinPercentage() {
         return Math.min(this.coins * 10, 100);
+    }
+
+    collectBottle() {
+        this.bottles++;
+    }
+
+    getBottlePercentage() {
+        return Math.min(this.bottles * 10, 100);
     }
 }
