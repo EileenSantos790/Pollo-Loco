@@ -90,6 +90,34 @@ canvas.start-screen {
   cursor: pointer;
 }
 
+#fullscreenIcon {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  z-index: 1000;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 6px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  filter: brightness(1.2);
+}
+
+#fullscreenIcon:hover {
+  opacity: 1;
+  transform: scale(1.1);
+  background: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+#fullscreenIcon:active {
+  transform: scale(0.95);
+}
+
 .stardos-stencil-regular {
   font-family: "Stardos Stencil", system-ui;
   font-weight: 400;

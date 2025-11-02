@@ -47,7 +47,6 @@
 
     <div id="gameOverlay" class="game-overlay">
         <div class="overlay-content">
-            <!-- Flip Card für Small Chicken / Legal Board -->
             <div class="flip-card" id="legalCard">
                 <div class="flip-card-inner">
                     <div class="flip-card-front">
@@ -75,7 +74,6 @@
                 <button class="overlay-button" onclick="hideOverlay()">Zum Spiel</button>
             </div>
 
-            <!-- Flip Card für Bottle / Information Container -->
             <div class="flip-card" id="infoCard">
                 <div class="flip-card-inner">
                     <div class="flip-card-front">
@@ -120,9 +118,10 @@
         <div class="headline">
             <h1 translate="no">El Pollo Loco</h1>
         </div>
-        <div class="gameSection">
+        <div class="gameSection" id="fullscreen">
             <div class="canvas-frame">
                 <canvas id="gameCanvas" width="720" height="480"></canvas>
+                <img id="fullscreenIcon" src="components/img_pollo_loco/img/fullscreen.png" alt="Fullscreen" onclick="toggleFullscreen()">
             </div>
         </div>
         <div>

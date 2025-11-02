@@ -122,3 +122,26 @@ function flipCard(cardId) {
         card.classList.toggle('flipped');
     }
 }
+
+function toggleFullscreen() {
+    const element = document.getElementById('fullscreen');
+    const icon = document.getElementById('fullscreenIcon');
+    
+    if (!document.fullscreenElement) {
+        element.requestFullscreen();
+        icon.style.transform = 'rotate(180deg)';
+        icon.title = 'Vollbild verlassen (ESC)';
+    } else {
+        document.exitFullscreen();
+        icon.style.transform = 'rotate(0deg)';
+        icon.title = 'Vollbild aktivieren';
+    }
+}
+
+document.addEventListener('fullscreenchange', () => {
+    const icon = document.getElementById('fullscreenIcon');
+    if (!document.fullscreenElement) {
+        icon.style.transform = 'rotate(0deg)';
+        icon.title = 'Vollbild aktivieren';
+    }
+});
