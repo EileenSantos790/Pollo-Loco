@@ -123,6 +123,14 @@ function flipCard(cardId) {
     }
 }
 
+function navigateTo(url, event) {
+    if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+    }
+    window.location.href = url;
+}
+
 function toggleFullscreen() {
     const element = document.getElementById('fullscreen');
     const icon = document.getElementById('fullscreenIcon');
