@@ -592,7 +592,94 @@ body:has(.legal-notice-container) {
   }
 }
 
-@media (max-width: 840px) {
+/* Mobile Controls Styles */
+.mobile-controls {
+  display: none;
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+  max-width: 280px;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  backdrop-filter: blur(5px);
+  z-index: 100;
+}
+
+.control-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.control-btn {
+  width: 55px;
+  height: 55px;
+  border: 2px solid #8B4513;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #D2B48C, #CD853F);
+  color: #654321;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4), inset 0 1px 3px rgba(255, 255, 255, 0.3);
+  transition: all 0.1s ease;
+  font-family: 'Stardos Stencil', sans-serif;
+}
+
+.control-btn:active {
+  background: linear-gradient(145deg, #CD853F, #A0522D);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4), inset 0 2px 8px rgba(0, 0, 0, 0.3);
+  transform: scale(0.95);
+}
+
+.control-btn span {
+  pointer-events: none;
+}
+
+.left-btn, .right-btn {
+  background: linear-gradient(145deg, #F4A460, #DAA520);
+  border-color: #B8860B;
+  color: #000000;
+}
+
+.left-btn:active, .right-btn:active {
+  background: linear-gradient(145deg, #DAA520, #CD853F);
+}
+
+.jump-btn {
+  background: linear-gradient(145deg, #9ACD32, #6B8E23);
+  border-color: #556B2F;
+  color: #000000;
+}
+
+.jump-btn:active {
+  background: linear-gradient(145deg, #6B8E23, #556B2F);
+}
+
+.throw-btn {
+  background: linear-gradient(145deg, #FF6347, #DC143C);
+  border-color: #8B0000;
+  color: #000000;
+  font-size: 20px;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+.throw-btn:active {
+  background: linear-gradient(145deg, #DC143C, #B22222);
+}
+
+@media (max-width: 1042px) {
   .overlay-content {
     flex-direction: column;
     height: auto;
@@ -600,5 +687,88 @@ body:has(.legal-notice-container) {
 
   .openGameSection {
     padding-block: 20px;
+  }
+
+  .mobile-controls {
+    display: flex;
+  }
+
+  body {
+    overflow: hidden;
+  }
+
+  .gameSection {
+    margin-bottom: 10px;
+  }
+}
+
+@media screen and (orientation: landscape) and (max-width: 1042px) {
+  .mobile-controls {
+    display: flex;
+  }
+}
+
+/* @media screen and (orientation: landscape) and (pointer: coarse) {
+  .mobile-controls {
+    display: flex;
+  }
+} */
+
+
+@media (min-width: 1042px) {
+  .mobile-controls {
+    display: none !important;
+  }
+}
+
+/* Rotate Device Overlay */
+.rotate-device-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  flex-direction: column;
+}
+
+.rotate-device-content {
+  text-align: center;
+  color: #333333;
+  font-family: 'Stardos Stencil', sans-serif;
+}
+
+.rotate-device-image {
+  width: 150px;
+  height: auto;
+  margin-bottom: 20px;
+  animation: pulse 2s infinite;
+}
+
+.rotate-device-text {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+@media screen and (max-width: 1042px) and (orientation: portrait) {
+  .rotate-device-overlay {
+    display: flex !important;
   }
 }

@@ -45,6 +45,12 @@
 
 <body class="stardos-stencil-regular" onload="init()">
 
+    <div id="rotateDeviceOverlay" class="rotate-device-overlay">
+        <div class="rotate-device-content">
+            <img src="components/img_pollo_loco/img/smartphone-drehen.png" alt="Rotate Device" class="rotate-device-image">
+        </div>
+    </div>
+
     <div id="gameOverlay" class="game-overlay">
         <div class="overlay-content">
             <div class="flip-card" id="legalCard">
@@ -122,6 +128,24 @@
             <div class="canvas-frame">
                 <canvas id="gameCanvas" width="720" height="480"></canvas>
                 <img id="fullscreenIcon" src="components/img_pollo_loco/img/fullscreen.png" alt="Fullscreen" onclick="toggleFullscreen()">
+                
+                <!-- Mobile Controls innerhalb des Canvas -->
+                <div class="mobile-controls" id="mobileControls">
+                    <div class="control-row">
+                        <button id="leftBtn" class="control-btn left-btn">
+                            <span>←</span>
+                        </button>
+                        <button id="rightBtn" class="control-btn right-btn">
+                            <span>→</span>
+                        </button>
+                        <button id="jumpBtn" class="control-btn jump-btn">
+                            <span>↑</span>
+                        </button>
+                        <button id="throwBtn" class="control-btn throw-btn">
+                            <span>↻</span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
         <div>
