@@ -44,6 +44,7 @@ function startGame() {
     gameState = 'playing';
     canvas.removeEventListener('click', handleCanvasClick);
     canvas.classList.remove('start-screen');
+    initLevel1();
     world = new World(canvas, keyboard);
     
     document.getElementById('restartButton').style.display = 'block';
