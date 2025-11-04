@@ -32,6 +32,8 @@ function init() {
     
     globalSoundManager = new SoundManager();
     
+    loadMuteSettings();
+    
     canvas.addEventListener('click', handleCanvasClick);
     initMobileControls();
     initRotateDeviceOverlay();
@@ -182,7 +184,7 @@ function startGame() {
     canvas.removeEventListener('click', handleCanvasClick);
     canvas.classList.remove('start-screen');
     
-    if (backgroundMusic) {
+    if (backgroundMusic && !isMuted) {
         backgroundMusic.play().catch(e => {
             console.log('Autoplay wurde blockiert:', e);
         });
@@ -190,6 +192,8 @@ function startGame() {
     
     initLevel1();
     world = new World(canvas, keyboard);
+    
+    applyMuteSettings();
     
     document.getElementById('restartButton').style.display = 'block';
 }
@@ -306,8 +310,67 @@ document.addEventListener('fullscreenchange', () => {
     }
 });
 
+function loadMuteSettings() {
+    const savedMuteState = localStorage.getItem('polloLoco_isMuted');
+    if (savedMuteState !== null) {
+        isMuted = JSON.parse(savedMuteState);
+    }
+    
+    updateMuteIcon();
+    applyMuteSettings();
+}
+
+function saveMuteSettings() {
+    localStorage.setItem('polloLoco_isMuted', JSON.stringify(isMuted));
+}
+
+function applyMuteSettings() {
+    if (backgroundMusic) {
+        try {
+            backgroundMusic.muted = isMuted;
+        } catch (e) {}
+    }
+
+    if (world && world.character && world.character.soundManager) {
+        try {
+            if (isMuted) {
+                world.character.soundManager.muteAll();
+            } else {
+                world.character.soundManager.unmuteAll();
+            }
+        } catch (e) {}
+    }
+
+    if (globalSoundManager) {
+        try {
+            if (isMuted) {
+                globalSoundManager.muteAll();
+            } else {
+                globalSoundManager.unmuteAll();
+            }
+        } catch (e) {}
+    }
+}
+
+function updateMuteIcon() {
+    const icon = document.getElementById('muteIcon');
+    if (!icon) return;
+    
+    if (isMuted) {
+        icon.src = 'components/img_pollo_loco/icons8-no-sound-50.png';
+        icon.alt = 'Unmute';
+        icon.title = 'Sound einschalten';
+    } else {
+        icon.src = 'components/img_pollo_loco/img/icons8-sound-50.png';
+        icon.alt = 'Mute';
+        icon.title = 'Sound ausschalten';
+    }
+}
+
 function toggleMute() {
     isMuted = !isMuted;
+
+    saveMuteSettings();
 
     if (backgroundMusic) {
         try {
@@ -338,17 +401,7 @@ function toggleMute() {
         } catch (e) {}
     }
 
-    const icon = document.getElementById('muteIcon');
-    if (!icon) return;
-    if (isMuted) {
-        icon.src = 'components/img_pollo_loco/icons8-no-sound-50.png';
-        icon.alt = 'Unmute';
-        icon.title = 'Sound einschalten';
-    } else {
-        icon.src = 'components/img_pollo_loco/img/icons8-sound-50.png';
-        icon.alt = 'Mute';
-        icon.title = 'Sound ausschalten';
-    }
+    updateMuteIcon();
 }
 
 function initRotateDeviceOverlay() {
