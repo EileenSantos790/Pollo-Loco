@@ -5,6 +5,7 @@ let ctx;
 let gameState = 'start';
 let startScreenImg;
 let gameOverImg;
+let winImg;
 let backgroundMusic;
 let globalSoundManager;
 let isMuted = false;
@@ -21,6 +22,9 @@ function init() {
     
     gameOverImg = new Image();
     gameOverImg.src = 'components/img_pollo_loco/img/You won, you lost/Game over A.png';
+    
+    winImg = new Image();
+    winImg.src = 'components/img_pollo_loco/img/You won, you lost/You Won B.png';
     
     backgroundMusic = new Audio('components/audio/Run-Amok(chosic.com).mp3');
     backgroundMusic.loop = true;
@@ -120,6 +124,26 @@ function showGameOver() {
     createRestartButton();
 }
 
+function showWin() {
+    gameState = 'win';
+    
+    if (backgroundMusic) {
+        backgroundMusic.pause();
+        backgroundMusic.currentTime = 0;
+    }
+    
+    if (globalSoundManager && !isMuted) {
+        globalSoundManager.playWin();
+    }
+    
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(winImg, 0, 0, canvas.width, canvas.height);
+    
+    canvas.classList.add('win-screen');
+    
+    createRestartButton();
+}
+
 function createRestartButton() {
     removeRestartButton();
     
@@ -144,6 +168,8 @@ function handleCanvasClick() {
     if (gameState === 'start') {
         startGame();
     } else if (gameState === 'gameOver') {
+        restartGame();
+    } else if (gameState === 'win') {
         restartGame();
     }
 }
@@ -175,6 +201,7 @@ function restartGame() {
     
     if (globalSoundManager) {
         globalSoundManager.stopSound('gameOver');
+        globalSoundManager.stopSound('win');
     }
     
     if (world) {
@@ -182,6 +209,7 @@ function restartGame() {
     }
     canvas.removeEventListener('click', handleCanvasClick);
     canvas.classList.remove('game-over-screen');
+    canvas.classList.remove('win-screen');
     removeRestartButton();
     canvas.addEventListener('click', handleCanvasClick);
     showStartScreen();

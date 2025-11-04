@@ -177,6 +177,14 @@ class World {
             return;
         }
 
+        if (this.checkEndbossDead() && gameState === 'playing' && !this.gameOverTriggered) {
+            this.gameOverTriggered = true;
+            setTimeout(() => {
+                showWin();
+            }, 1000);
+            return;
+        }
+
         requestAnimationFrame(() => this.draw());
     }
 
@@ -191,6 +199,15 @@ class World {
                 }
             }
         });
+    }
+
+    checkEndbossDead() {
+        return this.level.enemies.every(enemy => {
+            if (enemy instanceof Endboss) {
+                return enemy.isDead();
+            }
+            return true; 
+        }) && this.level.enemies.some(enemy => enemy instanceof Endboss);
     }
 
     addObjectsToMap(objects) {

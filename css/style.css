@@ -82,6 +82,12 @@ canvas.game-over-screen {
   cursor: default;
 }
 
+/* win screen */
+
+canvas.win-screen {
+  cursor: default;
+}
+
 .game-over-restart-button {
   position: absolute;
   bottom: 40px;

@@ -23,6 +23,7 @@ class SoundManager {
         this.createSound('endbossAlert', 'components/audio/chicken.wav', { volume: 0.8 });
         this.createSound('endbossHurt', 'components/audio/chicken.wav', { volume: 0.8 });
         this.createSound('gameOver', 'components/audio/gameOver.wav', { volume: 0.7 });
+        this.createSound('win', 'components/audio/Winning.wav', { volume: 0.7 });
     }
 
     createSound(name, path, options = {}) {
@@ -137,5 +138,9 @@ class SoundManager {
 
     playGameOver() {
         return this.playSound('gameOver');
+    }
+
+    playWin() {
+        return this.playSound('win');
     }
 }
