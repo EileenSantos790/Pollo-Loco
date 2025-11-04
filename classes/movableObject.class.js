@@ -138,14 +138,6 @@ class MoveableObject extends DrawableObject {
 
     collectCoin() {
         this.coins++;
-        
-        // Coin Sound abspielen wenn es sich um den Character handelt
-        if (this instanceof Character && this.coinSound) {
-            this.coinSound.currentTime = 0; // Sound von Anfang starten
-            this.coinSound.play().catch(e => {
-                console.log('Coin sound konnte nicht abgespielt werden:', e);
-            });
-        }
     }
 
     getCoinPercentage() {

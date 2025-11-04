@@ -8,22 +8,23 @@ class SoundManager {
     }
 
     initializeSounds() {
-        this.createSound('hurt', 'components/audio/hurt.wav', { volume: 1.0 });
-        this.createSound('coin', 'components/audio/collectingMoney.wav', { volume: 0.8 });
+        this.createSound('hurt', 'components/audio/hurt.wav', { volume: 0.4 });
+        this.createSound('coin', 'components/audio/collectingMoney.wav', { volume: 0.6 });
         this.createSound('snoring', 'components/audio/Snoring-Child-chosic.com_ (1).mp3', { 
-            volume: 0.5, 
+            volume: 0.1, 
             loop: true 
         });
         this.createSound('walking', 'components/audio/walk.wav', { 
-            volume: 1.0, 
+            volume: 0.3, 
             loop: true 
         });
-        this.createSound('jump', 'components/audio/jump.wav', { volume: 0.8 });
-        this.createSound('bottleCollect', 'components/audio/bottleCollecting.wav', { volume: 0.8 });
-        this.createSound('endbossAlert', 'components/audio/chicken.wav', { volume: 0.8 });
-        this.createSound('endbossHurt', 'components/audio/chicken.wav', { volume: 0.8 });
-        this.createSound('gameOver', 'components/audio/gameOver.wav', { volume: 0.7 });
-        this.createSound('win', 'components/audio/Winning.wav', { volume: 0.7 });
+        this.createSound('jump', 'components/audio/jump.wav', { volume: 0.3 });
+        this.createSound('bottleCollect', 'components/audio/bottleCollecting.wav', { volume: 0.3 });
+        this.createSound('endbossAlert', 'components/audio/chicken.wav', { volume: 0.3 });
+        this.createSound('endbossHurt', 'components/audio/chicken.wav', { volume: 0.3 });
+        this.createSound('gameOver', 'components/audio/gameOver.wav', { volume: 0.4 });
+        this.createSound('win', 'components/audio/Winning.wav', { volume: 0.4 });
+        this.createSound('crush', 'components/audio/crush.wav', { volume: 0.3 });
     }
 
     createSound(name, path, options = {}) {
@@ -142,5 +143,13 @@ class SoundManager {
 
     playWin() {
         return this.playSound('win');
+    }
+
+    playCrush() {
+        return this.playSound('crush');
+    }
+
+    playCoin() {
+        return this.playSound('coin');
     }
 }

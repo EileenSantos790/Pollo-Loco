@@ -62,6 +62,7 @@ class World {
                 if (isStomping) {
                     this.character.speedY = 12;
                     enemy.die();
+                    this.soundManager.playCrush();
                     setTimeout(() => {
                         const enemyIndex = this.level.enemies.indexOf(enemy);
                         if (enemyIndex > -1) {
@@ -83,6 +84,7 @@ class World {
             if (collectableObject.type === 'coin' && this.character.isColliding(collectableObject)) {
                 this.character.collectCoin();
                 this.coinStatusBar.setPercentage(this.character.getCoinPercentage());
+                this.soundManager.playCoin();
                 this.level.collectableObjects.splice(index, 1);
             } else if (collectableObject.type === 'bottle' && this.character.isColliding(collectableObject)) {
                 this.character.collectBottle();
