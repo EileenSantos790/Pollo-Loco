@@ -115,13 +115,15 @@ class MoveableObject extends DrawableObject {
             thisY < moY + moHeight;
     }
 
-    hit() {
-        this.energy -= 5;
+    hit(amount = 20) {
+        if (this.isHurt()) {
+            return;
+        }
+        this.energy -= amount;
         if (this.energy < 0) {
             this.energy = 0;
-        } else {
-            this.lastHit = new Date().getTime();
         }
+        this.lastHit = new Date().getTime();
     }
 
     isDead() {
