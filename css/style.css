@@ -1,3 +1,5 @@
+/* fonts definition */
+
 @font-face {
   font-family: 'Stardos Stencil';
   src: url('../components/fonts/Stardos_Stencil/StardosStencil-Regular.ttf') format('truetype');
@@ -14,34 +16,30 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: 'Crimson Pro';
-  src: url('../components/fonts/Stardos_Stencil/Crimson_Pro/CrimsonPro-VariableFont_wght.ttf') format('truetype-variations');
-  font-weight: 200 900;
+.stardos-stencil-regular {
+  font-family: "Stardos Stencil", system-ui;
+  font-weight: 400;
   font-style: normal;
-  font-display: swap;
 }
 
-@font-face {
-  font-family: 'Crimson Pro';
-  src: url('../components/fonts/Stardos_Stencil/Crimson_Pro/CrimsonPro-Italic-VariableFont_wght.ttf') format('truetype-variations');
-  font-weight: 200 900;
-  font-style: italic;
-  font-display: swap;
+.stardos-stencil-bold {
+  font-family: "Stardos Stencil", system-ui;
+  font-weight: 700;
+  font-style: normal;
 }
+
+/* General Definition */
 
 body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   background-image: url('../components/img_pollo_loco/img/desert.jpg');
   background-size: cover;
-  background-position: center;
+  /* background-position: center; */
   background-repeat: no-repeat;
   min-height: 100vh;
   font-family: 'Stardos Stencil', sans-serif;
-  font-weight: 400;
+  font-weight: 100;
   overflow: hidden;
+  margin: 0;
 }
 
 canvas {
@@ -54,7 +52,7 @@ canvas {
   background: linear-gradient(145deg, #D2B48C, #DEB887);
   border: 8px solid #8B4513;
   border-radius: 25px;
-  padding: 20px;
+  padding: 10px;
   box-shadow:
     inset 3px 3px 8px rgba(222, 184, 135, 0.8),
     inset -3px -3px 8px rgba(0, 0, 0, 0.3),
@@ -62,33 +60,13 @@ canvas {
   position: relative;
 }
 
-.canvas-frame::before {
-  content: '';
-  position: absolute;
-  top: -12px;
-  left: 40px;
-  right: 40px;
-  height: 10px;
-  background: linear-gradient(to right, #654321, #8B4513, #654321);
-  border-radius: 50%;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
-}
-
-.canvas-frame::after {
-  content: '';
-  position: absolute;
-  bottom: -12px;
-  left: 40px;
-  right: 40px;
-  height: 10px;
-  background: linear-gradient(to right, #654321, #8B4513, #654321);
-  border-radius: 50%;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
-}
+/* start screen */
 
 canvas.start-screen {
   cursor: pointer;
 }
+
+/* fullscreen icon */
 
 #fullscreenIcon {
   position: absolute;
@@ -118,6 +96,8 @@ canvas.start-screen {
   transform: scale(0.95);
 }
 
+/* mute icon */
+
 #muteIcon {
   position: absolute;
   top: 20px;
@@ -146,23 +126,13 @@ canvas.start-screen {
   transform: scale(0.95);
 }
 
-.stardos-stencil-regular {
-  font-family: "Stardos Stencil", system-ui;
-  font-weight: 400;
-  font-style: normal;
-}
-
-.stardos-stencil-bold {
-  font-family: "Stardos Stencil", system-ui;
-  font-weight: 700;
-  font-style: normal;
-}
+/* flip card styles */
 
 .flip-card {
   background-color: transparent;
   width: 250px;
   height: 250px;
-  perspective: 1000px;
+  /* perspective: 1000px; */
 }
 
 .flip-card-inner {
@@ -192,8 +162,6 @@ canvas.start-screen {
   border-radius: 15px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
   font-size: 25px;
   margin-block-start: 0;
   margin-block-end: 0;
@@ -207,6 +175,7 @@ canvas.start-screen {
     inset 2px 2px 5px rgba(222, 184, 135, 0.8),
     inset -2px -2px 5px rgba(0, 0, 0, 0.3),
     5px 5px 15px rgba(0, 0, 0, 0.5);
+
 }
 
 .flip-card-back {
@@ -343,7 +312,7 @@ canvas.start-screen {
   position: relative;
 }
 
-.legal-board-container{
+.legal-board-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -399,6 +368,13 @@ canvas.start-screen {
     inset 1px 1px 2px rgba(255, 255, 255, 0.5);
 }
 
+.gameContainerPositioning {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .headline {
   font-size: 36px;
   color: black;
@@ -410,11 +386,8 @@ canvas.start-screen {
 
 .gameSection {
   display: flex;
-  flex-direction: row;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  position: relative;
 }
 
 .gameSection .informationContainer {
@@ -474,7 +447,7 @@ canvas.start-screen {
   box-sizing: border-box;
 }
 
-.legal-notice-container > div {
+.legal-notice-container>div {
   max-width: 800px;
   width: 100%;
   background: rgba(210, 180, 140, 0.95);
@@ -550,14 +523,7 @@ body:has(.legal-notice-container) {
   }
 }
 
-.overlay-image {
-  width: 100%;
-  max-width: 300px;
-  height: auto;
-  border-radius: 15px;
-  margin-bottom: 20px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-}
+/* first Overlay Screen Styles */
 
 .overlay-title {
   font-size: 48px;
@@ -607,18 +573,7 @@ body:has(.legal-notice-container) {
     inset 1px 1px 3px rgba(255, 255, 255, 0.5);
 }
 
-@media only screen and (max-width: 720px) {
-  .canvas {
-    width: 100%;
-  }
-}
-
-@media only screen and (max-height: 480px) {
-
-  .canvas {
-    height: 100vh;
-  }
-}
+/* Mobile Controls Styles */
 
 .mobile-controls {
   display: none;
@@ -674,13 +629,15 @@ body:has(.legal-notice-container) {
   pointer-events: none;
 }
 
-.left-btn, .right-btn {
+.left-btn,
+.right-btn {
   background: linear-gradient(145deg, #F4A460, #DAA520);
   border-color: #B8860B;
   color: #000000;
 }
 
-.left-btn:active, .right-btn:active {
+.left-btn:active,
+.right-btn:active {
   background: linear-gradient(145deg, #DAA520, #CD853F);
 }
 
@@ -706,7 +663,7 @@ body:has(.legal-notice-container) {
   background: linear-gradient(145deg, #DC143C, #B22222);
 }
 
-@media (max-width: 1042px) {
+/* @media (max-width: 1042px) {
   .overlay-content {
     flex-direction: column;
     height: auto;
@@ -739,7 +696,10 @@ body:has(.legal-notice-container) {
   .mobile-controls {
     display: none !important;
   }
-}
+} */
+
+
+/* Rotate Device Overlay Styles */
 
 .rotate-device-overlay {
   position: fixed;
@@ -776,18 +736,68 @@ body:has(.legal-notice-container) {
 }
 
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1);
     opacity: 0.8;
   }
+
   50% {
     transform: scale(1.1);
     opacity: 1;
   }
 }
 
-@media screen and (max-width: 1042px) and (orientation: portrait) {
-  .rotate-device-overlay {
-    display: flex !important;
+@media only screen and (max-width: 720px) {
+  .canvas {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-height: 480px) {
+
+  .canvas {
+    height: 100vh;
+  }
+
+  .headline {
+    display: none;
+  }
+}
+
+@media (max-width: 835px) {
+  .overlay-content {
+    flex-direction: column;
+    height: fit-content;
+    padding: 20px;
+    margin: 10px;
+  }
+
+  .openGameSection {
+    padding: 0px;
+  }
+
+  .overlay-title {
+    font-size: 26px;
+  }
+
+  .overlay-subtitle {
+    font-size: 18px;
+    margin-block-start: 0em;
+    margin-block-end: 0em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+  }
+
+  .flip-card-front img {
+    max-width: 50%;
+    max-height: 50%;
+  }
+
+  .overlay-button{
+    font-size: 16px;
+    padding: 12px 24px;
+    margin-block: 20px;
   }
 }

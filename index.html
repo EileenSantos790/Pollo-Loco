@@ -48,7 +48,8 @@
 
     <div id="rotateDeviceOverlay" class="rotate-device-overlay">
         <div class="rotate-device-content">
-            <img src="components/img_pollo_loco/img/smartphone-drehen.png" alt="Rotate Device" class="rotate-device-image">
+            <img src="components/img_pollo_loco/img/smartphone-drehen.png" alt="Rotate Device"
+                class="rotate-device-image">
         </div>
     </div>
 
@@ -58,17 +59,18 @@
                 <div class="flip-card-inner">
                     <div class="flip-card-front">
                         <span>Rechtliches</span>
-                        <img src="components/img_pollo_loco/img/3_enemies_chicken/chicken_small/1_walk/2_w.png" 
-                             alt="Small Chicken" 
-                             onclick="flipCard('legalCard')">
+                        <img src="components/img_pollo_loco/img/3_enemies_chicken/chicken_small/1_walk/2_w.png"
+                            alt="Small Chicken" onclick="flipCard('legalCard')">
                     </div>
                     <div class="flip-card-back legal-board-container">
                         <div class="legal-board" onclick="flipCard('legalCard')">
                             <div class="legal-item">
-                                <button class="legal-button" onclick="navigateTo('./privacyPolicy.html', event)">Datenschutz</button>
+                                <button class="legal-button"
+                                    onclick="navigateTo('./privacyPolicy.html', event)">Datenschutz</button>
                             </div>
                             <div class="legal-item">
-                                <button class="legal-button" onclick="navigateTo('./legalNotice.html', event)">Impressum</button>
+                                <button class="legal-button"
+                                    onclick="navigateTo('./legalNotice.html', event)">Impressum</button>
                             </div>
                         </div>
                     </div>
@@ -85,9 +87,8 @@
                 <div class="flip-card-inner">
                     <div class="flip-card-front">
                         <span>Steuerung</span>
-                        <img src="components/img_pollo_loco/img/6_salsa_bottle/salsa_bottle.png" 
-                             alt="Salsa Bottle" 
-                             onclick="flipCard('infoCard')">
+                        <img src="components/img_pollo_loco/img/6_salsa_bottle/salsa_bottle.png" alt="Salsa Bottle"
+                            onclick="flipCard('infoCard')">
                     </div>
                     <div class="flip-card-back">
                         <div class="informationContainer" onclick="flipCard('infoCard')">
@@ -119,18 +120,20 @@
             </div>
         </div>
     </div>
-    
 
-    <section>
+
+    <section class="gameContainerPositioning">
         <div class="headline">
             <h1 translate="no">El Pollo Loco</h1>
         </div>
         <div class="gameSection" id="fullscreen">
             <div class="canvas-frame">
                 <canvas id="gameCanvas" width="720" height="480"></canvas>
-                <img id="fullscreenIcon" src="components/img_pollo_loco/img/fullscreen.png" alt="Fullscreen" onclick="toggleFullscreen()">
-                <img id="muteIcon" src="components/img_pollo_loco/img/icons8-sound-50.png" alt="Mute" title="Sound ausschalten" onclick="toggleMute()">
-                
+                <img id="fullscreenIcon" src="components/img_pollo_loco/img/fullscreen.png" alt="Fullscreen"
+                    onclick="toggleFullscreen()">
+                <img id="muteIcon" src="components/img_pollo_loco/img/icons8-sound-50.png" alt="Mute"
+                    title="Sound ausschalten" onclick="toggleMute()">
+
                 <!-- Mobile Controls innerhalb des Canvas -->
                 <div class="mobile-controls" id="mobileControls">
                     <div class="control-row">
@@ -150,10 +153,6 @@
                 </div>
             </div>
         </div>
-        <div>
-            <button id="restartButton" onclick="restartGame()" style="display: none;">Neustart</button>
-        </div>
-
     </section>
 
 </body>
