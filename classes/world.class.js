@@ -31,7 +31,7 @@ class World {
         setInterval(() => {
             this.checkCollisions();
             this.checkBottleCollisions();
-        }, 200);
+        }, 1000 / 60);
         
         setInterval(() => {
             this.checkThrowObjects();
@@ -39,8 +39,41 @@ class World {
     }
 
     checkCollisions() {
-        this.level.enemies.forEach(enemy => {
-            if (this.character.isColliding(enemy)) {
+        this.level.enemies.forEach((enemy) => {
+            if (!this.character.isColliding(enemy) || enemy.isDying) {
+                return;
+            }
+
+            if (enemy instanceof Chicken || enemy instanceof smallChicken) {
+                const characterHitboxY = this.character.y + 120;
+                const characterHitboxHeight = this.character.height - 140;
+                const characterHitboxBottom = characterHitboxY + characterHitboxHeight;
+                
+                const enemyOffset = enemy instanceof smallChicken ? 4 : 10;
+                const enemyHitboxY = enemy.y + enemyOffset;
+                const enemyHitboxTop = enemyHitboxY;
+                const wasDescending = typeof this.character.prevY === 'number' && this.character.prevY < this.character.y;
+                const baseMargin = Math.floor(enemy.height * 0.3);
+                const margin = enemy instanceof smallChicken
+                    ? Math.max(16, Math.min(22, baseMargin))
+                    : Math.max(12, Math.min(22, baseMargin));
+                const isStomping = characterHitboxBottom <= (enemyHitboxTop + margin) && wasDescending;
+                
+                if (isStomping) {
+                    this.character.speedY = 12;
+                    enemy.die();
+                    setTimeout(() => {
+                        const enemyIndex = this.level.enemies.indexOf(enemy);
+                        if (enemyIndex > -1) {
+                            this.level.enemies.splice(enemyIndex, 1);
+                        }
+                    }, 1500);
+                    return;
+                } else {
+                    this.character.hit();
+                    this.statusBar.setPercentage(this.character.energy);
+                }
+            } else {
                 this.character.hit();
                 this.statusBar.setPercentage(this.character.energy);
             }

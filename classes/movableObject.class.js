@@ -10,10 +10,20 @@ class MoveableObject extends DrawableObject {
 
     applyGravity() {
         setInterval(() => {
+            const previousY = this.y;
+
             if (this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
+
+                if (!this.isAboveGround() && this.speedY < 0) {
+                    this.speedY = 0;
+                }
+            } else {
+                this.speedY = 0;
             }
+
+            this.prevY = previousY;
         }, 1000 / 25);
     }
 
@@ -23,6 +33,10 @@ class MoveableObject extends DrawableObject {
         } else {
             return this.y < 130;
         }
+    }
+
+    isJumping() {
+        return this.y < 130 && this.speedY < 0;
     }
 
     moveLeft() {
@@ -56,7 +70,12 @@ class MoveableObject extends DrawableObject {
             thisY += 120;
             thisWidth -= 60;
             thisHeight -= 140;
-        } else if (this instanceof Chicken || this instanceof smallChicken || this instanceof Endboss) {
+        } else if (this instanceof smallChicken) {
+            thisX += 4;
+            thisY += 4;
+            thisWidth -= 8;
+            thisHeight -= 8;
+        } else if (this instanceof Chicken || this instanceof Endboss) {
             thisX += 10;
             thisY += 10;
             thisWidth -= 20;
@@ -73,7 +92,12 @@ class MoveableObject extends DrawableObject {
             moY += 120;
             moWidth -= 60;
             moHeight -= 140;
-        } else if (mo instanceof Chicken || mo instanceof smallChicken || mo instanceof Endboss) {
+        } else if (mo instanceof smallChicken) {
+            moX += 4;
+            moY += 4;
+            moWidth -= 8;
+            moHeight -= 8;
+        } else if (mo instanceof Chicken || mo instanceof Endboss) {
             moX += 10;
             moY += 10;
             moWidth -= 20;

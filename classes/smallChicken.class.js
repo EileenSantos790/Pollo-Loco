@@ -1,8 +1,8 @@
 class smallChicken extends MoveableObject {
 
-    y = 390;
-    height = 40;
-    width = 35;
+    y = 375;
+    height = 55;
+    width = 45;
     isDying = false;
     walkInterval;
     animationInterval;
