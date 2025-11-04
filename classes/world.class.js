@@ -97,16 +97,26 @@ class World {
     checkBottleCollisions() {
         this.throwableObjects.forEach((bottle, bottleIndex) => {
             this.level.enemies.forEach((enemy, enemyIndex) => {
-                if (bottle.isColliding(enemy)) {
-                    this.throwableObjects.splice(bottleIndex, 1);
+                if (bottle.isColliding(enemy) && !bottle.isSplashing) {
+                    bottle.splash();
+                    this.soundManager.playSound('glassBroken');
+                    
+                    setTimeout(() => {
+                        const index = this.throwableObjects.indexOf(bottle);
+                        if (index > -1) {
+                            this.throwableObjects.splice(index, 1);
+                        }
+                    }, 600);
                     
                     if (enemy instanceof Endboss) {
                         enemy.hitByBottle();
                         this.soundManager.playSound('endbossHurt');
                         this.updateEndbossStatusBar(enemy);
                         if (enemy.isDead()) {
-                            this.level.enemies.splice(enemyIndex, 1);
-                            this.endbossStatusBar.hide();
+                            setTimeout(() => {
+                                this.level.enemies.splice(enemyIndex, 1);
+                                this.endbossStatusBar.hide();
+                            }, 2000);
                         }
                     } else {
                         enemy.die();

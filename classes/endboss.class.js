@@ -139,6 +139,6 @@ class Endboss extends MoveableObject {
     }
 
     isDead() {
-        return this.isDying;
+        return this.hitCount >= 3 && this.isDying;
     }
 }

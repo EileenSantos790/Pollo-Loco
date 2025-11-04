@@ -25,6 +25,7 @@ class SoundManager {
         this.createSound('gameOver', 'components/audio/gameOver.wav', { volume: 0.4 });
         this.createSound('win', 'components/audio/Winning.wav', { volume: 0.4 });
         this.createSound('crush', 'components/audio/crush.wav', { volume: 0.3 });
+        this.createSound('glassBroken', 'components/audio/glassBroken.wav', { volume: 0.4 });
     }
 
     createSound(name, path, options = {}) {
