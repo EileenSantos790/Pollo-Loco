@@ -117,7 +117,13 @@ function showGameOver() {
     }
     
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(gameOverImg, 0, 0, canvas.width, canvas.height);
+    
+    const imgWidth = canvas.width * 0.5;
+    const imgHeight = canvas.height * 0.5;
+    const x = (canvas.width - imgWidth) / 2;
+    const y = (canvas.height - imgHeight) / 2;
+    
+    ctx.drawImage(gameOverImg, x, y, imgWidth, imgHeight);
     
     canvas.classList.add('game-over-screen');
     
@@ -142,7 +148,13 @@ function showWin() {
     }
     
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(winImg, 0, 0, canvas.width, canvas.height);
+    
+    const imgWidth = canvas.width * 0.5;
+    const imgHeight = canvas.height * 0.3;
+    const x = (canvas.width - imgWidth) / 2;
+    const y = (canvas.height - imgHeight) / 2;
+    
+    ctx.drawImage(winImg, x, y, imgWidth, imgHeight);
     
     canvas.classList.add('win-screen');
     
