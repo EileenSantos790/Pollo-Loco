@@ -64,12 +64,10 @@ function initMobileControls() {
     jumpBtn.addEventListener('touchstart', (e) => {
         e.preventDefault();
         keyboard.SPACE = true;
-        keyboard.UP = true;
     });
     jumpBtn.addEventListener('touchend', (e) => {
         e.preventDefault();
         keyboard.SPACE = false;
-        keyboard.UP = false;
     });
 
     throwBtn.addEventListener('touchstart', (e) => {
@@ -231,10 +229,6 @@ window.addEventListener("keydown", (event) => {
         keyboard.LEFT = true;
     }
 
-    if (event.keyCode == 38) {
-        keyboard.UP = true;
-    }
-
     if (event.keyCode == 32) {
         keyboard.SPACE = true;
     }
@@ -252,10 +246,6 @@ if (event.keyCode == 39) {
 
     if (event.keyCode == 37) {
         keyboard.LEFT = false;
-    }
-
-    if (event.keyCode == 38) {
-        keyboard.UP = false;
     }
 
     if (event.keyCode == 32) {
@@ -371,10 +361,9 @@ function initRotateDeviceOverlay() {
 
 function checkOrientation() {
     const overlay = document.getElementById('rotateDeviceOverlay');
-    const isMobile = window.innerWidth <= 771;
-    const isPortrait = window.innerHeight > window.innerWidth;
+    const isPortrait = window.innerWidth < window.innerHeight;
     
-    if (isMobile && isPortrait) {
+    if (isPortrait) {
         overlay.style.display = 'flex';
     } else {
         overlay.style.display = 'none';

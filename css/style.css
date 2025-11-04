@@ -808,7 +808,7 @@ body:has(.legal-notice-container) {
   canvas {
     width: 100%;
   }
-  
+
 }
 
 @media only screen and (max-height: 480px) {
@@ -816,14 +816,20 @@ body:has(.legal-notice-container) {
     height: 100vh;
   }
 
-  .headline {
+  /* .headline {
     display: none;
-  }
+  } */
 
-  .canvas-frame{
+  .canvas-frame {
     background: none;
     border: none;
     padding: 0px;
+  }
+}
+
+@media only screen and (max-height: 715px) {
+  .headline {
+    display: none;
   }
 }
 
@@ -920,7 +926,7 @@ body:has(.legal-notice-container) {
     font-size: 28px;
   }
 
-  .legal-notice-container h1{
+  .legal-notice-container h1 {
     font-size: 26px;
   }
 

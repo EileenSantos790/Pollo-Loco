@@ -85,12 +85,9 @@ class World {
                 this.coinStatusBar.setPercentage(this.character.getCoinPercentage());
                 this.level.collectableObjects.splice(index, 1);
             } else if (collectableObject.type === 'bottle' && this.character.isColliding(collectableObject)) {
-                let isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-                if (isTouchDevice || this.keyboard.UP) {
-                    this.character.collectBottle();
-                    this.bottleStatusBar.setPercentage(this.character.getBottlePercentage());
-                    this.level.collectableObjects.splice(index, 1);
-                }
+                this.character.collectBottle();
+                this.bottleStatusBar.setPercentage(this.character.getBottlePercentage());
+                this.level.collectableObjects.splice(index, 1);
             }
         });
     }
