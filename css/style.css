@@ -1,14 +1,12 @@
 /* Scrollbar Prevention - Must be at the top */
-html, body {
+html,
+body {
   overflow: hidden !important;
-  max-width: 100vw !important;
-  max-height: 100vh !important;
-}
-
-html::-webkit-scrollbar, 
-body::-webkit-scrollbar {
-  display: none !important;
-  width: 0 !important;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
 }
 
 /* fonts definition */
@@ -47,24 +45,11 @@ body::-webkit-scrollbar {
   box-sizing: border-box;
 }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  max-width: 100vw;
-  max-height: 100vh;
-}
-
 body {
   background-image: url('../components/img_pollo_loco/img/desert.jpg');
   background-size: cover;
-  /* background-position: center; */
   background-repeat: no-repeat;
-  min-height: 100vh;
   font-family: 'Stardos Stencil', sans-serif;
-  font-weight: 100;
 }
 
 canvas {
@@ -690,42 +675,6 @@ body:has(.legal-notice-container) {
   background: linear-gradient(145deg, #DC143C, #B22222);
 }
 
-/* @media (max-width: 1042px) {
-  .overlay-content {
-    flex-direction: column;
-    height: auto;
-  }
-
-  .openGameSection {
-    padding-block: 20px;
-  }
-
-  .mobile-controls {
-    display: flex;
-  }
-
-  body {
-    overflow: hidden;
-  }
-
-  .gameSection {
-    margin-bottom: 10px;
-  }
-}
-
-@media screen and (orientation: landscape) and (max-width: 1042px) {
-  .mobile-controls {
-    display: flex;
-  }
-}
-
-@media (min-width: 1042px) {
-  .mobile-controls {
-    display: none !important;
-  }
-} */
-
-
 /* Rotate Device Overlay Styles */
 
 .rotate-device-overlay {
@@ -777,19 +726,24 @@ body:has(.legal-notice-container) {
 }
 
 @media only screen and (max-width: 720px) {
-  .canvas {
+  canvas {
     width: 100%;
   }
 }
 
 @media only screen and (max-height: 480px) {
-
-  .canvas {
+  canvas {
     height: 100vh;
   }
 
   .headline {
     display: none;
+  }
+
+  .canvas-frame{
+    background: none;
+    border: none;
+    padding: 0px;
   }
 }
 
@@ -822,13 +776,13 @@ body:has(.legal-notice-container) {
     max-height: 50%;
   }
 
-  .overlay-button{
+  .overlay-button {
     font-size: 16px;
     padding: 12px 24px;
     margin-block: 20px;
   }
 
-  .flip-card-front, 
+  .flip-card-front,
   .flip-card-back {
     height: 200px;
     font-size: 20px;
@@ -872,11 +826,18 @@ body:has(.legal-notice-container) {
     font-size: 12px;
   }
 
-  .flip-card-back{
+  .flip-card-back {
     align-items: center;
   }
 
   .controls-board {
     background: none;
   }
+}
+
+@media (max-width: 771px) {
+  .headline {
+    font-size: 28px;
+  }
+
 }

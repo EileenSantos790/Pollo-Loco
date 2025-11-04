@@ -272,7 +272,7 @@ function initRotateDeviceOverlay() {
 
 function checkOrientation() {
     const overlay = document.getElementById('rotateDeviceOverlay');
-    const isMobile = window.innerWidth <= 1024;
+    const isMobile = window.innerWidth <= 771;
     const isPortrait = window.innerHeight > window.innerWidth;
     
     if (isMobile && isPortrait) {
