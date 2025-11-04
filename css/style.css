@@ -934,4 +934,8 @@ body:has(.legal-notice-container) {
   .mobile-controls {
     display: block;
   }
+
+  .game-over-restart-button {
+    bottom: 80px;
+  }
 }
