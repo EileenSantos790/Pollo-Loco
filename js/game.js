@@ -132,6 +132,11 @@ function showWin() {
         backgroundMusic.currentTime = 0;
     }
     
+    if (world && world.character && world.character.soundManager) {
+        world.character.soundManager.stopSound('snoring');
+        world.character.soundManager.stopSound('walking');
+    }
+    
     if (globalSoundManager && !isMuted) {
         globalSoundManager.playWin();
     }

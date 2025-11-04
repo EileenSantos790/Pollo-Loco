@@ -167,7 +167,7 @@ class Character extends MoveableObject {
     }
 
     handleIdleAnimations() {
-        if (!this.isDead() && !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT) {
+        if (!this.isDead() && !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && gameState === 'playing') {
             if (this.isLongIdle) {
                 this.playAnimation(this.IMAGES_LONG_IDLE);
                 
