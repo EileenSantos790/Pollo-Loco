@@ -929,3 +929,9 @@ body:has(.legal-notice-container) {
   }
 
 }
+
+@media (max-width: 1370px) {
+  .mobile-controls {
+    display: block;
+  }
+}
