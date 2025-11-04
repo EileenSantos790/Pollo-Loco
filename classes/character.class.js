@@ -75,7 +75,6 @@ class Character extends MoveableObject {
     maxBottles = 5;
     lastThrowTime = 0;
     throwCooldown = 500;
-
     constructor() {
         super().loadImage('components/img_pollo_loco/img/2_character_pepe/1_idle/idle/I-1.png');
         this.loadImages(this.IMAGES_WALKING);
@@ -84,6 +83,9 @@ class Character extends MoveableObject {
         this.loadImages(this.IMAGES_JUMP);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT);
+        
+        this.soundManager = new SoundManager();
+        
         this.applyGravity();
         this.animate();
         this.bottles = 0;
@@ -150,6 +152,17 @@ class Character extends MoveableObject {
     handleWalkingAnimation() {
         if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
             this.playAnimation(this.IMAGES_WALKING);
+            
+            if (!this.isAboveGround()) {
+                if (!this.soundManager.isPlaying('walking')) {
+                    console.log('Starting walking sound');
+                    this.soundManager.playSound('walking');
+                }
+            } else {
+                this.soundManager.stopSound('walking');
+            }
+        } else {
+            this.soundManager.stopSound('walking');
         }
     }
 
@@ -157,9 +170,16 @@ class Character extends MoveableObject {
         if (!this.isDead() && !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT) {
             if (this.isLongIdle) {
                 this.playAnimation(this.IMAGES_LONG_IDLE);
+                
+                if (!this.soundManager.isPlaying('snoring')) {
+                    this.soundManager.playSound('snoring');
+                }
             } else if (this.isIdle) {
                 this.playAnimation(this.IMAGES_IDLE);
+                this.soundManager.stopSound('snoring');
             }
+        } else {
+            this.soundManager.stopSound('snoring');
         }
     }
 
@@ -193,6 +213,12 @@ class Character extends MoveableObject {
     handleHurtAnimation() {
         if (!this.isDead() && this.isHurt()) {
             this.playAnimation(this.IMAGES_HURT);
+            
+            if (!this.soundManager.hasPlayed('hurt')) {
+                this.soundManager.playSound('hurt');
+            }
+        } else {
+            this.soundManager.resetSoundState('hurt');
         }
     }
 
@@ -200,11 +226,15 @@ class Character extends MoveableObject {
         this.idleTimer = 0;
         this.isIdle = false;
         this.isLongIdle = false;
+        this.soundManager.stopSound('snoring');
     }
 
     collectBottle() {
         if (this.bottles < this.maxBottles) {
             this.bottles++;
+            
+            // Bottle Collecting Sound abspielen
+            this.soundManager.playSound('bottleCollect');
         }
     }
 
@@ -222,5 +252,10 @@ class Character extends MoveableObject {
 
     getBottlePercentage() {
         return (this.bottles / this.maxBottles) * 100;
+    }
+
+    jump() {
+        this.soundManager.playSound('jump');
+        super.jump();
     }
 }

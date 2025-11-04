@@ -4,6 +4,8 @@ let keyboard = new Keyboard();
 let ctx;
 let gameState = 'start';
 let startScreenImg;
+let backgroundMusic;
+let isMuted = false; // global mute state for backgroundMusic and SoundManager
 
 function init() {
     canvas = document.getElementById("gameCanvas");
@@ -14,6 +16,10 @@ function init() {
     startScreenImg.onload = function() {
         showStartScreen();
     };
+    
+    backgroundMusic = new Audio('components/audio/Run-Amok(chosic.com).mp3');
+    backgroundMusic.loop = true;
+    backgroundMusic.volume = 0.5;
     
     canvas.addEventListener('click', handleCanvasClick);
     initMobileControls();
@@ -26,7 +32,6 @@ function initMobileControls() {
     const jumpBtn = document.getElementById('jumpBtn');
     const throwBtn = document.getElementById('throwBtn');
 
-    // Left Button
     leftBtn.addEventListener('touchstart', (e) => {
         e.preventDefault();
         keyboard.LEFT = true;
@@ -36,7 +41,6 @@ function initMobileControls() {
         keyboard.LEFT = false;
     });
 
-    // Right Button
     rightBtn.addEventListener('touchstart', (e) => {
         e.preventDefault();
         keyboard.RIGHT = true;
@@ -46,7 +50,6 @@ function initMobileControls() {
         keyboard.RIGHT = false;
     });
 
-    // Jump Button (Space + UP)
     jumpBtn.addEventListener('touchstart', (e) => {
         e.preventDefault();
         keyboard.SPACE = true;
@@ -58,7 +61,6 @@ function initMobileControls() {
         keyboard.UP = false;
     });
 
-    // Throw Button
     throwBtn.addEventListener('touchstart', (e) => {
         e.preventDefault();
         keyboard.D = true;
@@ -68,7 +70,6 @@ function initMobileControls() {
         keyboard.D = false;
     });
 
-    // Prevent context menu on long press
     [leftBtn, rightBtn, jumpBtn, throwBtn].forEach(btn => {
         btn.addEventListener('contextmenu', (e) => {
             e.preventDefault();
@@ -102,6 +103,13 @@ function startGame() {
     gameState = 'playing';
     canvas.removeEventListener('click', handleCanvasClick);
     canvas.classList.remove('start-screen');
+    
+    if (backgroundMusic) {
+        backgroundMusic.play().catch(e => {
+            console.log('Autoplay wurde blockiert:', e);
+        });
+    }
+    
     initLevel1();
     world = new World(canvas, keyboard);
     
@@ -110,6 +118,12 @@ function startGame() {
 
 function restartGame() {
     gameState = 'start';
+    
+    if (backgroundMusic) {
+        backgroundMusic.pause();
+        backgroundMusic.currentTime = 0;
+    }
+    
     if (world) {
         world = null;
     }
@@ -213,7 +227,41 @@ document.addEventListener('fullscreenchange', () => {
     }
 });
 
-// Rotate Device Overlay Functions
+function toggleMute() {
+    isMuted = !isMuted;
+
+    if (backgroundMusic) {
+        try {
+            backgroundMusic.muted = isMuted;
+            if (!isMuted && gameState === 'playing') {
+                backgroundMusic.play().catch(() => {});
+            }
+        } catch (e) {}
+    }
+
+    if (world && world.character && world.character.soundManager) {
+        try {
+            if (isMuted) {
+                world.character.soundManager.muteAll();
+            } else {
+                world.character.soundManager.unmuteAll();
+            }
+        } catch (e) {}
+    }
+
+    const icon = document.getElementById('muteIcon');
+    if (!icon) return;
+    if (isMuted) {
+        icon.src = 'components/img_pollo_loco/icons8-no-sound-50.png';
+        icon.alt = 'Unmute';
+        icon.title = 'Sound einschalten';
+    } else {
+        icon.src = 'components/img_pollo_loco/img/icons8-sound-50.png';
+        icon.alt = 'Mute';
+        icon.title = 'Sound ausschalten';
+    }
+}
+
 function initRotateDeviceOverlay() {
     checkOrientation();
     window.addEventListener('orientationchange', () => {

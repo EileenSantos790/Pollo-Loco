@@ -10,6 +10,7 @@ class World {
     coinStatusBar = new CoinStatusBar();
     bottleStatusBar = new BottleStatusBar();
     throwableObjects = [];
+    soundManager = new SoundManager();
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext("2d");
@@ -96,6 +97,7 @@ class World {
                 let endbossOnScreen = enemy.x < (-this.camera_x + 720);
                 if (endbossOnScreen) {
                     enemy.activate();
+                    this.soundManager.playSound('endbossAlert');
                 }
             }
         });

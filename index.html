@@ -11,6 +11,7 @@
     <script src="./classes/drawableObject.class.js" defer></script>
     <script src="./classes/movableObject.class.js" defer></script>
     <script src="./classes/keyboard.class.js" defer></script>
+    <script src="./classes/soundManager.class.js" defer></script>
 
     <!-- Alle Objekt-Klassen -->
     <script src="./classes/character.class.js" defer></script>
@@ -36,7 +37,6 @@
     <script src="./classes/world.class.js" defer></script>
 
     <!-- Spiel-Logik -->
-    <script src="./js/main.js" defer></script>
     <script src="./js/game.js" defer></script>
 
     <title>El Polo Loco</title>
@@ -128,6 +128,7 @@
             <div class="canvas-frame">
                 <canvas id="gameCanvas" width="720" height="480"></canvas>
                 <img id="fullscreenIcon" src="components/img_pollo_loco/img/fullscreen.png" alt="Fullscreen" onclick="toggleFullscreen()">
+                <img id="muteIcon" src="components/img_pollo_loco/img/icons8-sound-50.png" alt="Mute" title="Sound ausschalten" onclick="toggleMute()">
                 
                 <!-- Mobile Controls innerhalb des Canvas -->
                 <div class="mobile-controls" id="mobileControls">

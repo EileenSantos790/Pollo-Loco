@@ -118,6 +118,34 @@ canvas.start-screen {
   transform: scale(0.95);
 }
 
+#muteIcon {
+  position: absolute;
+  top: 20px;
+  right: 70px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  z-index: 1000;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 6px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  filter: brightness(1.2);
+}
+
+#muteIcon:hover {
+  opacity: 1;
+  transform: scale(1.1);
+  background: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+#muteIcon:active {
+  transform: scale(0.95);
+}
+
 .stardos-stencil-regular {
   font-family: "Stardos Stencil", system-ui;
   font-weight: 400;
@@ -592,7 +620,6 @@ body:has(.legal-notice-container) {
   }
 }
 
-/* Mobile Controls Styles */
 .mobile-controls {
   display: none;
   position: absolute;
@@ -708,20 +735,12 @@ body:has(.legal-notice-container) {
   }
 }
 
-/* @media screen and (orientation: landscape) and (pointer: coarse) {
-  .mobile-controls {
-    display: flex;
-  }
-} */
-
-
 @media (min-width: 1042px) {
   .mobile-controls {
     display: none !important;
   }
 }
 
-/* Rotate Device Overlay */
 .rotate-device-overlay {
   position: fixed;
   top: 0;
