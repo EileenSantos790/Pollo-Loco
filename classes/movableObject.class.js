@@ -61,6 +61,11 @@ class MoveableObject extends DrawableObject {
             thisY += 10;
             thisWidth -= 20;
             thisHeight -= 20;
+        } else if (this instanceof ThrowableObject) {
+            thisX += 5;
+            thisY += 5;
+            thisWidth -= 10;
+            thisHeight -= 10;
         }
         
         if (mo instanceof Character) {
@@ -73,6 +78,11 @@ class MoveableObject extends DrawableObject {
             moY += 10;
             moWidth -= 20;
             moHeight -= 20;
+        } else if (mo instanceof ThrowableObject) {
+            moX += 5;
+            moY += 5;
+            moWidth -= 10;
+            moHeight -= 10;
         }
         
         return thisX + thisWidth > moX &&

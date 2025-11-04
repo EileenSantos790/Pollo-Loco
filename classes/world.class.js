@@ -9,6 +9,7 @@ class World {
     statusBar = new StatusBar();
     coinStatusBar = new CoinStatusBar();
     bottleStatusBar = new BottleStatusBar();
+    endbossStatusBar = new EndbossStatusBar();
     throwableObjects = [];
     soundManager = new SoundManager();
 
@@ -28,6 +29,7 @@ class World {
     run() {
         setInterval(() => {
             this.checkCollisions();
+            this.checkBottleCollisions();
         }, 200);
         
         setInterval(() => {
@@ -59,6 +61,48 @@ class World {
         });
     }
 
+    checkBottleCollisions() {
+        this.throwableObjects.forEach((bottle, bottleIndex) => {
+            this.level.enemies.forEach((enemy, enemyIndex) => {
+                if (bottle.isColliding(enemy)) {
+                    this.throwableObjects.splice(bottleIndex, 1);
+                    
+                    if (enemy instanceof Endboss) {
+                        enemy.hitByBottle();
+                        this.soundManager.playSound('endbossHurt');
+                        this.updateEndbossStatusBar(enemy);
+                        if (enemy.isDead()) {
+                            this.level.enemies.splice(enemyIndex, 1);
+                            this.endbossStatusBar.hide();
+                        }
+                    } else {
+                        enemy.die();
+                        setTimeout(() => {
+                            this.level.enemies.splice(enemyIndex, 1);
+                        }, 1000);
+                    }
+                }
+            });
+        });
+    }
+
+    updateEndbossStatusBar(endboss) {
+        let remainingLives = 3 - endboss.hitCount;
+        let healthPercentage;
+        
+        if (remainingLives === 3) {
+            healthPercentage = 100;
+        } else if (remainingLives === 2) {
+            healthPercentage = 66.67;
+        } else if (remainingLives === 1) {
+            healthPercentage = 33.33;
+        } else {
+            healthPercentage = 0;
+        }
+        
+        this.endbossStatusBar.setPercentage(healthPercentage);
+    }
+
     checkThrowObjects() {
         if (this.keyboard.D && this.character.canThrowBottle()) {
             let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100, this.character.otherDirection);
@@ -78,6 +122,9 @@ class World {
         this.addToMap(this.statusBar);
         this.addToMap(this.coinStatusBar);
         this.addToMap(this.bottleStatusBar);
+        if (this.endbossStatusBar.isVisible) {
+            this.addToMap(this.endbossStatusBar);
+        }
         this.ctx.translate(this.camera_x, 0);
         this.addToMap(this.character);
         this.checkEndbossActivation();
@@ -97,6 +144,7 @@ class World {
                 let endbossOnScreen = enemy.x < (-this.camera_x + 720);
                 if (endbossOnScreen) {
                     enemy.activate();
+                    this.endbossStatusBar.show();
                     this.soundManager.playSound('endbossAlert');
                 }
             }

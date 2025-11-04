@@ -21,6 +21,7 @@ class SoundManager {
         this.createSound('jump', 'components/audio/jump.wav', { volume: 0.8 });
         this.createSound('bottleCollect', 'components/audio/bottleCollecting.wav', { volume: 0.8 });
         this.createSound('endbossAlert', 'components/audio/chicken.wav', { volume: 0.8 });
+        this.createSound('endbossHurt', 'components/audio/chicken.wav', { volume: 0.8 });
     }
 
     createSound(name, path, options = {}) {
