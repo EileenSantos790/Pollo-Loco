@@ -11,7 +11,7 @@ class SoundManager {
         this.createSound('hurt', 'components/audio/hurt.wav', { volume: 1.0 });
         this.createSound('coin', 'components/audio/collectingMoney.wav', { volume: 0.8 });
         this.createSound('snoring', 'components/audio/Snoring-Child-chosic.com_ (1).mp3', { 
-            volume: 0.6, 
+            volume: 0.5, 
             loop: true 
         });
         this.createSound('walking', 'components/audio/walk.wav', { 
