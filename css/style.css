@@ -76,6 +76,42 @@ canvas.start-screen {
   cursor: pointer;
 }
 
+/* game over screen */
+
+canvas.game-over-screen {
+  cursor: default;
+}
+
+.game-over-restart-button {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #D9B687;
+  border: 2px solid black;
+  border-radius: 15px;
+  padding: 15px 30px;
+  font-family: 'Stardos Stencil', Arial, sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+  color: black;
+  cursor: pointer;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+
+.game-over-restart-button:hover {
+  background: #E5C29F;
+  transform: translateX(-50%) translateY(-3px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.4);
+}
+
+.game-over-restart-button:active {
+  transform: translateX(-50%) translateY(1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
 /* fullscreen icon */
 
 #fullscreenIcon {

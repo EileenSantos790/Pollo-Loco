@@ -12,6 +12,7 @@ class World {
     endbossStatusBar = new EndbossStatusBar();
     throwableObjects = [];
     soundManager = new SoundManager();
+    gameOverTriggered = false;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext("2d");
@@ -134,6 +135,14 @@ class World {
         this.addObjectsToMap(this.throwableObjects);
 
         this.ctx.translate(-this.camera_x, 0);
+
+        if (this.character.isDead() && gameState === 'playing' && !this.gameOverTriggered) {
+            this.gameOverTriggered = true;
+            setTimeout(() => {
+                showGameOver();
+            }, 1000);
+            return;
+        }
 
         requestAnimationFrame(() => this.draw());
     }

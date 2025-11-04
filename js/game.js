@@ -4,8 +4,10 @@ let keyboard = new Keyboard();
 let ctx;
 let gameState = 'start';
 let startScreenImg;
+let gameOverImg;
 let backgroundMusic;
-let isMuted = false; // global mute state for backgroundMusic and SoundManager
+let globalSoundManager;
+let isMuted = false;
 
 function init() {
     canvas = document.getElementById("gameCanvas");
@@ -17,9 +19,14 @@ function init() {
         showStartScreen();
     };
     
+    gameOverImg = new Image();
+    gameOverImg.src = 'components/img_pollo_loco/img/You won, you lost/Game over A.png';
+    
     backgroundMusic = new Audio('components/audio/Run-Amok(chosic.com).mp3');
     backgroundMusic.loop = true;
     backgroundMusic.volume = 0.5;
+    
+    globalSoundManager = new SoundManager();
     
     canvas.addEventListener('click', handleCanvasClick);
     initMobileControls();
@@ -93,9 +100,51 @@ function showStartScreen() {
     ctx.fillText('Klicke zum Starten', canvas.width / 2, canvas.height - 390);
 }
 
+function showGameOver() {
+    gameState = 'gameOver';
+    
+    if (backgroundMusic) {
+        backgroundMusic.pause();
+        backgroundMusic.currentTime = 0;
+    }
+    
+    if (globalSoundManager && !isMuted) {
+        globalSoundManager.playGameOver();
+    }
+    
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(gameOverImg, 0, 0, canvas.width, canvas.height);
+    
+    canvas.classList.add('game-over-screen');
+    
+    createRestartButton();
+}
+
+function createRestartButton() {
+    removeRestartButton();
+    
+    const canvasFrame = document.querySelector('.canvas-frame');
+    const restartButton = document.createElement('button');
+    restartButton.id = 'gameOverRestartButton';
+    restartButton.className = 'game-over-restart-button';
+    restartButton.textContent = 'Neues Spiel starten';
+    restartButton.onclick = restartGame;
+    
+    canvasFrame.appendChild(restartButton);
+}
+
+function removeRestartButton() {
+    const existingButton = document.getElementById('gameOverRestartButton');
+    if (existingButton) {
+        existingButton.remove();
+    }
+}
+
 function handleCanvasClick() {
     if (gameState === 'start') {
         startGame();
+    } else if (gameState === 'gameOver') {
+        restartGame();
     }
 }
 
@@ -124,9 +173,16 @@ function restartGame() {
         backgroundMusic.currentTime = 0;
     }
     
+    if (globalSoundManager) {
+        globalSoundManager.stopSound('gameOver');
+    }
+    
     if (world) {
         world = null;
     }
+    canvas.removeEventListener('click', handleCanvasClick);
+    canvas.classList.remove('game-over-screen');
+    removeRestartButton();
     canvas.addEventListener('click', handleCanvasClick);
     showStartScreen();
     
@@ -245,6 +301,16 @@ function toggleMute() {
                 world.character.soundManager.muteAll();
             } else {
                 world.character.soundManager.unmuteAll();
+            }
+        } catch (e) {}
+    }
+
+    if (globalSoundManager) {
+        try {
+            if (isMuted) {
+                globalSoundManager.muteAll();
+            } else {
+                globalSoundManager.unmuteAll();
             }
         } catch (e) {}
     }
