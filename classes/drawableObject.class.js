@@ -22,7 +22,6 @@ class DrawableObject {
             img.src = path;
             this.imageCache[path] = img;
         });
-
     }
 
     drawFrame(ctx) {
@@ -31,7 +30,7 @@ class DrawableObject {
             ctx.beginPath();
             ctx.lineWidth = '5';
             ctx.strokeStyle = 'red';
-            
+
             if (this instanceof Character) {
                 ctx.rect(this.x + 30, this.y + 120, this.width - 60, this.height - 140);
             } else {
@@ -40,5 +39,4 @@ class DrawableObject {
             ctx.stroke();
         }
     }
-
 }

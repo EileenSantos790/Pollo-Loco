@@ -1,69 +1,67 @@
 let level1;
 function initLevel1() {
 
-
     level1 = new Level(
 
-    [
-        new Chicken(),
-        new Chicken(),
-        new smallChicken(),
-        new Chicken(),
-        new smallChicken(),
-        new Chicken(),
-        new smallChicken(),
-        new Endboss(),
-    ],
+        [
+            new Chicken(),
+            new Chicken(),
+            new smallChicken(),
+            new Chicken(),
+            new smallChicken(),
+            new Chicken(),
+            new smallChicken(),
+            new Endboss(),
+        ],
 
-    [
-        new Cloud('components/img_pollo_loco/img/5_background/layers/4_clouds/2.png', 0),
-        new Cloud('components/img_pollo_loco/img/5_background/layers/4_clouds/1.png', 719),
-        new Cloud('components/img_pollo_loco/img/5_background/layers/4_clouds/2.png', 719*2),
-        new Cloud('components/img_pollo_loco/img/5_background/layers/4_clouds/1.png', 719*3),
-    ],
+        [
+            new Cloud('components/img_pollo_loco/img/5_background/layers/4_clouds/2.png', 0),
+            new Cloud('components/img_pollo_loco/img/5_background/layers/4_clouds/1.png', 719),
+            new Cloud('components/img_pollo_loco/img/5_background/layers/4_clouds/2.png', 719 * 2),
+            new Cloud('components/img_pollo_loco/img/5_background/layers/4_clouds/1.png', 719 * 3),
+        ],
 
-    [
-        new BackgroundObject('components/img_pollo_loco/img/5_background/layers/air.png', -719),
-        new BackgroundObject('components/img_pollo_loco/img/5_background/layers/3_third_layer/2.png', -719),
-        new BackgroundObject('components/img_pollo_loco/img/5_background/layers/2_second_layer/2.png', -719),
-        new BackgroundObject('components/img_pollo_loco/img/5_background/layers/1_first_layer/2.png', -719),
-        new BackgroundObject('components/img_pollo_loco/img/5_background/layers/air.png', 0, 0),
-        new BackgroundObject('components/img_pollo_loco/img/5_background/layers/3_third_layer/1.png', 0),
-        new BackgroundObject('components/img_pollo_loco/img/5_background/layers/2_second_layer/1.png', 0),
-        new BackgroundObject('components/img_pollo_loco/img/5_background/layers/1_first_layer/1.png', 0),
-        new BackgroundObject('components/img_pollo_loco/img/5_background/layers/air.png', 719),
-        new BackgroundObject('components/img_pollo_loco/img/5_background/layers/3_third_layer/2.png', 719),
-        new BackgroundObject('components/img_pollo_loco/img/5_background/layers/2_second_layer/2.png', 719),
-        new BackgroundObject('components/img_pollo_loco/img/5_background/layers/1_first_layer/2.png', 719),
-        new BackgroundObject('components/img_pollo_loco/img/5_background/layers/air.png', 719 * 2),
-        new BackgroundObject('components/img_pollo_loco/img/5_background/layers/3_third_layer/1.png', 719 * 2),
-        new BackgroundObject('components/img_pollo_loco/img/5_background/layers/2_second_layer/1.png', 719 * 2),
-        new BackgroundObject('components/img_pollo_loco/img/5_background/layers/1_first_layer/1.png', 719 * 2),
-        new BackgroundObject('components/img_pollo_loco/img/5_background/layers/air.png', 719 * 3),
-        new BackgroundObject('components/img_pollo_loco/img/5_background/layers/3_third_layer/2.png', 719 * 3),
-        new BackgroundObject('components/img_pollo_loco/img/5_background/layers/2_second_layer/2.png', 719 * 3),
-        new BackgroundObject('components/img_pollo_loco/img/5_background/layers/1_first_layer/2.png', 719 * 3),
-    ],
+        [
+            new BackgroundObject('components/img_pollo_loco/img/5_background/layers/air.png', -719),
+            new BackgroundObject('components/img_pollo_loco/img/5_background/layers/3_third_layer/2.png', -719),
+            new BackgroundObject('components/img_pollo_loco/img/5_background/layers/2_second_layer/2.png', -719),
+            new BackgroundObject('components/img_pollo_loco/img/5_background/layers/1_first_layer/2.png', -719),
+            new BackgroundObject('components/img_pollo_loco/img/5_background/layers/air.png', 0, 0),
+            new BackgroundObject('components/img_pollo_loco/img/5_background/layers/3_third_layer/1.png', 0),
+            new BackgroundObject('components/img_pollo_loco/img/5_background/layers/2_second_layer/1.png', 0),
+            new BackgroundObject('components/img_pollo_loco/img/5_background/layers/1_first_layer/1.png', 0),
+            new BackgroundObject('components/img_pollo_loco/img/5_background/layers/air.png', 719),
+            new BackgroundObject('components/img_pollo_loco/img/5_background/layers/3_third_layer/2.png', 719),
+            new BackgroundObject('components/img_pollo_loco/img/5_background/layers/2_second_layer/2.png', 719),
+            new BackgroundObject('components/img_pollo_loco/img/5_background/layers/1_first_layer/2.png', 719),
+            new BackgroundObject('components/img_pollo_loco/img/5_background/layers/air.png', 719 * 2),
+            new BackgroundObject('components/img_pollo_loco/img/5_background/layers/3_third_layer/1.png', 719 * 2),
+            new BackgroundObject('components/img_pollo_loco/img/5_background/layers/2_second_layer/1.png', 719 * 2),
+            new BackgroundObject('components/img_pollo_loco/img/5_background/layers/1_first_layer/1.png', 719 * 2),
+            new BackgroundObject('components/img_pollo_loco/img/5_background/layers/air.png', 719 * 3),
+            new BackgroundObject('components/img_pollo_loco/img/5_background/layers/3_third_layer/2.png', 719 * 3),
+            new BackgroundObject('components/img_pollo_loco/img/5_background/layers/2_second_layer/2.png', 719 * 3),
+            new BackgroundObject('components/img_pollo_loco/img/5_background/layers/1_first_layer/2.png', 719 * 3),
+        ],
 
-    [
-        new CollectableObject('coin'),
-        new CollectableObject('coin'),
-        new CollectableObject('coin'),
-        new CollectableObject('coin'),
-        new CollectableObject('coin'),
-        new CollectableObject('coin'),
-        new CollectableObject('coin'),
-        new CollectableObject('coin'),
-        new CollectableObject('coin'),
-        new CollectableObject('coin'),
-        
-        new CollectableObject('bottle'),
-        new CollectableObject('bottle'),
-        new CollectableObject('bottle'),
-        new CollectableObject('bottle'),
-        new CollectableObject('bottle'),
-        new CollectableObject('bottle'),
-    ]
+        [
+            new CollectableObject('coin'),
+            new CollectableObject('coin'),
+            new CollectableObject('coin'),
+            new CollectableObject('coin'),
+            new CollectableObject('coin'),
+            new CollectableObject('coin'),
+            new CollectableObject('coin'),
+            new CollectableObject('coin'),
+            new CollectableObject('coin'),
+            new CollectableObject('coin'),
+
+            new CollectableObject('bottle'),
+            new CollectableObject('bottle'),
+            new CollectableObject('bottle'),
+            new CollectableObject('bottle'),
+            new CollectableObject('bottle'),
+            new CollectableObject('bottle'),
+        ]
     );
-
 }

@@ -22,7 +22,6 @@ class MoveableObject extends DrawableObject {
             } else {
                 this.speedY = 0;
             }
-
             this.prevY = previousY;
         }, 1000 / 25);
     }
@@ -59,12 +58,11 @@ class MoveableObject extends DrawableObject {
         let thisY = this.y;
         let thisWidth = this.width;
         let thisHeight = this.height;
-        
         let moX = mo.x;
         let moY = mo.y;
         let moWidth = mo.width;
         let moHeight = mo.height;
-        
+
         if (this instanceof Character) {
             thisX += 30;
             thisY += 120;
@@ -86,7 +84,7 @@ class MoveableObject extends DrawableObject {
             thisWidth -= 10;
             thisHeight -= 10;
         }
-        
+
         if (mo instanceof Character) {
             moX += 30;
             moY += 120;
@@ -108,7 +106,7 @@ class MoveableObject extends DrawableObject {
             moWidth -= 10;
             moHeight -= 10;
         }
-        
+
         return thisX + thisWidth > moX &&
             thisY + thisHeight > moY &&
             thisX < moX + moWidth &&

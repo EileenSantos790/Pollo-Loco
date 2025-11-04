@@ -1,5 +1,5 @@
 class CollectableObject extends MoveableObject {
-    
+
     width = 80;
     height = 80;
 
@@ -16,25 +16,24 @@ class CollectableObject extends MoveableObject {
     constructor(type) {
         super();
         this.type = type;
-        
+
         if (type === 'coin') {
             this.loadImage(this.IMAGES_COINS[0]);
             this.loadImages(this.IMAGES_COINS);
-            
+
         } else if (type === 'bottle') {
             this.loadImage(this.IMAGES_BOTTLES[0]);
             this.loadImages(this.IMAGES_BOTTLES);
             this.width = 70;
             this.height = 70;
         }
-        
         this.setRandomPosition();
         this.animate();
     }
 
     setRandomPosition() {
         this.x = 200 + Math.random() * 1800;
-        
+
         if (this.type === 'coin') {
             this.y = 100 + Math.random() * 200;
         } else if (this.type === 'bottle') {

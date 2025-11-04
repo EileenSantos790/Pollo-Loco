@@ -83,9 +83,9 @@ class Character extends MoveableObject {
         this.loadImages(this.IMAGES_JUMP);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT);
-        
+
         this.soundManager = new SoundManager();
-        
+
         this.applyGravity();
         this.animate();
         this.bottles = 0;
@@ -129,7 +129,6 @@ class Character extends MoveableObject {
             this.x += this.speed;
             this.otherDirection = false;
             isMoving = true;
-
         }
 
         if (this.world.keyboard.LEFT && this.x > 0) {
@@ -143,7 +142,6 @@ class Character extends MoveableObject {
         }
 
         this.world.camera_x = -this.x + 100;
-
         if (this.world.keyboard.SPACE && !this.isAboveGround()) {
             this.jump();
         }
@@ -152,7 +150,7 @@ class Character extends MoveableObject {
     handleWalkingAnimation() {
         if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
             this.playAnimation(this.IMAGES_WALKING);
-            
+
             if (!this.isAboveGround()) {
                 if (!this.soundManager.isPlaying('walking')) {
                     console.log('Starting walking sound');
@@ -170,7 +168,7 @@ class Character extends MoveableObject {
         if (!this.isDead() && !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && gameState === 'playing') {
             if (this.isLongIdle) {
                 this.playAnimation(this.IMAGES_LONG_IDLE);
-                
+
                 if (!this.soundManager.isPlaying('snoring')) {
                     this.soundManager.playSound('snoring');
                 }
@@ -213,7 +211,7 @@ class Character extends MoveableObject {
     handleHurtAnimation() {
         if (!this.isDead() && this.isHurt()) {
             this.playAnimation(this.IMAGES_HURT);
-            
+
             if (!this.soundManager.hasPlayed('hurt')) {
                 this.soundManager.playSound('hurt');
             }
@@ -232,8 +230,6 @@ class Character extends MoveableObject {
     collectBottle() {
         if (this.bottles < this.maxBottles) {
             this.bottles++;
-            
-            // Bottle Collecting Sound abspielen
             this.soundManager.playSound('bottleCollect');
         }
     }

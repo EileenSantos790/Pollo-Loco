@@ -10,13 +10,13 @@ class SoundManager {
     initializeSounds() {
         this.createSound('hurt', 'components/audio/hurt.wav', { volume: 0.4 });
         this.createSound('coin', 'components/audio/collectingMoney.wav', { volume: 0.6 });
-        this.createSound('snoring', 'components/audio/Snoring-Child-chosic.com_ (1).mp3', { 
-            volume: 0.1, 
-            loop: true 
+        this.createSound('snoring', 'components/audio/Snoring-Child-chosic.com_ (1).mp3', {
+            volume: 0.1,
+            loop: true
         });
-        this.createSound('walking', 'components/audio/walk.wav', { 
-            volume: 0.3, 
-            loop: true 
+        this.createSound('walking', 'components/audio/walk.wav', {
+            volume: 0.3,
+            loop: true
         });
         this.createSound('jump', 'components/audio/jump.wav', { volume: 0.3 });
         this.createSound('bottleCollect', 'components/audio/bottleCollecting.wav', { volume: 0.3 });
@@ -35,14 +35,14 @@ class SoundManager {
             audio.volume = volume;
             audio.loop = options.loop || false;
             audio.preload = 'auto';
-            
+
             this.sounds[name] = audio;
             this.originalVolumes[name] = volume;
             this.soundStates[name] = {
                 isPlaying: false,
                 hasPlayed: false
             };
-        } catch (error) {}
+        } catch (error) { }
     }
 
     playSound(name) {
@@ -75,7 +75,7 @@ class SoundManager {
             sound.pause();
             sound.currentTime = 0;
             this.soundStates[name].isPlaying = false;
-        } catch (error) {}
+        } catch (error) { }
     }
 
     pauseSound(name) {
@@ -87,7 +87,7 @@ class SoundManager {
         try {
             sound.pause();
             this.soundStates[name].isPlaying = false;
-        } catch (error) {}
+        } catch (error) { }
     }
 
     isPlaying(name) {
@@ -133,7 +133,7 @@ class SoundManager {
         }
         return this.isMuted;
     }
-    
+
     playEndbossAlert() {
         return this.playSound('endbossAlert');
     }

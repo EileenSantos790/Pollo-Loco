@@ -40,7 +40,7 @@ class ThrowableObject extends MoveableObject {
             clearInterval(this.throwInterval);
             this.speedY = 0;
             this.speed = 0;
-            
+
             let currentFrame = 0;
             const splashImages = [
                 'components/img_pollo_loco/img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.png',
@@ -50,7 +50,7 @@ class ThrowableObject extends MoveableObject {
                 'components/img_pollo_loco/img/6_salsa_bottle/bottle_rotation/bottle_splash/5_bottle_splash.png',
                 'components/img_pollo_loco/img/6_salsa_bottle/bottle_rotation/bottle_splash/6_bottle_splash.png'
             ];
-            
+
             const animationInterval = setInterval(() => {
                 if (currentFrame < splashImages.length) {
                     this.loadImage(splashImages[currentFrame]);

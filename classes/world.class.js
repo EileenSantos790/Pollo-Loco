@@ -32,7 +32,7 @@ class World {
             this.checkCollisions();
             this.checkBottleCollisions();
         }, 1000 / 60);
-        
+
         setInterval(() => {
             this.checkThrowObjects();
         }, 100);
@@ -48,7 +48,7 @@ class World {
                 const characterHitboxY = this.character.y + 120;
                 const characterHitboxHeight = this.character.height - 140;
                 const characterHitboxBottom = characterHitboxY + characterHitboxHeight;
-                
+
                 const enemyOffset = enemy instanceof smallChicken ? 4 : 10;
                 const enemyHitboxY = enemy.y + enemyOffset;
                 const enemyHitboxTop = enemyHitboxY;
@@ -58,7 +58,7 @@ class World {
                     ? Math.max(16, Math.min(22, baseMargin))
                     : Math.max(12, Math.min(22, baseMargin));
                 const isStomping = characterHitboxBottom <= (enemyHitboxTop + margin) && wasDescending;
-                
+
                 if (isStomping) {
                     this.character.speedY = 12;
                     enemy.die();
@@ -100,14 +100,14 @@ class World {
                 if (bottle.isColliding(enemy) && !bottle.isSplashing) {
                     bottle.splash();
                     this.soundManager.playSound('glassBroken');
-                    
+
                     setTimeout(() => {
                         const index = this.throwableObjects.indexOf(bottle);
                         if (index > -1) {
                             this.throwableObjects.splice(index, 1);
                         }
                     }, 600);
-                    
+
                     if (enemy instanceof Endboss) {
                         enemy.hitByBottle();
                         this.soundManager.playSound('endbossHurt');
@@ -132,7 +132,7 @@ class World {
     updateEndbossStatusBar(endboss) {
         let remainingLives = 3 - endboss.hitCount;
         let healthPercentage;
-        
+
         if (remainingLives === 3) {
             healthPercentage = 100;
         } else if (remainingLives === 2) {
@@ -142,7 +142,7 @@ class World {
         } else {
             healthPercentage = 0;
         }
-        
+
         this.endbossStatusBar.setPercentage(healthPercentage);
     }
 
@@ -157,9 +157,7 @@ class World {
 
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
         this.ctx.translate(this.camera_x, 0);
-
         this.addObjectsToMap(this.level.backgroundObjects);
         this.addObjectsToMap(this.level.clouds);
         this.ctx.translate(-this.camera_x, 0);
@@ -215,7 +213,7 @@ class World {
             if (enemy instanceof Endboss) {
                 return enemy.isDead();
             }
-            return true; 
+            return true;
         }) && this.level.enemies.some(enemy => enemy instanceof Endboss);
     }
 
@@ -232,7 +230,6 @@ class World {
         } else {
             mo.draw(this.ctx);
         }
-
         mo.drawFrame(this.ctx);
     }
 

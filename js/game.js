@@ -13,27 +13,27 @@ let isMuted = false;
 function init() {
     canvas = document.getElementById("gameCanvas");
     ctx = canvas.getContext("2d");
-    
+
     startScreenImg = new Image();
     startScreenImg.src = 'components/img_pollo_loco/img/9_intro_outro_screens/start/startscreen_2.png';
-    startScreenImg.onload = function() {
+    startScreenImg.onload = function () {
         showStartScreen();
     };
-    
+
     gameOverImg = new Image();
     gameOverImg.src = 'components/img_pollo_loco/img/You won, you lost/Game over A.png';
-    
+
     winImg = new Image();
     winImg.src = 'components/img_pollo_loco/img/You won, you lost/You Won B.png';
-    
+
     backgroundMusic = new Audio('components/audio/Run-Amok(chosic.com).mp3');
     backgroundMusic.loop = true;
     backgroundMusic.volume = 0.5;
-    
+
     globalSoundManager = new SoundManager();
-    
+
     loadMuteSettings();
-    
+
     canvas.addEventListener('click', handleCanvasClick);
     initMobileControls();
     initRotateDeviceOverlay();
@@ -91,86 +91,86 @@ function initMobileControls() {
 function showStartScreen() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(startScreenImg, 0, 0, canvas.width, canvas.height);
-    
+
     canvas.classList.add('start-screen');
-    
+
     ctx.fillStyle = 'black';
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 3;
     ctx.font = 'bold 36px "Stardos Stencil", Arial';
     ctx.textAlign = 'center';
-    
+
     ctx.strokeText('Klicke zum Starten', canvas.width / 2, canvas.height - 390);
     ctx.fillText('Klicke zum Starten', canvas.width / 2, canvas.height - 390);
 }
 
 function showGameOver() {
     gameState = 'gameOver';
-    
+
     if (backgroundMusic) {
         backgroundMusic.pause();
         backgroundMusic.currentTime = 0;
     }
-    
+
     if (globalSoundManager && !isMuted) {
         globalSoundManager.playGameOver();
     }
-    
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
+
     const imgWidth = canvas.width * 0.5;
     const imgHeight = canvas.height * 0.5;
     const x = (canvas.width - imgWidth) / 2;
     const y = (canvas.height - imgHeight) / 2;
-    
+
     ctx.drawImage(gameOverImg, x, y, imgWidth, imgHeight);
-    
+
     canvas.classList.add('game-over-screen');
-    
+
     createRestartButton();
 }
 
 function showWin() {
     gameState = 'win';
-    
+
     if (backgroundMusic) {
         backgroundMusic.pause();
         backgroundMusic.currentTime = 0;
     }
-    
+
     if (world && world.character && world.character.soundManager) {
         world.character.soundManager.stopSound('snoring');
         world.character.soundManager.stopSound('walking');
     }
-    
+
     if (globalSoundManager && !isMuted) {
         globalSoundManager.playWin();
     }
-    
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
+
     const imgWidth = canvas.width * 0.5;
     const imgHeight = canvas.height * 0.3;
     const x = (canvas.width - imgWidth) / 2;
     const y = (canvas.height - imgHeight) / 2;
-    
+
     ctx.drawImage(winImg, x, y, imgWidth, imgHeight);
-    
+
     canvas.classList.add('win-screen');
-    
+
     createRestartButton();
 }
 
 function createRestartButton() {
     removeRestartButton();
-    
+
     const canvasFrame = document.querySelector('.canvas-frame');
     const restartButton = document.createElement('button');
     restartButton.id = 'gameOverRestartButton';
     restartButton.className = 'game-over-restart-button';
     restartButton.textContent = 'Neues Spiel starten';
     restartButton.onclick = restartGame;
-    
+
     canvasFrame.appendChild(restartButton);
 }
 
@@ -195,34 +195,34 @@ function startGame() {
     gameState = 'playing';
     canvas.removeEventListener('click', handleCanvasClick);
     canvas.classList.remove('start-screen');
-    
+
     if (backgroundMusic && !isMuted) {
         backgroundMusic.play().catch(e => {
             console.log('Autoplay wurde blockiert:', e);
         });
     }
-    
+
     initLevel1();
     world = new World(canvas, keyboard);
-    
+
     applyMuteSettings();
-    
+
     document.getElementById('restartButton').style.display = 'block';
 }
 
 function restartGame() {
     gameState = 'start';
-    
+
     if (backgroundMusic) {
         backgroundMusic.pause();
         backgroundMusic.currentTime = 0;
     }
-    
+
     if (globalSoundManager) {
         globalSoundManager.stopSound('gameOver');
         globalSoundManager.stopSound('win');
     }
-    
+
     if (world) {
         world = null;
     }
@@ -232,7 +232,7 @@ function restartGame() {
     removeRestartButton();
     canvas.addEventListener('click', handleCanvasClick);
     showStartScreen();
-    
+
     document.getElementById('restartButton').style.display = 'none';
 }
 
@@ -256,7 +256,7 @@ window.addEventListener("keydown", (event) => {
 
 window.addEventListener("keyup", (event) => {
 
-if (event.keyCode == 39) {
+    if (event.keyCode == 39) {
         keyboard.RIGHT = false;
     }
 
@@ -276,7 +276,7 @@ if (event.keyCode == 39) {
 function hideOverlay() {
     const overlay = document.getElementById('gameOverlay');
     overlay.classList.add('hidden');
-    
+
     setTimeout(() => {
         if (overlay && overlay.parentNode) {
             overlay.parentNode.removeChild(overlay);
@@ -302,7 +302,7 @@ function navigateTo(url, event) {
 function toggleFullscreen() {
     const element = document.getElementById('fullscreen');
     const icon = document.getElementById('fullscreenIcon');
-    
+
     if (!document.fullscreenElement) {
         element.requestFullscreen();
         icon.style.transform = 'rotate(180deg)';
@@ -327,7 +327,7 @@ function loadMuteSettings() {
     if (savedMuteState !== null) {
         isMuted = JSON.parse(savedMuteState);
     }
-    
+
     updateMuteIcon();
     applyMuteSettings();
 }
@@ -340,7 +340,7 @@ function applyMuteSettings() {
     if (backgroundMusic) {
         try {
             backgroundMusic.muted = isMuted;
-        } catch (e) {}
+        } catch (e) { }
     }
 
     if (world && world.character && world.character.soundManager) {
@@ -350,7 +350,7 @@ function applyMuteSettings() {
             } else {
                 world.character.soundManager.unmuteAll();
             }
-        } catch (e) {}
+        } catch (e) { }
     }
 
     if (globalSoundManager) {
@@ -360,14 +360,14 @@ function applyMuteSettings() {
             } else {
                 globalSoundManager.unmuteAll();
             }
-        } catch (e) {}
+        } catch (e) { }
     }
 }
 
 function updateMuteIcon() {
     const icon = document.getElementById('muteIcon');
     if (!icon) return;
-    
+
     if (isMuted) {
         icon.src = 'components/img_pollo_loco/icons8-no-sound-50.png';
         icon.alt = 'Unmute';
@@ -388,9 +388,9 @@ function toggleMute() {
         try {
             backgroundMusic.muted = isMuted;
             if (!isMuted && gameState === 'playing') {
-                backgroundMusic.play().catch(() => {});
+                backgroundMusic.play().catch(() => { });
             }
-        } catch (e) {}
+        } catch (e) { }
     }
 
     if (world && world.character && world.character.soundManager) {
@@ -400,7 +400,7 @@ function toggleMute() {
             } else {
                 world.character.soundManager.unmuteAll();
             }
-        } catch (e) {}
+        } catch (e) { }
     }
 
     if (globalSoundManager) {
@@ -410,7 +410,7 @@ function toggleMute() {
             } else {
                 globalSoundManager.unmuteAll();
             }
-        } catch (e) {}
+        } catch (e) { }
     }
 
     updateMuteIcon();
@@ -427,7 +427,7 @@ function initRotateDeviceOverlay() {
 function checkOrientation() {
     const overlay = document.getElementById('rotateDeviceOverlay');
     const isPortrait = window.innerWidth < window.innerHeight;
-    
+
     if (isPortrait) {
         overlay.style.display = 'flex';
     } else {

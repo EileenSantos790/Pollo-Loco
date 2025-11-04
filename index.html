@@ -7,13 +7,11 @@
     <link rel="stylesheet" href="./css/style.css">
     <link type="image/png" sizes="32x32" rel="icon" href="components/img_pollo_loco/img/icons8-sombrero-32.png">
 
-    <!-- Basis-Klassen -->
     <script src="./classes/drawableObject.class.js" defer></script>
     <script src="./classes/movableObject.class.js" defer></script>
     <script src="./classes/keyboard.class.js" defer></script>
     <script src="./classes/soundManager.class.js" defer></script>
 
-    <!-- Alle Objekt-Klassen -->
     <script src="./classes/character.class.js" defer></script>
     <script src="./classes/chicken.class.js" defer></script>
     <script src="./classes/smallChicken.class.js" defer></script>
@@ -27,17 +25,12 @@
     <script src="./classes/endbossStatusbar.class.js" defer></script>
     <script src="./classes/throwableObject.class.js" defer></script>
 
-
-    <!-- Level-Klassen -->
     <script src="./classes/level.class.js" defer></script>
 
-    <!-- Level-Definitionen (nach level1!) -->
     <script src="./levels/level1.js" defer></script>
 
-    <!-- World-Klasse (nach level1!) -->
     <script src="./classes/world.class.js" defer></script>
 
-    <!-- Spiel-Logik -->
     <script src="./js/game.js" defer></script>
 
     <title>El Polo Loco</title>
@@ -119,7 +112,6 @@
         </div>
     </div>
 
-
     <section class="gameContainerPositioning">
         <div class="headline">
             <h1 translate="no">El Pollo Loco</h1>
@@ -132,7 +124,6 @@
                 <img id="muteIcon" src="components/img_pollo_loco/img/icons8-sound-50.png" alt="Mute"
                     title="Sound ausschalten" onclick="toggleMute()">
 
-                <!-- Mobile Controls innerhalb des Canvas -->
                 <div class="mobile-controls" id="mobileControls">
                     <div class="control-row">
                         <button id="leftBtn" class="control-btn left-btn">
