@@ -110,22 +110,36 @@ function showWin() {
 function createRestartButton() {
     removeRestartButton();
     const canvasFrame = document.querySelector('.canvas-frame');
+    
+    // Restart Button
     const restartButton = document.createElement('button');
     restartButton.id = 'gameOverRestartButton';
     restartButton.className = 'game-over-restart-button';
     restartButton.innerHTML = '<img src="components/img_pollo_loco/img/icons8-reload-50.png" alt="Neues Spiel starten">';
     restartButton.onclick = restartGameDirectly;
     canvasFrame.appendChild(restartButton);
+    
+    // Menu Button
+    const menuButton = document.createElement('button');
+    menuButton.id = 'gameOverMenuButton';
+    menuButton.className = 'game-over-menu-button';
+    menuButton.innerHTML = '<img src="components/img_pollo_loco/img/icons8-menu-50.png" alt="Menü">';
+    // Keine Funktionalität vorerst
+    canvasFrame.appendChild(menuButton);
 }
 
 /**
- * Removes the restart button.
+ * Removes the restart button and menu button.
  * @returns {void}
  */
 function removeRestartButton() {
-    const existingButton = document.getElementById('gameOverRestartButton');
-    if (existingButton) {
-        existingButton.remove();
+    const existingRestartButton = document.getElementById('gameOverRestartButton');
+    if (existingRestartButton) {
+        existingRestartButton.remove();
+    }
+    const existingMenuButton = document.getElementById('gameOverMenuButton');
+    if (existingMenuButton) {
+        existingMenuButton.remove();
     }
 }
 
