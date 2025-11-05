@@ -913,8 +913,18 @@ body:has(.legal-notice-container) {
   }
 
   .game-over-restart-button {
-    bottom: 70px;
+    top: 30px;
+    bottom: auto;
     padding: 5px 15px;
+    font-size: 20px;
+  }
+
+  .control-row {
+    gap: 5px;
+  }
+  .control-btn {
+    width: 45px;
+    height: 45px;
     font-size: 20px;
   }
 }
