@@ -25,18 +25,6 @@ class DrawableObject {
     }
 
     drawFrame(ctx) {
-
-        if (this instanceof Character || this instanceof Chicken || this instanceof smallChicken || this instanceof Endboss) {
-            ctx.beginPath();
-            ctx.lineWidth = '5';
-            ctx.strokeStyle = 'red';
-
-            if (this instanceof Character) {
-                ctx.rect(this.x + 30, this.y + 120, this.width - 60, this.height - 140);
-            } else {
-                ctx.rect(this.x + 10, this.y + 10, this.width - 20, this.height - 20);
-            }
-            ctx.stroke();
-        }
+        // Collision detection frames removed
     }
 }
