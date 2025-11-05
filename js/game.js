@@ -1,14 +1,4 @@
-let canvas;
-let world;
-let keyboard = new Keyboard();
-let ctx;
-let gameState = 'start';
-let startScreenImg;
-let gameOverImg;
-let winImg;
-let backgroundMusic;
-let globalSoundManager;
-let isMuted = false;
+let canvas; let world; let keyboard = new Keyboard(); let ctx; let gameState = 'start'; let startScreenImg; let gameOverImg; let winImg; let backgroundMusic; let globalSoundManager; let isMuted = false;
 
 /**
  * Initializes the game.
@@ -23,10 +13,7 @@ function init() {
     winImg = new Image(); winImg.src = 'components/img_pollo_loco/img/You won, you lost/You Won B.png';
     backgroundMusic = new Audio('components/audio/Run-Amok(chosic.com).mp3'); backgroundMusic.loop = true; backgroundMusic.volume = 0.5;
     globalSoundManager = new SoundManager();
-    loadMuteSettings();
-    canvas.addEventListener('click', handleCanvasClick);
-    initMobileControls();
-    initRotateDeviceOverlay();
+    loadMuteSettings(); canvas.addEventListener('click', handleCanvasClick); initMobileControls(); initRotateDeviceOverlay();
 }
 
 /**
@@ -130,13 +117,9 @@ function createRestartButton() {
  */
 function removeRestartButton() {
     const existingRestartButton = document.getElementById('gameOverRestartButton');
-    if (existingRestartButton) {
-        existingRestartButton.remove();
-    }
+    if (existingRestartButton) { existingRestartButton.remove(); }
     const existingMenuButton = document.getElementById('gameOverMenuButton');
-    if (existingMenuButton) {
-        existingMenuButton.remove();
-    }
+    if (existingMenuButton) { existingMenuButton.remove(); } 
 }
 
 /**
@@ -144,13 +127,7 @@ function removeRestartButton() {
  * @returns {void}
  */
 function handleCanvasClick() {
-    if (gameState === 'start') {
-        startGame();
-    } else if (gameState === 'gameOver') {
-        restartGame();
-    } else if (gameState === 'win') {
-        restartGame();
-    }
+    if (gameState === 'start') { startGame(); } else if (gameState === 'gameOver') { restartGame(); } else if (gameState === 'win') { restartGame(); }
 }
 
 /**
@@ -161,11 +138,7 @@ function startGame() {
     gameState = 'playing';
     canvas.removeEventListener('click', handleCanvasClick);
     canvas.classList.remove('start-screen');
-    if (backgroundMusic && !isMuted) {
-        backgroundMusic.play().catch(e => {
-            console.log('Autoplay wurde blockiert:', e);
-        });
-    }
+    if (backgroundMusic && !isMuted) { backgroundMusic.play().catch(e => { console.log('Autoplay wurde blockiert:', e); }); }
     initLevel1();
     world = new World(canvas, keyboard);
     applyMuteSettings();
@@ -193,14 +166,8 @@ function restartGame() {
  * @returns {void}
  */
 function stopAllSounds() {
-    if (backgroundMusic) {
-        backgroundMusic.pause();
-        backgroundMusic.currentTime = 0;
-    }
-    if (globalSoundManager) {
-        globalSoundManager.stopSound('gameOver');
-        globalSoundManager.stopSound('win');
-    }
+    if (backgroundMusic) { backgroundMusic.pause(); backgroundMusic.currentTime = 0; }
+    if (globalSoundManager) { globalSoundManager.stopSound('gameOver'); globalSoundManager.stopSound('win'); }
 }
 
 /**
@@ -228,18 +195,10 @@ function restartGameDirectly() {
  * @returns {void}
  */
 window.addEventListener("keydown", (event) => {
-    if (event.keyCode == 39) {
-        keyboard.RIGHT = true;
-    }
-    if (event.keyCode == 37) {
-        keyboard.LEFT = true;
-    }
-    if (event.keyCode == 32) {
-        keyboard.SPACE = true;
-    }
-    if (event.keyCode == 68) {
-        keyboard.D = true;
-    }
+    if (event.keyCode == 39) { keyboard.RIGHT = true; }
+    if (event.keyCode == 37) { keyboard.LEFT = true; }
+    if (event.keyCode == 32) { keyboard.SPACE = true; }
+    if (event.keyCode == 68) { keyboard.D = true; }
 });
 
 /**
@@ -247,18 +206,10 @@ window.addEventListener("keydown", (event) => {
  * @returns {void}
  */
 window.addEventListener("keyup", (event) => {
-    if (event.keyCode == 39) {
-        keyboard.RIGHT = false;
-    }
-    if (event.keyCode == 37) {
-        keyboard.LEFT = false;
-    }
-    if (event.keyCode == 32) {
-        keyboard.SPACE = false;
-    }
-    if (event.keyCode == 68) {
-        keyboard.D = false;
-    }
+    if (event.keyCode == 39) { keyboard.RIGHT = false; }
+    if (event.keyCode == 37) { keyboard.LEFT = false; }
+    if (event.keyCode == 32) { keyboard.SPACE = false; }
+    if (event.keyCode == 68) { keyboard.D = false; }
 });
 
 /**
@@ -379,17 +330,9 @@ function saveMuteSettings() {
  * @returns {void}
  */
 function applyMuteSettings() {
-    if (backgroundMusic) {
-        try { backgroundMusic.muted = isMuted; } catch (e) { }
-    }
-
-    if (world && world.character && world.character.soundManager) {
-        try { if (isMuted) { world.character.soundManager.muteAll(); } else { world.character.soundManager.unmuteAll(); } } catch (e) { }
-    }
-
-    if (globalSoundManager) {
-        try { if (isMuted) { globalSoundManager.muteAll(); } else { globalSoundManager.unmuteAll(); } } catch (e) { }
-    }
+    if (backgroundMusic) { try { backgroundMusic.muted = isMuted; } catch (e) { } }
+    if (world && world.character && world.character.soundManager) { try { if (isMuted) { world.character.soundManager.muteAll(); } else { world.character.soundManager.unmuteAll(); } } catch (e) { }}
+    if (globalSoundManager) { try { if (isMuted) { globalSoundManager.muteAll(); } else { globalSoundManager.unmuteAll(); } } catch (e) { } }
 }
 
 /**
@@ -448,10 +391,5 @@ function initRotateDeviceOverlay() {
 function checkOrientation() {
     const overlay = document.getElementById('rotateDeviceOverlay');
     const isPortrait = window.innerWidth < window.innerHeight;
-
-    if (isPortrait) {
-        overlay.style.display = 'flex';
-    } else {
-        overlay.style.display = 'none';
-    }
+    if (isPortrait) { overlay.style.display = 'flex'; } else { overlay.style.display = 'none'; }
 }
