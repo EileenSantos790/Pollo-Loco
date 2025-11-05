@@ -114,7 +114,7 @@ function createRestartButton() {
     restartButton.id = 'gameOverRestartButton';
     restartButton.className = 'game-over-restart-button';
     restartButton.textContent = 'Neues Spiel starten';
-    restartButton.onclick = restartGame;
+    restartButton.onclick = restartGameDirectly;
     canvasFrame.appendChild(restartButton);
 }
 
@@ -176,6 +176,41 @@ function restartGame() {
     removeRestartButton();
     canvas.addEventListener('click', handleCanvasClick);
     showStartScreen();
+}
+
+/**
+ * Stops all game sounds and resets background music.
+ * @returns {void}
+ */
+function stopAllSounds() {
+    if (backgroundMusic) {
+        backgroundMusic.pause();
+        backgroundMusic.currentTime = 0;
+    }
+    if (globalSoundManager) {
+        globalSoundManager.stopSound('gameOver');
+        globalSoundManager.stopSound('win');
+    }
+}
+
+/**
+ * Cleans up the game state and UI elements.
+ * @returns {void}
+ */
+function cleanupGameState() {
+    world = null;
+    canvas.classList.remove('game-over-screen', 'win-screen');
+    removeRestartButton();
+}
+
+/**
+ * Restarts the game directly without showing the start screen.
+ * @returns {void}
+ */
+function restartGameDirectly() {
+    stopAllSounds();
+    cleanupGameState();
+    startGame();
 }
 
 /**

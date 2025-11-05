@@ -95,6 +95,7 @@ class Character extends MoveableObject {
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_IDLE);
         this.loadImages(this.IMAGES_LONG_IDLE);
+        this.wasWalking = false;
         this.loadImages(this.IMAGES_JUMP);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT);
@@ -142,15 +143,50 @@ class Character extends MoveableObject {
      * @returns {void}
      */
     handleWalkingAnimation() {
-        if (!this.isDead() && (this.world.keyboard.RIGHT || this.world.keyboard.LEFT)) {
-            this.playAnimation(this.IMAGES_WALKING);
+        const moving = this.world.keyboard.RIGHT || this.world.keyboard.LEFT;
+        if (!this.isDead() && moving) {
+            this.handleMovingAnimation();
+        } else {
+            this.handleStoppedMoving();
+        }
+    }
 
-            if (!this.isAboveGround()) {
-                if (!this.soundManager.isPlaying('walking')) {
-                    this.soundManager.playSound('walking');
-                }
-            } else { this.soundManager.stopSound('walking'); } 
-        } else { this.soundManager.stopSound('walking'); }
+    /**
+     * Handles animation when character is moving.
+     * @returns {void}
+     */
+    handleMovingAnimation() {
+        if (!this.isAboveGround()) {
+            this.playAnimation(this.IMAGES_WALKING);
+            if (!this.soundManager.isPlaying('walking')) {
+                this.soundManager.playSound('walking');
+            }
+        } else {
+            this.soundManager.stopSound('walking');
+        }
+        this.wasWalking = true;
+    }
+
+    /**
+     * Handles transition when character stops moving.
+     * @returns {void}
+     */
+    handleStoppedMoving() {
+        this.soundManager.stopSound('walking');
+        if (this.wasWalking && !this.isAboveGround()) {
+            this.transitionToIdle();
+        }
+        this.wasWalking = false;
+    }
+
+    /**
+     * Transitions character to idle state.
+     * @returns {void}
+     */
+    transitionToIdle() {
+        this.img = this.imageCache['components/img_pollo_loco/img/2_character_pepe/1_idle/idle/I-1.png'];
+        this.currentImageIndex = 0;
+        this.isIdle = true;
     }
 
 
