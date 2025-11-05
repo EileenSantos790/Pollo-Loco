@@ -159,7 +159,6 @@ function startGame() {
     initLevel1();
     world = new World(canvas, keyboard);
     applyMuteSettings();
-    document.getElementById('restartButton').style.display = 'block';
 }
 
 /**
