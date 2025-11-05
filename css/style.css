@@ -83,12 +83,12 @@ canvas.win-screen {
   left: 20px;
   background: #D9B687;
   border: 2px solid black;
-  border-radius: 15px;
-  padding: 10px;
-  width: 50px;
-  height: 50px;
+  border-radius: 8px;
+  padding: 6px;
+  width: 32px;
+  height: 32px;
   cursor: pointer;
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
   z-index: 100;
   display: flex;
@@ -98,13 +98,12 @@ canvas.win-screen {
 
 .game-over-restart-button:hover {
   background: #E5C29F;
-  transform: translateY(-3px);
-  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.4);
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .game-over-restart-button:active {
-  transform: translateY(1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transform: scale(0.95);
 }
 
 .game-over-restart-button img {
@@ -116,15 +115,15 @@ canvas.win-screen {
 .game-over-menu-button {
   position: absolute;
   top: 20px;
-  left: 80px;
+  left: 62px;
   background: #D9B687;
   border: 2px solid black;
-  border-radius: 15px;
-  padding: 10px;
-  width: 50px;
-  height: 50px;
+  border-radius: 8px;
+  padding: 6px;
+  width: 32px;
+  height: 32px;
   cursor: pointer;
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
   z-index: 100;
   display: flex;
@@ -134,13 +133,12 @@ canvas.win-screen {
 
 .game-over-menu-button:hover {
   background: #E5C29F;
-  transform: translateY(-3px);
-  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.4);
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .game-over-menu-button:active {
-  transform: translateY(1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transform: scale(0.95);
 }
 
 .game-over-menu-button img {
