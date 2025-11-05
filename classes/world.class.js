@@ -126,6 +126,18 @@ class World {
                     }
                 }
             });
+
+            if (!bottle.isAboveGround() && !bottle.isSplashing) {
+                bottle.splash();
+                this.soundManager.playSound('glassBroken');
+
+                setTimeout(() => {
+                    const index = this.throwableObjects.indexOf(bottle);
+                    if (index > -1) {
+                        this.throwableObjects.splice(index, 1);
+                    }
+                }, 600);
+            }
         });
     }
 
@@ -148,6 +160,7 @@ class World {
 
     checkThrowObjects() {
         if (this.keyboard.D && this.character.canThrowBottle()) {
+            this.character.stopLongIdleAnimation();
             let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100, this.character.otherDirection);
             this.throwableObjects.push(bottle);
             this.character.throwBottle();
@@ -177,11 +190,13 @@ class World {
         this.ctx.translate(-this.camera_x, 0);
 
         if (this.character.isDead() && gameState === 'playing' && !this.gameOverTriggered) {
-            this.gameOverTriggered = true;
-            setTimeout(() => {
-                showGameOver();
-            }, 1000);
-            return;
+            if (this.character.isDeathAnimationCompleted()) {
+                this.gameOverTriggered = true;
+                setTimeout(() => {
+                    showGameOver();
+                }, 500);
+                return;
+            }
         }
 
         if (this.checkEndbossDead() && gameState === 'playing' && !this.gameOverTriggered) {

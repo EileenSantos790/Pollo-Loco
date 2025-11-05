@@ -75,6 +75,12 @@ class Character extends MoveableObject {
     maxBottles = 5;
     lastThrowTime = 0;
     throwCooldown = 500;
+    wasAboveGround = false;
+    jumpAnimationStarted = false;
+    jumpAnimationIndex = 0;
+    deathAnimationStarted = false;
+    deathAnimationCompleted = false;
+    deathAnimationIndex = 0;
     constructor() {
         super().loadImage('components/img_pollo_loco/img/2_character_pepe/1_idle/idle/I-1.png');
         this.loadImages(this.IMAGES_WALKING);
@@ -110,11 +116,19 @@ class Character extends MoveableObject {
 
         setInterval(() => {
             this.handlejumpingAnimation();
-        }, 100);
+        }, 50);
+
+        setInterval(() => {
+            this.updateJumpAnimationFrame();
+        }, 150);
 
         setInterval(() => {
             this.handleDeathAnimation();
-        }, 250);
+        }, 150);
+
+        setInterval(() => {
+            this.updateDeathAnimationFrame();
+        }, 150);
 
         setInterval(() => {
             this.handleHurtAnimation();
@@ -123,6 +137,8 @@ class Character extends MoveableObject {
     }
 
     handleMovement() {
+        if (this.isDead()) return;
+        
         let isMoving = false;
 
         if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
@@ -148,7 +164,7 @@ class Character extends MoveableObject {
     }
 
     handleWalkingAnimation() {
-        if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+        if (!this.isDead() && (this.world.keyboard.RIGHT || this.world.keyboard.LEFT)) {
             this.playAnimation(this.IMAGES_WALKING);
 
             if (!this.isAboveGround()) {
@@ -165,7 +181,7 @@ class Character extends MoveableObject {
     }
 
     handleIdleAnimations() {
-        if (!this.isDead() && !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && gameState === 'playing') {
+        if (!this.isDead() && !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.isAboveGround() && gameState === 'playing') {
             if (this.isLongIdle) {
                 this.playAnimation(this.IMAGES_LONG_IDLE);
 
@@ -182,13 +198,43 @@ class Character extends MoveableObject {
     }
 
     handlejumpingAnimation() {
-        if (this.isAboveGround()) {
-            this.playAnimation(this.IMAGES_JUMP);
+        if (this.isDead()) return;
+        
+        const currentlyAboveGround = this.isAboveGround();
+        
+        if (currentlyAboveGround) {
+            this.wasAboveGround = true;
+            
+            if (!this.jumpAnimationStarted) {
+                this.jumpAnimationStarted = true;
+                this.jumpAnimationIndex = 0;
+            }
+            
+            if (this.jumpAnimationIndex < this.IMAGES_JUMP.length) {
+                const path = this.IMAGES_JUMP[this.jumpAnimationIndex];
+                this.img = this.imageCache[path];
+            } else {
+                const lastFramePath = this.IMAGES_JUMP[this.IMAGES_JUMP.length - 1];
+                this.img = this.imageCache[lastFramePath];
+            }
+        } else if (this.wasAboveGround && !currentlyAboveGround) {
+            this.wasAboveGround = false;
+            this.jumpAnimationStarted = false;
+            this.jumpAnimationIndex = 0;
+            this.resetIdleState();
+            this.isIdle = true;
+            this.currentImageIndex = 0;
+        }
+    }
+
+    updateJumpAnimationFrame() {
+        if (this.jumpAnimationStarted && this.jumpAnimationIndex < this.IMAGES_JUMP.length) {
+            this.jumpAnimationIndex++;
         }
     }
 
     handleIdleTimer() {
-        if (!this.isDead() && !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT) {
+        if (!this.isDead() && !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.isAboveGround()) {
             this.idleTimer++;
 
             if (this.idleTimer === 2 && !this.isIdle) {
@@ -203,9 +249,31 @@ class Character extends MoveableObject {
 
     handleDeathAnimation() {
         if (this.isDead()) {
-            this.img = this.imageCache['components/img_pollo_loco/img/2_character_pepe/5_dead/D-51.png'];
-            this.playAnimation(this.IMAGES_DEAD);
+            if (!this.deathAnimationStarted) {
+                this.deathAnimationStarted = true;
+                this.deathAnimationIndex = 0;
+                this.deathAnimationCompleted = false;
+            }
+
+            if (this.deathAnimationIndex < this.IMAGES_DEAD.length) {
+                const path = this.IMAGES_DEAD[this.deathAnimationIndex];
+                this.img = this.imageCache[path];
+            } else {
+                const lastFramePath = this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1];
+                this.img = this.imageCache[lastFramePath];
+                this.deathAnimationCompleted = true;
+            }
         }
+    }
+
+    updateDeathAnimationFrame() {
+        if (this.deathAnimationStarted && this.deathAnimationIndex < this.IMAGES_DEAD.length) {
+            this.deathAnimationIndex++;
+        }
+    }
+
+    isDeathAnimationCompleted() {
+        return this.deathAnimationCompleted;
     }
 
     handleHurtAnimation() {
@@ -225,6 +293,15 @@ class Character extends MoveableObject {
         this.isIdle = false;
         this.isLongIdle = false;
         this.soundManager.stopSound('snoring');
+    }
+
+    stopLongIdleAnimation() {
+        if (this.isLongIdle) {
+            this.isLongIdle = false;
+            this.isIdle = true;
+            this.currentImageIndex = 0;
+            this.soundManager.stopSound('snoring');
+        }
     }
 
     collectBottle() {
