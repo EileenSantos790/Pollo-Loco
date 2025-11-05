@@ -74,7 +74,7 @@ class Character extends MoveableObject {
     bottles = 0;
     maxBottles = 5;
     lastThrowTime = 0;
-    throwCooldown = 500;
+    throwCooldown = 1500;
     wasAboveGround = false;
     jumpAnimationStarted = false;
     jumpAnimationIndex = 0;
