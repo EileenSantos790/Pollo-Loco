@@ -176,7 +176,6 @@ function restartGame() {
     removeRestartButton();
     canvas.addEventListener('click', handleCanvasClick);
     showStartScreen();
-    document.getElementById('restartButton').style.display = 'none';
 }
 
 /**

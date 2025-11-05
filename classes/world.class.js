@@ -60,17 +60,83 @@ class World {
      * @returns {void}
      */
     checkCollisions() {
+        this.checkEnemyCollisions();
+        this.checkCollectableCollisions();
+    }
+
+    /**
+     * Checks for collisions between the character and enemies.
+     * @returns {void}
+     */
+    checkEnemyCollisions() {
         this.level.enemies.forEach((enemy) => {
             if (!this.character.isColliding(enemy) || enemy.isDying) { return; }
             if (enemy instanceof Chicken || enemy instanceof smallChicken) {
-                const characterHitboxY = this.character.y + 120; const characterHitboxHeight = this.character.height - 140; const characterHitboxBottom = characterHitboxY + characterHitboxHeight; const enemyOffset = enemy instanceof smallChicken ? 4 : 10; const enemyHitboxY = enemy.y + enemyOffset; const enemyHitboxTop = enemyHitboxY; const wasDescending = typeof this.character.prevY === 'number' && this.character.prevY < this.character.y; const baseMargin = Math.floor(enemy.height * 0.3); const margin = enemy instanceof smallChicken ? Math.max(16, Math.min(22, baseMargin)) : Math.max(12, Math.min(22, baseMargin)); const isStomping = characterHitboxBottom <= (enemyHitboxTop + margin) && wasDescending; 
-                if (isStomping) { this.character.speedY = 12; enemy.die(); this.soundManager.playCrush();
-                    setTimeout(() => { const enemyIndex = this.level.enemies.indexOf(enemy); if (enemyIndex > -1) { this.level.enemies.splice(enemyIndex, 1); } }, 1500); return;
-                } else { this.character.hit(); this.statusBar.setPercentage(this.character.energy); } } else { this.character.hit(); this.statusBar.setPercentage(this.character.energy); }
+                this.handleChickenCollision(enemy);
+            } else {
+                this.character.hit();
+                this.statusBar.setPercentage(this.character.energy);
+            }
         });
+    }
+
+    /**
+     * Handles collision with chicken enemies (stomp vs hit).
+     * @param {Object} enemy - The chicken enemy to handle collision with.
+     * @returns {void}
+     */
+    handleChickenCollision(enemy) {
+        const characterHitboxY = this.character.y + 120;
+        const characterHitboxHeight = this.character.height - 140;
+        const characterHitboxBottom = characterHitboxY + characterHitboxHeight;
+        const enemyOffset = enemy instanceof smallChicken ? 4 : 10;
+        const enemyHitboxY = enemy.y + enemyOffset;
+        const wasDescending = typeof this.character.prevY === 'number' && this.character.prevY < this.character.y;
+        const baseMargin = Math.floor(enemy.height * 0.3);
+        const margin = enemy instanceof smallChicken ? Math.max(16, Math.min(22, baseMargin)) : Math.max(12, Math.min(22, baseMargin));
+        const isStomping = characterHitboxBottom <= (enemyHitboxY + margin) && wasDescending;
+
+        if (isStomping) {
+            this.performStomp(enemy);
+        } else {
+            this.character.hit();
+            this.statusBar.setPercentage(this.character.energy);
+        }
+    }
+
+    /**
+     * Performs stomp action on enemy.
+     * @param {Object} enemy - The enemy to stomp on.
+     * @returns {void}
+     */
+    performStomp(enemy) {
+        this.character.speedY = 12;
+        enemy.die();
+        this.soundManager.playCrush();
+        setTimeout(() => {
+            const enemyIndex = this.level.enemies.indexOf(enemy);
+            if (enemyIndex > -1) {
+                this.level.enemies.splice(enemyIndex, 1);
+            }
+        }, 1500);
+    }
+
+    /**
+     * Checks for collisions with collectable objects.
+     * @returns {void}
+     */
+    checkCollectableCollisions() {
         this.level.collectableObjects.forEach((collectableObject, index) => {
-            if (collectableObject.type === 'coin' && this.character.isColliding(collectableObject)) { this.character.collectCoin(); this.coinStatusBar.setPercentage(this.character.getCoinPercentage()); this.soundManager.playCoin(); this.level.collectableObjects.splice(index, 1);
-            } else if (collectableObject.type === 'bottle' && this.character.isColliding(collectableObject)) { this.character.collectBottle(); this.bottleStatusBar.setPercentage(this.character.getBottlePercentage()); this.soundManager.playBottle(); this.level.collectableObjects.splice(index, 1);}
+            if (collectableObject.type === 'coin' && this.character.isColliding(collectableObject)) {
+                this.character.collectCoin();
+                this.coinStatusBar.setPercentage(this.character.getCoinPercentage());
+                this.soundManager.playCoin();
+                this.level.collectableObjects.splice(index, 1);
+            } else if (collectableObject.type === 'bottle' && this.character.isColliding(collectableObject)) {
+                this.character.collectBottle();
+                this.bottleStatusBar.setPercentage(this.character.getBottlePercentage());
+                this.level.collectableObjects.splice(index, 1);
+            }
         });
     }
 
