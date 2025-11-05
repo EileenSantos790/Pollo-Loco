@@ -17,16 +17,23 @@ class smallChicken extends MoveableObject {
         'components/img_pollo_loco/img/3_enemies_chicken/chicken_small/2_dead/dead.png'
     ];
 
+
+    /**
+     * Constructor for the smallChicken class.
+     */
     constructor() {
         super().loadImage('components/img_pollo_loco/img/3_enemies_chicken/chicken_small/1_walk/1_w.png');
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_DEAD);
-
         this.x = 600 + Math.random() * 1500;
         this.speed = 0.15 + Math.random() * 0.25;
         this.animate();
     }
 
+
+    /**
+     * Animates the smallChicken object.
+     */
     animate() {
         this.walkInterval = setInterval(() => {
             if (!this.isDying) {
@@ -41,6 +48,11 @@ class smallChicken extends MoveableObject {
         }, 200);
     }
 
+
+    /**
+     * Makes the smallChicken object die.
+     * @returns {void}
+     */
     die() {
         if (!this.isDying) {
             this.isDying = true;
@@ -49,6 +61,4 @@ class smallChicken extends MoveableObject {
             this.loadImage('components/img_pollo_loco/img/3_enemies_chicken/chicken_small/2_dead/dead.png');
         }
     }
-
-
 } 

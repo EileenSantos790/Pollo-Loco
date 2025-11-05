@@ -41,6 +41,11 @@ class Endboss extends MoveableObject {
         'components/img_pollo_loco/img/4_enemie_boss_chicken/4_hurt/G23.png',
     ];
 
+
+    /**
+     * Creates an instance of the Endboss class.
+     * @constructor
+     */
     constructor() {
         super().loadImage(this.IMAGES_ALERT[0]);
         this.loadImages(this.IMAGES_ALERT);
@@ -51,6 +56,11 @@ class Endboss extends MoveableObject {
         this.x = 720 * 3 + 150;
     }
 
+
+    /**
+     * Activates the end boss.
+     * @returns {void}
+     */
     activate() {
         if (!this.isActivated) {
             this.isActivated = true;
@@ -58,6 +68,11 @@ class Endboss extends MoveableObject {
         }
     }
 
+
+    /**
+     * Starts the animation loop for the end boss.
+     * @returns {void}
+     */
     animate() {
         let alertInterval = setInterval(() => {
             this.playAnimation(this.IMAGES_ALERT);
@@ -69,6 +84,11 @@ class Endboss extends MoveableObject {
         }, 2000);
     }
 
+
+    /**
+     * Starts the walking and movement behavior for the end boss.
+     * @returns {void}
+     */
     startWalkingAndMovement() {
         this.animationInterval = setInterval(() => {
             if (!this.isDying && !this.isHurting) {
@@ -83,6 +103,11 @@ class Endboss extends MoveableObject {
         }, 1000 / 60);
     }
 
+
+    /**
+     * Handles the event when the end boss is hit by a bottle.
+     * @returns {void}
+     */
     hitByBottle() {
         this.hitCount++;
 
@@ -93,14 +118,17 @@ class Endboss extends MoveableObject {
         }
     }
 
+
+    /**
+     * Shows the hurt animation for the end boss.
+     * @returns {void}
+     */
     showHurtAnimation() {
         this.isHurting = true;
         clearInterval(this.animationInterval);
-
         let hurtAnimationInterval = setInterval(() => {
             this.playAnimation(this.IMAGES_HURT);
         }, 150);
-
         setTimeout(() => {
             clearInterval(hurtAnimationInterval);
             this.isHurting = false;
@@ -110,6 +138,11 @@ class Endboss extends MoveableObject {
         }, 1000);
     }
 
+
+    /**
+     * Shows the hurt animation before the end boss dies.
+     * @returns {void}
+     */
     showHurtAnimationBeforeDeath() {
         this.isHurting = true;
         clearInterval(this.walkInterval);
@@ -125,10 +158,14 @@ class Endboss extends MoveableObject {
         }, 1000);
     }
 
+
+    /**
+     * Handles the event when the end boss dies.
+     * @returns {void}
+     */
     die() {
         this.isDying = true;
         this.isHurting = false;
-
         let deathAnimationInterval = setInterval(() => {
             this.playAnimation(this.IMAGES_DEAD);
         }, 200);
@@ -138,6 +175,11 @@ class Endboss extends MoveableObject {
         }, 2000);
     }
 
+
+    /**
+     * Checks if the end boss is dead.
+     * @returns {boolean}
+     */
     isDead() {
         return this.hitCount >= 3 && this.isDying;
     }

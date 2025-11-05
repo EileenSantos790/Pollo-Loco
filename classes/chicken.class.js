@@ -17,16 +17,26 @@ class Chicken extends MoveableObject {
         'components/img_pollo_loco/img/3_enemies_chicken/chicken_normal/2_dead/dead.png'
     ];
 
+    
+    /**
+     * Creates an instance of the Chicken class.
+     * Initializes the chicken's position, loads images for walking and dead states.
+     * @constructor
+     */
     constructor() {
         super().loadImage('components/img_pollo_loco/img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_DEAD);
-
         this.x = 600 + Math.random() * 1500;
         this.speed = 0.15 + Math.random() * 0.25;
         this.animate();
     }
 
+
+    /**
+     * Starts the animation loop for the chicken.
+     * @returns {void}
+     */
     animate() {
         this.walkInterval = setInterval(() => {
             if (!this.isDying) {
@@ -41,6 +51,11 @@ class Chicken extends MoveableObject {
         }, 200);
     }
 
+
+    /**
+     * Handles the death animation for the chicken.
+     * @returns {void}
+     */
     die() {
         if (!this.isDying) {
             this.isDying = true;

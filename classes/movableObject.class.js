@@ -8,14 +8,17 @@ class MoveableObject extends DrawableObject {
     bottles = 0;
     lastHit = 0;
 
+
+    /**
+     * Applies gravity to the object.
+     * @returns {void}
+     */
     applyGravity() {
         setInterval(() => {
             const previousY = this.y;
-
             if (this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
-
                 if (!this.isAboveGround() && this.speedY < 0) {
                     this.speedY = 0;
                 }
@@ -26,6 +29,11 @@ class MoveableObject extends DrawableObject {
         }, 1000 / 25);
     }
 
+
+    /**
+     * Checks if the object is above ground.
+     * @returns {boolean} - True if the object is above ground, false otherwise.
+     */
     isAboveGround() {
         if (this instanceof ThrowableObject) {
             return this.y < 350;
@@ -34,14 +42,30 @@ class MoveableObject extends DrawableObject {
         }
     }
 
+
+    /**
+     * Checks if the object is jumping.
+     * @returns {boolean} - True if the object is jumping, false otherwise.
+     */
     isJumping() {
         return this.y < 130 && this.speedY < 0;
     }
 
+
+    /**
+     * Moves the object to the left.
+     * @returns {void}
+     */
     moveLeft() {
         this.x -= this.speed;
     }
 
+
+    /**
+     * Plays the animation for the object.
+     * @param {Array} images - The array of image paths for the animation.
+     * @returns {void}
+     */
     playAnimation(images) {
         let i = this.currentImageIndex % images.length;
         const path = images[i];
@@ -49,70 +73,40 @@ class MoveableObject extends DrawableObject {
         this.currentImageIndex++;
     }
 
+
+    /**
+     * Makes the object jump.
+     * @returns {void}
+     */
     jump() {
         this.speedY = 30;
     }
 
+
+    /**
+     * Checks for collision with another movable object.
+     * @param {MoveableObject} mo - The other movable object to check for collision.
+     * @returns {boolean} - True if the objects are colliding, false otherwise.
+     */
     isColliding(mo) {
-        let thisX = this.x;
-        let thisY = this.y;
-        let thisWidth = this.width;
-        let thisHeight = this.height;
-        let moX = mo.x;
-        let moY = mo.y;
-        let moWidth = mo.width;
-        let moHeight = mo.height;
-
-        if (this instanceof Character) {
-            thisX += 30;
-            thisY += 120;
-            thisWidth -= 60;
-            thisHeight -= 140;
-        } else if (this instanceof smallChicken) {
-            thisX += 4;
-            thisY += 4;
-            thisWidth -= 8;
-            thisHeight -= 8;
-        } else if (this instanceof Chicken || this instanceof Endboss) {
-            thisX += 10;
-            thisY += 10;
-            thisWidth -= 20;
-            thisHeight -= 20;
-        } else if (this instanceof ThrowableObject) {
-            thisX += 5;
-            thisY += 5;
-            thisWidth -= 10;
-            thisHeight -= 10;
-        }
-
-        if (mo instanceof Character) {
-            moX += 30;
-            moY += 120;
-            moWidth -= 60;
-            moHeight -= 140;
-        } else if (mo instanceof smallChicken) {
-            moX += 4;
-            moY += 4;
-            moWidth -= 8;
-            moHeight -= 8;
-        } else if (mo instanceof Chicken || mo instanceof Endboss) {
-            moX += 10;
-            moY += 10;
-            moWidth -= 20;
-            moHeight -= 20;
-        } else if (mo instanceof ThrowableObject) {
-            moX += 5;
-            moY += 5;
-            moWidth -= 10;
-            moHeight -= 10;
-        }
-
-        return thisX + thisWidth > moX &&
-            thisY + thisHeight > moY &&
-            thisX < moX + moWidth &&
-            thisY < moY + moHeight;
+        let thisX = this.x; let thisY = this.y; let thisWidth = this.width; let thisHeight = this.height; let moX = mo.x; let moY = mo.y; let moWidth = mo.width; let moHeight = mo.height;
+        if (this instanceof Character) { thisX += 30; thisY += 120; thisWidth -= 60; thisHeight -= 140;
+        } else if (this instanceof smallChicken) { thisX += 4; thisY += 4; thisWidth -= 8; thisHeight -= 8;
+        } else if (this instanceof Chicken || this instanceof Endboss) { thisX += 10; thisY += 10; thisWidth -= 20; thisHeight -= 20;
+        } else if (this instanceof ThrowableObject) { thisX += 5; thisY += 5; thisWidth -= 10; thisHeight -= 10; }
+        if (mo instanceof Character) { moX += 30; moY += 120; moWidth -= 60; moHeight -= 140;
+        } else if (mo instanceof smallChicken) { moX += 4; moY += 4; moWidth -= 8; moHeight -= 8;
+        } else if (mo instanceof Chicken || mo instanceof Endboss) { moX += 10; moY += 10; moWidth -= 20; moHeight -= 20;
+        } else if (mo instanceof ThrowableObject) { moX += 5; moY += 5; moWidth -= 10; moHeight -= 10; }
+        return thisX + thisWidth > moX && thisY + thisHeight > moY && thisX < moX + moWidth && thisY < moY + moHeight;
     }
 
+
+    /**
+     * Reduces the energy of the object when it is hit.
+     * @param {number} amount - The amount of energy to reduce.
+     * @returns {void}
+     */
     hit(amount = 20) {
         if (this.isHurt()) {
             return;
@@ -124,28 +118,58 @@ class MoveableObject extends DrawableObject {
         this.lastHit = new Date().getTime();
     }
 
+
+    /**
+     * Checks if the object is dead.
+     * @returns {boolean} - True if the object is dead, false otherwise.
+     */
     isDead() {
         return this.energy === 0;
     }
 
+
+    /**
+     * Checks if the object is hurt.
+     * @returns {boolean} - True if the object is hurt, false otherwise.
+     */
     isHurt() {
         let timepassed = new Date().getTime() - this.lastHit;
         timepassed = timepassed / 1000;
         return timepassed < 1;
     }
 
+
+    /**
+     * Collects a coin.
+     * @returns {void}
+     */
     collectCoin() {
         this.coins++;
     }
 
+
+    /**
+     * Gets the percentage of coins collected.
+     * @returns {number} - The percentage of coins collected (0-100).
+     */
     getCoinPercentage() {
         return Math.min(this.coins * 10, 100);
     }
 
+
+    /**
+     * Collects a bottle.
+     * @returns {void}
+     */
     collectBottle() {
         this.bottles++;
     }
 
+
+    /**
+     * Gets the percentage of bottles collected.
+     * @returns {number} - The percentage of bottles collected (0-100).
+     */
     getBottlePercentage() {
         return Math.min(this.bottles * 10, 100);
     }

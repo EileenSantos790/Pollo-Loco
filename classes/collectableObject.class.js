@@ -13,14 +13,18 @@ class CollectableObject extends MoveableObject {
         'components/img_pollo_loco/img/6_salsa_bottle/2_salsa_bottle_on_ground.png'
     ];
 
+
+    /**
+     * Creates an instance of the CollectableObject class.
+     * @constructor
+     * @param {string} type - The type of the collectable object (e.g., 'coin' or 'bottle').
+     */
     constructor(type) {
         super();
         this.type = type;
-
         if (type === 'coin') {
             this.loadImage(this.IMAGES_COINS[0]);
             this.loadImages(this.IMAGES_COINS);
-
         } else if (type === 'bottle') {
             this.loadImage(this.IMAGES_BOTTLES[0]);
             this.loadImages(this.IMAGES_BOTTLES);
@@ -31,9 +35,13 @@ class CollectableObject extends MoveableObject {
         this.animate();
     }
 
+
+    /**
+     * Sets a random position for the collectable object.
+     * @returns {void}
+     */
     setRandomPosition() {
         this.x = 200 + Math.random() * 1800;
-
         if (this.type === 'coin') {
             this.y = 100 + Math.random() * 200;
         } else if (this.type === 'bottle') {
@@ -41,6 +49,11 @@ class CollectableObject extends MoveableObject {
         }
     }
 
+    
+    /**
+     * Starts the animation loop for the collectable object.
+     * @returns {void}
+     */
     animate() {
         if (this.type === 'coin') {
             setInterval(() => {

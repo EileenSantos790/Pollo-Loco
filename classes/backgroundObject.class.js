@@ -1,3 +1,10 @@
+/**
+ * Represents a background object that extends MoveableObject functionality.
+ * Background objects are typically used for scenery elements like clouds, mountains, or buildings.
+ * 
+ * @class BackgroundObject
+ * @extends MoveableObject
+ */
 class BackgroundObject extends MoveableObject {
 
     width = 720;
