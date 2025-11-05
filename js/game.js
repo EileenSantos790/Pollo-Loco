@@ -120,6 +120,7 @@ function createRestartButton() {
     menuButton.id = 'gameOverMenuButton';
     menuButton.className = 'game-over-menu-button';
     menuButton.innerHTML = '<img src="components/img_pollo_loco/img/icons8-menu-50.png" alt="Menü">';
+    menuButton.onclick = openMainMenuOverlay;
     canvasFrame.appendChild(menuButton);
 }
 
@@ -266,8 +267,32 @@ window.addEventListener("keyup", (event) => {
  */
 function hideOverlay() {
     const overlay = document.getElementById('gameOverlay');
+    if (!overlay) return;
     overlay.classList.add('hidden');
-    setTimeout(() => { if (overlay && overlay.parentNode) { overlay.parentNode.removeChild(overlay); } }, 500);
+}
+
+/**
+ * Shows the main overlay menu again.
+ * @returns {void}
+ */
+function showOverlay(endGame = false) {
+    const overlay = document.getElementById('gameOverlay');
+    if (!overlay) return;
+    overlay.classList.remove('hidden');
+    if (endGame) {
+        document.getElementById('btnOverlay').onclick = () => {
+            restartGame(); hideOverlay();
+        }
+    }
+}
+
+/**
+ * Handler to open menu overlay from in-game buttons.
+ * @returns {void}
+ */
+function openMainMenuOverlay() {
+    stopAllSounds();
+    showOverlay(true);
 }
 
 /**
