@@ -73,6 +73,10 @@ class World {
             if (!this.character.isColliding(enemy) || enemy.isDying) { return; }
             if (enemy instanceof Chicken || enemy instanceof smallChicken) {
                 this.handleChickenCollision(enemy);
+            } else if (enemy instanceof Endboss) {
+                this.handleEndbossBlock(enemy);
+                this.character.hit();
+                this.statusBar.setPercentage(this.character.energy);
             } else {
                 this.character.hit();
                 this.statusBar.setPercentage(this.character.energy);
@@ -122,6 +126,22 @@ class World {
     }
 
     /**
+     * Blocks Pepe from crossing the Endboss by clamping his position to the boss boundary.
+     * @param {Endboss} endboss
+     */
+    handleEndbossBlock(endboss) {
+        const ch = this.character;
+        const boss = endboss;
+        const charHitbox = {x: ch.x + 30, y: ch.y + 120, w: ch.width - 60, h: ch.height - 140};
+        const bossHitbox = {x: boss.x + 10, y: boss.y + 10, w: boss.width - 20, h: boss.height - 20};  
+        const charCenter = charHitbox.x + charHitbox.w / 2;
+        const bossCenter = bossHitbox.x + bossHitbox.w / 2;
+        const buffer = 1;
+        if (charCenter < bossCenter) { const bossLeft = bossHitbox.x; ch.x = (bossLeft - buffer) - (ch.width - 30);
+        } else { const bossRight = bossHitbox.x + bossHitbox.w; ch.x = (bossRight + buffer) - 30; }
+    }
+
+    /**
      * Checks for collisions with collectable objects.
      * @returns {void}
      */
@@ -150,7 +170,7 @@ class World {
             this.level.enemies.forEach((enemy, enemyIndex) => {
                 if (bottle.isColliding(enemy) && !bottle.isSplashing) { bottle.splash(); this.soundManager.playSound('glassBroken');
                     setTimeout(() => { const index = this.throwableObjects.indexOf(bottle); if (index > -1) { this.throwableObjects.splice(index, 1); } }, 600);
-                    if (enemy instanceof Endboss) { enemy.hitByBottle(); this.soundManager.playSound('endbossHurt'); this.updateEndbossStatusBar(enemy);
+                    if (enemy instanceof Endboss) { if (!enemy.isDying) { enemy.hitByBottle(); this.soundManager.playSound('endbossHurt'); this.updateEndbossStatusBar(enemy); }
                         if (enemy.isDead()) { setTimeout(() => { this.level.enemies.splice(enemyIndex, 1); this.endbossStatusBar.hide(); }, 2000); }
                     } else { enemy.die(); setTimeout(() => { this.level.enemies.splice(enemyIndex, 1); }, 1000); } 
                 }
@@ -196,18 +216,17 @@ class World {
      * @returns {void}
      */
     draw() {
+        if (typeof gameState !== 'undefined' && gameState !== 'playing') { return; } 
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); this.ctx.translate(this.camera_x, 0); this.addObjectsToMap(this.level.backgroundObjects); this.addObjectsToMap(this.level.clouds); this.ctx.translate(-this.camera_x, 0);
         this.addToMap(this.statusBar); this.addToMap(this.coinStatusBar); this.addToMap(this.bottleStatusBar);
         if (this.endbossStatusBar.isVisible) { this.addToMap(this.endbossStatusBar); }
-        this.ctx.translate(this.camera_x, 0);
-        this.addToMap(this.character);
-        this.checkEndbossActivation();
+        this.ctx.translate(this.camera_x, 0); this.addToMap(this.character); this.checkEndbossActivation();
         this.addObjectsToMap(this.level.enemies); this.addObjectsToMap(this.level.collectableObjects); this.addObjectsToMap(this.throwableObjects);
         this.ctx.translate(-this.camera_x, 0);
         if (this.character.isDead() && gameState === 'playing' && !this.gameOverTriggered) {
             if (this.character.isDeathAnimationCompleted()) { this.gameOverTriggered = true; setTimeout(() => { showGameOver(); }, 500); return; }
         }
-        if (this.checkEndbossDead() && gameState === 'playing' && !this.gameOverTriggered) { this.gameOverTriggered = true; setTimeout(() => { showWin(); }, 1000); return; }
+        if (this.checkEndbossDead() && gameState === 'playing' && !this.gameOverTriggered) { this.gameOverTriggered = true; setTimeout(() => { showWin(); }, 2000);}
         requestAnimationFrame(() => this.draw());
     }
 

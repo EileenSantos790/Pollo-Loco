@@ -109,8 +109,8 @@ class Endboss extends MoveableObject {
      * @returns {void}
      */
     hitByBottle() {
+        if (this.isDying) { return; }
         this.hitCount++;
-
         if (this.hitCount >= 3) {
             this.showHurtAnimationBeforeDeath();
         } else {
@@ -124,6 +124,7 @@ class Endboss extends MoveableObject {
      * @returns {void}
      */
     showHurtAnimation() {
+        if (this.isDying || this.isHurting) { return; } 
         this.isHurting = true;
         clearInterval(this.animationInterval);
         let hurtAnimationInterval = setInterval(() => {
@@ -144,6 +145,7 @@ class Endboss extends MoveableObject {
      * @returns {void}
      */
     showHurtAnimationBeforeDeath() {
+        if (this.isDying || this.isHurting) { return; } 
         this.isHurting = true;
         clearInterval(this.walkInterval);
         clearInterval(this.animationInterval);
@@ -164,12 +166,14 @@ class Endboss extends MoveableObject {
      * @returns {void}
      */
     die() {
+        if (this.isDying) { return; }
         this.isDying = true;
         this.isHurting = false;
+        clearInterval(this.walkInterval);
+        clearInterval(this.animationInterval);
         let deathAnimationInterval = setInterval(() => {
             this.playAnimation(this.IMAGES_DEAD);
         }, 200);
-
         setTimeout(() => {
             clearInterval(deathAnimationInterval);
         }, 2000);
