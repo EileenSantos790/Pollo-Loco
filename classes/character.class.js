@@ -92,15 +92,12 @@ class Character extends MoveableObject {
      */
     constructor() {
         super().loadImage('components/img_pollo_loco/img/2_character_pepe/1_idle/idle/I-1.png');
-        this.loadImages(this.IMAGES_WALKING);
-        this.loadImages(this.IMAGES_IDLE);
-        this.loadImages(this.IMAGES_LONG_IDLE);
+        this.loadImages(this.IMAGES_WALKING); this.loadImages(this.IMAGES_IDLE); this.loadImages(this.IMAGES_LONG_IDLE);
         this.wasWalking = false;
-        this.loadImages(this.IMAGES_JUMP);
-        this.loadImages(this.IMAGES_DEAD);
-        this.loadImages(this.IMAGES_HURT);
+        this.loadImages(this.IMAGES_JUMP); this.loadImages(this.IMAGES_DEAD); this.loadImages(this.IMAGES_HURT);
         this.soundManager = new SoundManager();
         this.applyGravity();
+        this.isIdle = true;  this.idleTimer = 0; this.isLongIdle = false; this.currentImageIndex = 0;
         this.animate();
         this.bottles = 0;
     }
@@ -237,25 +234,19 @@ class Character extends MoveableObject {
     }
 
 
-    /**
+    /**     
      * Handles the idle timer for the character, managing different idle states.
      * Increments the idle timer when the character is not dead, not moving horizontally,
      * and not above ground. Triggers idle and long idle states based on timer thresholds.
-     * 
+     *
      * @method handleIdleTimer
      * @returns {void}
      */
     handleIdleTimer() {
         if (!this.isDead() && !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.isAboveGround()) {
             this.idleTimer++;
-
-            if (this.idleTimer === 2 && !this.isIdle) {
-                this.isIdle = true;
-                this.currentImageIndex = 0;
-            } else if (this.idleTimer > 4 && !this.isLongIdle) {
-                this.isLongIdle = true;
-                this.currentImageIndex = 0;
-            }
+            if (this.idleTimer === 2 && !this.isIdle) {  this.isIdle = true; this.currentImageIndex = 0; }
+            if (this.idleTimer >= 15 && !this.isLongIdle) { this.isLongIdle = true; this.currentImageIndex = 0; }
         }
     }
 
@@ -320,9 +311,7 @@ class Character extends MoveableObject {
         if (!this.isDead() && this.isHurt()) {
             this.playAnimation(this.IMAGES_HURT);
 
-            if (!this.soundManager.hasPlayed('hurt')) {
-                this.soundManager.playSound('hurt');
-            }
+            if (!this.soundManager.hasPlayed('hurt')) { this.soundManager.playSound('hurt'); }
         } else {
             this.soundManager.resetSoundState('hurt');
         }
