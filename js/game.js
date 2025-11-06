@@ -248,13 +248,26 @@ async function startGame() {
     
     try {
         const musicPromise = new Promise((resolve) => {
+            const timeout = setTimeout(() => resolve(), 2000); // Max 2s wait
+            
             if (backgroundMusic && !isMuted) {
-                backgroundMusic.addEventListener('canplaythrough', resolve, { once: true });
+                if (backgroundMusic.readyState >= 3) { // HAVE_FUTURE_DATA
+                    clearTimeout(timeout);
+                    resolve();
+                } else {
+                    backgroundMusic.addEventListener('canplaythrough', () => {
+                        clearTimeout(timeout);
+                        resolve();
+                    }, { once: true });
+                }
+                
                 backgroundMusic.play().catch(e => { 
-                    console.log('Autoplay wurde blockiert:', e);
-                    resolve(); // Resolve anyway to not block
+                    console.log('Autoplay blocked:', e);
+                    clearTimeout(timeout);
+                    resolve();
                 });
             } else {
+                clearTimeout(timeout);
                 resolve();
             }
         });
@@ -262,6 +275,7 @@ async function startGame() {
         initLevel1();
         world = new World(canvas, keyboard);
         const assetPromises = [];
+        
         if (world.character) {
             assetPromises.push(
                 world.character.loadImages(world.character.IMAGES_WALKING),
@@ -297,24 +311,34 @@ async function startGame() {
             });
         }
         
-        const totalAssets = assetPromises.length + 1; // +1 for music
+        const totalAssets = assetPromises.length + 1;
         let loadedAssets = 0;
-        
         assetPromises.forEach(promise => {
             promise.then(() => {
+                loadedAssets++;
+                const progress = (loadedAssets / totalAssets) * 100;
+                updateLoadingProgressValue(progress);
+            }).catch(() => {
                 loadedAssets++;
                 const progress = (loadedAssets / totalAssets) * 100;
                 updateLoadingProgressValue(progress);
             });
         });
         
-        await Promise.all([musicPromise, ...assetPromises]);
+        await Promise.race([
+            Promise.all([musicPromise, ...assetPromises]),
+            new Promise(resolve => setTimeout(resolve, 5000))
+        ]);
+        
         applyMuteSettings();
         updateLoadingProgressValue(100);
-        await new Promise(resolve => setTimeout(resolve, 300));
+        
+        await new Promise(resolve => setTimeout(resolve, 200));
         hideLoadingScreen();
     } catch (error) {
         console.error('Error loading game assets:', error);
+        updateLoadingProgressValue(100);
+        await new Promise(resolve => setTimeout(resolve, 200));
         hideLoadingScreen();
     }
 }
@@ -527,17 +551,9 @@ function saveMuteSettings() {
  * @returns {void}
  */
 function applyMuteSettings() {
-    if (backgroundMusic) { 
-        try { backgroundMusic.muted = isMuted; } catch (e) {  console.log(e); } 
-    }
-    if (world && world.character && world.character.soundManager) { 
-        try { if (isMuted) {  world.character.soundManager.muteAll(); } else { world.character.soundManager.unmuteAll(); } } catch (e) { console.log(e); }}
-    if (world && world.soundManager) { 
-        try { if (isMuted) {  world.soundManager.muteAll(); } else { world.soundManager.unmuteAll(); } } catch (e) { console.log(e); }
-    }
-    if (globalSoundManager) { 
-        try { if (isMuted) { globalSoundManager.muteAll(); } else { globalSoundManager.unmuteAll(); } } catch (e) { console.log(e); }
-    }
+    if (backgroundMusic) { try { backgroundMusic.muted = isMuted; } catch (e) { console.log(e) } }
+    if (world && world.character && world.character.soundManager) { try { if (isMuted) { world.character.soundManager.muteAll(); } else { world.character.soundManager.unmuteAll(); } } catch (e) { console.log(e); }}
+    if (globalSoundManager) { try { if (isMuted) { globalSoundManager.muteAll(); } else { globalSoundManager.unmuteAll(); } } catch (e) { console.log(e); } }
 }
 
 /**
@@ -565,15 +581,14 @@ function updateMuteIcon() {
 function toggleMute() {
     isMuted = !isMuted;
     saveMuteSettings();
-    if (backgroundMusic) { try { backgroundMusic.muted = isMuted; if (!isMuted && gameState === 'playing') { backgroundMusic.play().catch((e) => {console.log(e); }); } } catch (e) {console.log(e); }}
-    if (world && world.character && world.character.soundManager) { try { if (isMuted) {  world.character.soundManager.muteAll(); } else { world.character.soundManager.unmuteAll(); } } catch (e) { console.log(e); }}
-    if (world && world.soundManager) {
-        try { if (isMuted) {  world.soundManager.muteAll(); } else { world.soundManager.unmuteAll(); } } catch (e) { console.log(e); }
+    if (backgroundMusic) {
+        try {backgroundMusic.muted = isMuted; if (!isMuted && gameState === 'playing') { backgroundMusic.play().catch((e) => {console.log(e); }); } } catch (e) { }
+    }
+    if (world && world.character && world.character.soundManager) {
+        try { if (isMuted) { world.character.soundManager.muteAll(); } else { world.character.soundManager.unmuteAll(); } } catch (e) { console.log(e); }
     }
     if (globalSoundManager) {
-        try { 
-            if (isMuted) { globalSoundManager.muteAll(); } else { globalSoundManager.unmuteAll(); } 
-        } catch (e) { console.log(e); }
+        try { if (isMuted) { globalSoundManager.muteAll(); } else { globalSoundManager.unmuteAll(); } } catch (e) { console.log(e); }
     }
     updateMuteIcon();
 }
