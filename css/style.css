@@ -983,11 +983,9 @@ body:has(.legal-notice-container) {
 
 }
 
-/* Mobile Controls für Touch-Geräte */
+/* Mobile Controls für Touch-Geräte - JavaScript gesteuert */
 @media (pointer: coarse), (hover: none), (max-width: 1024px) {
-  .mobile-controls {
-    display: block;
-  }
+  /* Basis-Styles werden von JavaScript gesteuert */
 
   .game-over-restart-button {
     top: 15px;
@@ -1005,16 +1003,6 @@ body:has(.legal-notice-container) {
     padding: 8px;
   }
 
-  .control-row {
-    gap: 5px;
-  }
-  .control-btn {
-    width: 45px;
-    height: 45px;
-    font-size: 20px;
-  }
-}
-@media (max-width: 550px){
   .control-row {
     gap: 5px;
   }
@@ -1125,22 +1113,6 @@ body:has(.legal-notice-container) {
         min-width: 0;
     }
 
-    /* Mobile Controls für allgemeine Querformat-Geräte */
-    .mobile-controls {
-        padding: 10px 15px;
-        max-width: 320px;
-        bottom: 10px;
-    }
-
-    .control-row {
-        gap: 8px;
-    }
-
-    .control-btn {
-        width: 50px;
-        height: 50px;
-        font-size: 22px;
-    }
 }
 
 @media (max-width: 911px) and (min-height: 660px) {
@@ -1174,23 +1146,6 @@ body:has(.legal-notice-container) {
         padding: 10px 20px;
         margin: 10px 5px;
         min-width: 120px;
-    }
-
-    /* Mobile Controls für Portrait-Modus auf Tablets */
-    .mobile-controls {
-        padding: 10px 15px;
-        max-width: 300px;
-        bottom: 15px;
-    }
-
-    .control-row {
-        gap: 8px;
-    }
-
-    .control-btn {
-        width: 50px;
-        height: 50px;
-        font-size: 22px;
     }
 }
 
@@ -1237,22 +1192,6 @@ body:has(.legal-notice-container) {
         min-width: 0;
     }
 
-    /* Mobile Controls für iPhone XR im Querformat */
-    .mobile-controls {
-        padding: 8px 12px;
-        max-width: 300px;
-        bottom: 8px;
-    }
-
-    .control-row {
-        gap: 6px;
-    }
-
-    .control-btn {
-        width: 48px;
-        height: 48px;
-        font-size: 20px;
-    }
 }
 
 /* Spezielle Regel für Galaxy S20 Ultra und ähnliche große Smartphones im Querformat */
@@ -1353,22 +1292,6 @@ body:has(.legal-notice-container) {
         min-width: 0;
     }
 
-    /* Mobile Controls für Galaxy S20 Ultra im Querformat */
-    .mobile-controls {
-        padding: 8px 12px;
-        max-width: 290px;
-        bottom: 6px;
-    }
-
-    .control-row {
-        gap: 5px;
-    }
-
-    .control-btn {
-        width: 46px;
-        height: 46px;
-        font-size: 19px;
-    }
 }
 
 /* Spezielle Regel für kleinere mobile Geräte im Querformat (iPhone SE, etc.) */
@@ -1412,22 +1335,5 @@ body:has(.legal-notice-container) {
     .overlay-content > div {
         flex: 1;
         min-width: 0;
-    }
-
-    /* Mobile Controls für kleinere mobile Geräte (iPhone SE) im Querformat */
-    .mobile-controls {
-        padding: 6px 10px;
-        max-width: 260px;
-        bottom: 5px;
-    }
-
-    .control-row {
-        gap: 4px;
-    }
-
-    .control-btn {
-        width: 42px;
-        height: 42px;
-        font-size: 18px;
     }
 }

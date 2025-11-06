@@ -385,11 +385,26 @@ function initRotateDeviceOverlay() {
 }
 
 /**
- * Checks the device orientation and shows/hides the rotate overlay.
+ * Checks the device orientation and shows/hides the rotate overlay and mobile controls.
  * @returns {void}
  */
 function checkOrientation() {
     const overlay = document.getElementById('rotateDeviceOverlay');
+    const mobileControls = document.querySelector('.mobile-controls');
     const isPortrait = window.innerWidth < window.innerHeight;
-    if (isPortrait) { overlay.style.display = 'flex'; } else { overlay.style.display = 'none'; }
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || window.innerWidth <= 1024;
+    
+    if (isPortrait) { 
+        // Portrait-Modus: Zeige Rotate-Overlay, verstecke Mobile Controls
+        overlay.style.display = 'flex'; 
+        if (mobileControls) mobileControls.style.display = 'none';
+    } else { 
+        // Landscape-Modus: Verstecke Rotate-Overlay, zeige Mobile Controls (nur bei Touch-Geräten)
+        overlay.style.display = 'none'; 
+        if (mobileControls && isTouchDevice) {
+            mobileControls.style.display = 'block';
+        } else if (mobileControls) {
+            mobileControls.style.display = 'none';
+        }
+    }
 }
