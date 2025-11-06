@@ -392,7 +392,7 @@ function checkOrientation() {
     const overlay = document.getElementById('rotateDeviceOverlay');
     const mobileControls = document.querySelector('.mobile-controls');
     const isPortrait = window.innerWidth < window.innerHeight;
-    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || window.innerWidth <= 1024;
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     
     if (isPortrait) { 
         // Portrait-Modus: Zeige Rotate-Overlay, verstecke Mobile Controls
