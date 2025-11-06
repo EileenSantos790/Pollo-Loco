@@ -527,9 +527,17 @@ function saveMuteSettings() {
  * @returns {void}
  */
 function applyMuteSettings() {
-    if (backgroundMusic) { try { backgroundMusic.muted = isMuted; } catch (e) { console.log(e) } }
-    if (world && world.character && world.character.soundManager) { try { if (isMuted) { world.character.soundManager.muteAll(); } else { world.character.soundManager.unmuteAll(); } } catch (e) { console.log(e); }}
-    if (globalSoundManager) { try { if (isMuted) { globalSoundManager.muteAll(); } else { globalSoundManager.unmuteAll(); } } catch (e) { console.log(e); } }
+    if (backgroundMusic) { 
+        try { backgroundMusic.muted = isMuted; } catch (e) {  console.log(e); } 
+    }
+    if (world && world.character && world.character.soundManager) { 
+        try { if (isMuted) {  world.character.soundManager.muteAll(); } else { world.character.soundManager.unmuteAll(); } } catch (e) { console.log(e); }}
+    if (world && world.soundManager) { 
+        try { if (isMuted) {  world.soundManager.muteAll(); } else { world.soundManager.unmuteAll(); } } catch (e) { console.log(e); }
+    }
+    if (globalSoundManager) { 
+        try { if (isMuted) { globalSoundManager.muteAll(); } else { globalSoundManager.unmuteAll(); } } catch (e) { console.log(e); }
+    }
 }
 
 /**
@@ -557,14 +565,15 @@ function updateMuteIcon() {
 function toggleMute() {
     isMuted = !isMuted;
     saveMuteSettings();
-    if (backgroundMusic) {
-        try {backgroundMusic.muted = isMuted; if (!isMuted && gameState === 'playing') { backgroundMusic.play().catch((e) => {console.log(e); }); } } catch (e) { }
-    }
-    if (world && world.character && world.character.soundManager) {
-        try { if (isMuted) { world.character.soundManager.muteAll(); } else { world.character.soundManager.unmuteAll(); } } catch (e) { console.log(e); }
+    if (backgroundMusic) { try { backgroundMusic.muted = isMuted; if (!isMuted && gameState === 'playing') { backgroundMusic.play().catch((e) => {console.log(e); }); } } catch (e) {console.log(e); }}
+    if (world && world.character && world.character.soundManager) { try { if (isMuted) {  world.character.soundManager.muteAll(); } else { world.character.soundManager.unmuteAll(); } } catch (e) { console.log(e); }}
+    if (world && world.soundManager) {
+        try { if (isMuted) {  world.soundManager.muteAll(); } else { world.soundManager.unmuteAll(); } } catch (e) { console.log(e); }
     }
     if (globalSoundManager) {
-        try { if (isMuted) { globalSoundManager.muteAll(); } else { globalSoundManager.unmuteAll(); } } catch (e) { console.log(e); }
+        try { 
+            if (isMuted) { globalSoundManager.muteAll(); } else { globalSoundManager.unmuteAll(); } 
+        } catch (e) { console.log(e); }
     }
     updateMuteIcon();
 }
