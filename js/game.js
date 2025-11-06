@@ -248,10 +248,10 @@ async function startGame() {
     
     try {
         const musicPromise = new Promise((resolve) => {
-            const timeout = setTimeout(() => resolve(), 2000); // Max 2s wait
+            const timeout = setTimeout(() => resolve(), 2000);
             
             if (backgroundMusic && !isMuted) {
-                if (backgroundMusic.readyState >= 3) { // HAVE_FUTURE_DATA
+                if (backgroundMusic.readyState >= 3) {
                     clearTimeout(timeout);
                     resolve();
                 } else {
@@ -553,6 +553,8 @@ function saveMuteSettings() {
 function applyMuteSettings() {
     if (backgroundMusic) { try { backgroundMusic.muted = isMuted; } catch (e) { console.log(e) } }
     if (world && world.character && world.character.soundManager) { try { if (isMuted) { world.character.soundManager.muteAll(); } else { world.character.soundManager.unmuteAll(); } } catch (e) { console.log(e); }}
+    // CORREÇÃO: Adicionar world.soundManager para sons do jogo (coleta, colisões, etc.)
+    if (world && world.soundManager) { try { if (isMuted) { world.soundManager.muteAll(); } else { world.soundManager.unmuteAll(); } } catch (e) { console.log(e); } }
     if (globalSoundManager) { try { if (isMuted) { globalSoundManager.muteAll(); } else { globalSoundManager.unmuteAll(); } } catch (e) { console.log(e); } }
 }
 
@@ -586,6 +588,10 @@ function toggleMute() {
     }
     if (world && world.character && world.character.soundManager) {
         try { if (isMuted) { world.character.soundManager.muteAll(); } else { world.character.soundManager.unmuteAll(); } } catch (e) { console.log(e); }
+    }
+    // CORREÇÃO: Adicionar world.soundManager para sons do jogo (coleta, colisões, efeitos)
+    if (world && world.soundManager) {
+        try { if (isMuted) { world.soundManager.muteAll(); } else { world.soundManager.unmuteAll(); } } catch (e) { console.log(e); }
     }
     if (globalSoundManager) {
         try { if (isMuted) { globalSoundManager.muteAll(); } else { globalSoundManager.unmuteAll(); } } catch (e) { console.log(e); }
