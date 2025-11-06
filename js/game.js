@@ -1,228 +1,55 @@
-let canvas; let world; let keyboard = new Keyboard(); let ctx; let gameState = 'start'; let startScreenImg; let gameOverImg; let winImg; let backgroundMusic; let globalSoundManager; let isMuted = false;
-let assetsToLoad = 0;
-let assetsLoaded = 0;
-
-/**
- * Updates the loading progress bar and text.
- * @returns {void}
- */
-function updateLoadingProgress() {
-    const progress = assetsToLoad > 0 ? (assetsLoaded / assetsToLoad) * 100 : 0;
-    updateLoadingProgressValue(progress);
-    
-    if (progress >= 100) {
-        setTimeout(hideLoadingScreen, 500);
-    }
-}
-
-/**
- * Hides the loading screen with a fade-out effect.
- * @returns {void}
- */
-function hideLoadingScreen() {
-    const loadingScreen = document.getElementById('loadingScreen');
-    if (loadingScreen) {
-        loadingScreen.classList.add('fade-out');
-        setTimeout(() => {
-            loadingScreen.classList.remove('active');
-            loadingScreen.classList.remove('fade-out');
-            loadingScreen.style.display = 'none';
-        }, 500);
-    }
-}
-
-/**
- * Shows the loading screen.
- * @returns {void}
- */
-function showLoadingScreen() {
-    const loadingScreen = document.getElementById('loadingScreen');
-    const loadingBar = document.getElementById('loadingBar');
-    const loadingText = document.getElementById('loadingText');
-    
-    if (loadingScreen) {
-        loadingScreen.classList.add('active');
-        loadingScreen.style.display = 'flex';
-    }
-    if (loadingBar) {
-        loadingBar.style.width = '0%';
-    }
-    if (loadingText) {
-        loadingText.textContent = 'Loading... 0%';
-    }
-    assetsToLoad = 0;
-    assetsLoaded = 0;
-}
-
-/**
- * Tracks loading of an image asset.
- * @param {HTMLImageElement} img - The image element to track
- * @returns {void}
- */
-function trackImageLoad(img) {
-    assetsToLoad++;
-    img.onload = () => {
-        assetsLoaded++;
-        updateLoadingProgress();
-    };
-    img.onerror = () => {
-        assetsLoaded++;
-        updateLoadingProgress();
-    };
-}
-
-/**
- * Tracks loading of an audio asset.
- * @param {HTMLAudioElement} audio - The audio element to track
- * @returns {void}
- */
-function trackAudioLoad(audio) {
-    assetsToLoad++;
-    audio.addEventListener('canplaythrough', () => {
-        assetsLoaded++;
-        updateLoadingProgress();
-    }, { once: true });
-    audio.addEventListener('error', () => {
-        assetsLoaded++;
-        updateLoadingProgress();
-    }, { once: true });
-}
+// Global game variables
+let canvas; 
+let world; 
+let keyboard = new Keyboard(); 
+let ctx; 
+let gameState = 'start'; 
+let startScreenImg; 
+let gameOverImg; 
+let winImg; 
+let backgroundMusic; 
+let globalSoundManager; 
+let isMuted = false;
 
 /**
  * Initializes the game.
  * @returns {void}
  */
 function init() {
-    canvas = document.getElementById("gameCanvas"); ctx = canvas.getContext("2d");
+    canvas = document.getElementById("gameCanvas"); 
+    ctx = canvas.getContext("2d");
     
+    loadGameAssets();
+    setupGameEvents();
+    loadMuteSettings(); 
+}
+
+/**
+ * Loads all game assets.
+ * @returns {void}
+ */
+function loadGameAssets() {
     startScreenImg = new Image();
     startScreenImg.src = 'components/img_pollo_loco/img/9_intro_outro_screens/start/startscreen_2.png';
-    startScreenImg.onload = function () { 
-        showStartScreen(); 
-    };
-    
+    startScreenImg.onload = () => showStartScreen();
     gameOverImg = new Image(); 
     gameOverImg.src = 'components/img_pollo_loco/img/You won, you lost/Game over A.png';
-    
     winImg = new Image(); 
     winImg.src = 'components/img_pollo_loco/img/You won, you lost/You Won B.png';
-    
     backgroundMusic = new Audio('components/audio/Run-Amok(chosic.com).mp3'); 
     backgroundMusic.loop = true; 
     backgroundMusic.volume = 0.5;
-    
     globalSoundManager = new SoundManager();
-    
-    loadMuteSettings(); 
+}
+
+/**
+ * Sets up game event listeners.
+ * @returns {void}
+ */
+function setupGameEvents() {
     canvas.addEventListener('click', handleCanvasClick); 
     initMobileControls(); 
     initRotateDeviceOverlay();
-}
-
-/**
- * Initializes the mobile controls.
- * @returns {void}
- */
-function initMobileControls() {
-    const leftBtn = document.getElementById('leftBtn');
-    const rightBtn = document.getElementById('rightBtn');
-    const jumpBtn = document.getElementById('jumpBtn');
-    const throwBtn = document.getElementById('throwBtn');
-    leftBtn.addEventListener('touchstart', (e) => { e.preventDefault(); keyboard.LEFT = true; });
-    leftBtn.addEventListener('touchend', (e) => { e.preventDefault(); keyboard.LEFT = false; });
-    rightBtn.addEventListener('touchstart', (e) => { e.preventDefault(); keyboard.RIGHT = true; });
-    rightBtn.addEventListener('touchend', (e) => { e.preventDefault(); keyboard.RIGHT = false; });
-    jumpBtn.addEventListener('touchstart', (e) => { e.preventDefault(); keyboard.SPACE = true; });
-    jumpBtn.addEventListener('touchend', (e) => { e.preventDefault(); keyboard.SPACE = false; });
-    throwBtn.addEventListener('touchstart', (e) => { e.preventDefault(); keyboard.D = true; });
-    throwBtn.addEventListener('touchend', (e) => { e.preventDefault(); keyboard.D = false; });
-    [leftBtn, rightBtn, jumpBtn, throwBtn].forEach(btn => { btn.addEventListener('contextmenu', (e) => { e.preventDefault(); }); });
-}
-
-/**
- * Shows the start screen.
- * @returns {void}
- */
-function showStartScreen() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(startScreenImg, 0, 0, canvas.width, canvas.height);
-    canvas.classList.add('start-screen');
-    ctx.fillStyle = 'black';
-    ctx.strokeStyle = 'black';
-    ctx.lineWidth = 3;
-    ctx.font = 'bold 36px "Stardos Stencil", Arial';
-    ctx.textAlign = 'center';
-    ctx.strokeText('Klicke zum Starten', canvas.width / 2, canvas.height - 390);
-    ctx.fillText('Klicke zum Starten', canvas.width / 2, canvas.height - 390);
-}
-
-/**
- * Shows the game over screen.
- * @returns {void}
- */
-function showGameOver() {
-    gameState = 'gameOver';
-    if (backgroundMusic) { backgroundMusic.pause(); backgroundMusic.currentTime = 0; }
-    if (globalSoundManager && !isMuted) { globalSoundManager.playGameOver(); }
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const imgWidth = canvas.width * 0.5;
-    const imgHeight = canvas.height * 0.5;
-    const x = (canvas.width - imgWidth) / 2;
-    const y = (canvas.height - imgHeight) / 2;
-    ctx.drawImage(gameOverImg, x, y, imgWidth, imgHeight);
-    canvas.classList.add('game-over-screen');
-    createRestartButton();
-}
-
-/**
- * Shows the win screen.
- * @returns {void}
- */
-function showWin() {
-    gameState = 'win';
-    if (backgroundMusic) { backgroundMusic.pause(); backgroundMusic.currentTime = 0; }
-    if (world && world.character && world.character.soundManager) { world.character.soundManager.stopSound('snoring'); world.character.soundManager.stopSound('walking'); }
-    if (globalSoundManager && !isMuted) { globalSoundManager.playWin(); }
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const imgWidth = canvas.width * 0.5;
-    const imgHeight = canvas.height * 0.3;
-    const x = (canvas.width - imgWidth) / 2;
-    const y = (canvas.height - imgHeight) / 2;
-    ctx.drawImage(winImg, x, y, imgWidth, imgHeight);
-    canvas.classList.add('win-screen');
-    createRestartButton();
-}
-
-/**
- * Creates a restart button.
- * @returns {void}
- */
-function createRestartButton() {
-    removeRestartButton();
-    const canvasFrame = document.querySelector('.canvas-frame');
-    const restartButton = document.createElement('button');
-    restartButton.id = 'gameOverRestartButton';
-    restartButton.className = 'game-over-restart-button';
-    restartButton.innerHTML = '<img src="components/img_pollo_loco/img/icons8-reload-50.png" alt="Neues Spiel starten">';
-    restartButton.onclick = restartGameDirectly;
-    canvasFrame.appendChild(restartButton);
-    const menuButton = document.createElement('button');
-    menuButton.id = 'gameOverMenuButton';
-    menuButton.className = 'game-over-menu-button';
-    menuButton.innerHTML = '<img src="components/img_pollo_loco/img/icons8-menu-50.png" alt="Menü">';
-    menuButton.onclick = openMainMenuOverlay;
-    canvasFrame.appendChild(menuButton);
-}
-
-/**
- * Removes the restart button and menu button.
- * @returns {void}
- */
-function removeRestartButton() {
-    const existingRestartButton = document.getElementById('gameOverRestartButton');
-    if (existingRestartButton) { existingRestartButton.remove(); }
-    const existingMenuButton = document.getElementById('gameOverMenuButton');
-    if (existingMenuButton) { existingMenuButton.remove(); } 
 }
 
 /**
@@ -230,7 +57,11 @@ function removeRestartButton() {
  * @returns {void}
  */
 function handleCanvasClick() {
-    if (gameState === 'start') { startGame(); } else if (gameState === 'gameOver') { restartGame(); } else if (gameState === 'win') { restartGame(); }
+    if (gameState === 'start') { 
+        startGame(); 
+    } else if (gameState === 'gameOver' || gameState === 'win') { 
+        restartGame(); 
+    }
 }
 
 /**
@@ -239,128 +70,160 @@ function handleCanvasClick() {
  */
 async function startGame() {
     showLoadingScreen();
-    
     gameState = 'playing';
     canvas.removeEventListener('click', handleCanvasClick);
     canvas.classList.remove('start-screen');
     
     try {
-        const musicPromise = new Promise((resolve) => {
-            const timeout = setTimeout(() => resolve(), 2000);
-            
-            if (backgroundMusic && !isMuted) {
-                if (backgroundMusic.readyState >= 3) {
-                    clearTimeout(timeout);
-                    resolve();
-                } else {
-                    backgroundMusic.addEventListener('canplaythrough', () => {
-                        clearTimeout(timeout);
-                        resolve();
-                    }, { once: true });
-                }
-                
-                backgroundMusic.play().catch(e => { 
-                    console.log('Autoplay blocked:', e);
-                    clearTimeout(timeout);
-                    resolve();
-                });
-            } else {
-                clearTimeout(timeout);
-                resolve();
-            }
-        });
-
-        initLevel1();
-        world = new World(canvas, keyboard);
-        const assetPromises = [];
-        
-        if (world.character) {
-            assetPromises.push(
-                world.character.loadImages(world.character.IMAGES_WALKING),
-                world.character.loadImages(world.character.IMAGES_IDLE),
-                world.character.loadImages(world.character.IMAGES_LONG_IDLE),
-                world.character.loadImages(world.character.IMAGES_JUMP),
-                world.character.loadImages(world.character.IMAGES_DEAD),
-                world.character.loadImages(world.character.IMAGES_HURT)
-            );
-        }
-        
-        if (world.level && world.level.enemies) {
-            world.level.enemies.forEach(enemy => {
-                if (enemy.IMAGES_WALKING) assetPromises.push(enemy.loadImages(enemy.IMAGES_WALKING));
-                if (enemy.IMAGES_DEAD) assetPromises.push(enemy.loadImages(enemy.IMAGES_DEAD));
-                if (enemy.IMAGES_ALERT) assetPromises.push(enemy.loadImages(enemy.IMAGES_ALERT));
-                if (enemy.IMAGES_HURT) assetPromises.push(enemy.loadImages(enemy.IMAGES_HURT));
-            });
-        }
-        
-        if (world.level && world.level.backgroundObjects) {
-            world.level.backgroundObjects.forEach(bg => {
-                if (bg.img && bg.img.src) {
-                    assetPromises.push(new Promise((resolve) => {
-                        if (bg.img.complete) {
-                            resolve();
-                        } else {
-                            bg.img.onload = resolve;
-                            bg.img.onerror = resolve;
-                        }
-                    }));
-                }
-            });
-        }
-        
-        const totalAssets = assetPromises.length + 1;
-        let loadedAssets = 0;
-        assetPromises.forEach(promise => {
-            promise.then(() => {
-                loadedAssets++;
-                const progress = (loadedAssets / totalAssets) * 100;
-                updateLoadingProgressValue(progress);
-            }).catch(() => {
-                loadedAssets++;
-                const progress = (loadedAssets / totalAssets) * 100;
-                updateLoadingProgressValue(progress);
-            });
-        });
-        
-        await Promise.race([
-            Promise.all([musicPromise, ...assetPromises]),
-            new Promise(resolve => setTimeout(resolve, 5000))
-        ]);
-        
+        await initializeWorld();
         applyMuteSettings();
-        updateLoadingProgressValue(100);
-        
-        await new Promise(resolve => setTimeout(resolve, 200));
         hideLoadingScreen();
     } catch (error) {
         console.error('Error loading game assets:', error);
-        updateLoadingProgressValue(100);
-        await new Promise(resolve => setTimeout(resolve, 200));
         hideLoadingScreen();
     }
 }
 
 /**
- * Updates loading progress with a specific value.
- * @param {number} progress - The progress percentage (0-100)
+ * Initializes the game world and loads assets.
+ * @returns {Promise}
+ */
+async function initializeWorld() {
+    const musicPromise = setupBackgroundMusic();
+    initLevel1();
+    world = new World(canvas, keyboard);
+    
+    const assetPromises = loadWorldAssets();
+    await Promise.race([
+        Promise.all([musicPromise, ...assetPromises]),
+        new Promise(resolve => setTimeout(resolve, 5000))
+    ]);
+}
+
+/**
+ * Sets up background music playback.
+ * @returns {Promise}
+ */
+function setupBackgroundMusic() {
+    return new Promise((resolve) => {
+        const timeout = setTimeout(() => resolve(), 2000);
+        
+        if (backgroundMusic && !isMuted) {
+            handleMusicReady(resolve, timeout);
+        } else {
+            clearTimeout(timeout);
+            resolve();
+        }
+    });
+}
+
+/**
+ * Handles music ready state and playback.
  * @returns {void}
  */
-function updateLoadingProgressValue(progress) {
-    const loadingBar = document.getElementById('loadingBar');
-    const loadingText = document.getElementById('loadingText');
-    
-    if (loadingBar) {
-        loadingBar.style.width = Math.min(progress, 100) + '%';
+function handleMusicReady(resolve, timeout) {
+    if (backgroundMusic.readyState >= 3) {
+        clearTimeout(timeout);
+        resolve();
+    } else {
+        backgroundMusic.addEventListener('canplaythrough', () => {
+            clearTimeout(timeout);
+            resolve();
+        }, { once: true });
     }
     
-    if (loadingText) {
-        if (progress < 100) {
-            loadingText.textContent = `Loading... ${Math.round(progress)}%`;
+    startMusicPlayback(resolve, timeout);
+}
+
+/**
+ * Starts music playback with error handling.
+ * @returns {void}
+ */
+function startMusicPlayback(resolve, timeout) {
+    backgroundMusic.play().catch(e => { 
+        console.log('Autoplay blocked:', e);
+        clearTimeout(timeout);
+        resolve();
+    });
+}
+
+/**
+ * Loads all world assets.
+ * @returns {Array} Array of asset loading promises
+ */
+function loadWorldAssets() {
+    const assetPromises = [];
+    
+    loadCharacterAssets(assetPromises);
+    loadEnemyAssets(assetPromises);
+    loadBackgroundAssets(assetPromises);
+    
+    return assetPromises;
+}
+
+/**
+ * Loads character image assets.
+ * @param {Array} assetPromises - Array to add promises to
+ * @returns {void}
+ */
+function loadCharacterAssets(assetPromises) {
+    if (world.character) {
+        assetPromises.push(
+            world.character.loadImages(world.character.IMAGES_WALKING),
+            world.character.loadImages(world.character.IMAGES_IDLE),
+            world.character.loadImages(world.character.IMAGES_LONG_IDLE),
+            world.character.loadImages(world.character.IMAGES_JUMP),
+            world.character.loadImages(world.character.IMAGES_DEAD),
+            world.character.loadImages(world.character.IMAGES_HURT)
+        );
+    }
+}
+
+/**
+ * Loads enemy assets.
+ * @param {Array} assetPromises - Array to add promises to
+ * @returns {void}
+ */
+function loadEnemyAssets(assetPromises) {
+    if (world.level && world.level.enemies) {
+        world.level.enemies.forEach(enemy => {
+            if (enemy.IMAGES_WALKING) assetPromises.push(enemy.loadImages(enemy.IMAGES_WALKING));
+            if (enemy.IMAGES_DEAD) assetPromises.push(enemy.loadImages(enemy.IMAGES_DEAD));
+            if (enemy.IMAGES_ALERT) assetPromises.push(enemy.loadImages(enemy.IMAGES_ALERT));
+            if (enemy.IMAGES_HURT) assetPromises.push(enemy.loadImages(enemy.IMAGES_HURT));
+        });
+    }
+}
+
+/**
+ * Loads background assets.
+ * @param {Array} assetPromises - Array to add promises to  
+ * @returns {void}
+ */
+function loadBackgroundAssets(assetPromises) {
+    if (world.level && world.level.backgroundObjects) {
+        world.level.backgroundObjects.forEach(bg => {
+            if (bg.img && bg.img.src) {
+                assetPromises.push(createImageLoadPromise(bg.img));
+            }
+        });
+    }
+}
+
+/**
+ * Creates a promise for image loading.
+ * @param {HTMLImageElement} img - Image element to load
+ * @returns {Promise}
+ */
+function createImageLoadPromise(img) {
+    return new Promise((resolve) => {
+        if (img.complete) {
+            resolve();
         } else {
-            loadingText.textContent = 'Ready!';
+            img.onload = resolve;
+            img.onerror = resolve;
         }
-    }
+    });
 }
 
 /**
@@ -369,34 +232,10 @@ function updateLoadingProgressValue(progress) {
  */
 function restartGame() {
     gameState = 'start';
-    if (backgroundMusic) { backgroundMusic.pause(); backgroundMusic.currentTime = 0; }
-    if (globalSoundManager) { globalSoundManager.stopSound('gameOver'); globalSoundManager.stopSound('win'); }
-    if (world) { world = null; }
-    canvas.removeEventListener('click', handleCanvasClick);
-    canvas.classList.remove('game-over-screen');
-    canvas.classList.remove('win-screen');
-    removeRestartButton();
+    stopAllSounds();
+    cleanupGameState();
     canvas.addEventListener('click', handleCanvasClick);
     showStartScreen();
-}
-
-/**
- * Stops all game sounds and resets background music.
- * @returns {void}
- */
-function stopAllSounds() {
-    if (backgroundMusic) { backgroundMusic.pause(); backgroundMusic.currentTime = 0; }
-    if (globalSoundManager) { globalSoundManager.stopSound('gameOver'); globalSoundManager.stopSound('win'); }
-}
-
-/**
- * Cleans up the game state and UI elements.
- * @returns {void}
- */
-function cleanupGameState() {
-    world = null;
-    canvas.classList.remove('game-over-screen', 'win-screen');
-    removeRestartButton();
 }
 
 /**
@@ -410,50 +249,14 @@ function restartGameDirectly() {
 }
 
 /**
- * Handles keyboard input.
+ * Cleans up the game state and UI elements.
  * @returns {void}
  */
-window.addEventListener("keydown", (event) => {
-    if (event.keyCode == 39) { keyboard.RIGHT = true; }
-    if (event.keyCode == 37) { keyboard.LEFT = true; }
-    if (event.keyCode == 32) { keyboard.SPACE = true; }
-    if (event.keyCode == 68) { keyboard.D = true; }
-});
-
-/**
- * Handles keyboard input.
- * @returns {void}
- */
-window.addEventListener("keyup", (event) => {
-    if (event.keyCode == 39) { keyboard.RIGHT = false; }
-    if (event.keyCode == 37) { keyboard.LEFT = false; }
-    if (event.keyCode == 32) { keyboard.SPACE = false; }
-    if (event.keyCode == 68) { keyboard.D = false; }
-});
-
-/**
- * Hides the overlay.
- * @returns {void}
- */
-function hideOverlay() {
-    const overlay = document.getElementById('gameOverlay');
-    if (!overlay) return;
-    overlay.classList.add('hidden');
-}
-
-/**
- * Shows the main overlay menu again.
- * @returns {void}
- */
-function showOverlay(endGame = false) {
-    const overlay = document.getElementById('gameOverlay');
-    if (!overlay) return;
-    overlay.classList.remove('hidden');
-    if (endGame) {
-        document.getElementById('btnOverlay').onclick = () => {
-            restartGame(); hideOverlay();
-        }
-    }
+function cleanupGameState() {
+    world = null;
+    canvas.classList.remove('game-over-screen', 'win-screen');
+    removeRestartButton();
+    canvas.removeEventListener('click', handleCanvasClick);
 }
 
 /**
@@ -521,98 +324,3 @@ document.addEventListener('fullscreenchange', () => {
         icon.title = 'Vollbild aktivieren';
     }
 });
-
-/**
- * Loads the mute settings from local storage.
- * @returns {void}
- */
-function loadMuteSettings() {
-    const savedMuteState = localStorage.getItem('polloLoco_isMuted');
-    if (savedMuteState !== null) {
-        isMuted = JSON.parse(savedMuteState);
-    }
-
-    updateMuteIcon();
-    applyMuteSettings();
-}
-
-/**
- * Saves the mute settings to local storage.
- * @returns {void}
- */
-function saveMuteSettings() {
-    localStorage.setItem('polloLoco_isMuted', JSON.stringify(isMuted));
-}
-
-/**
- * Applies the mute settings.
- * @returns {void}
- */
-function applyMuteSettings() {
-    if (backgroundMusic) { try { backgroundMusic.muted = isMuted; } catch (e) { console.log(e) } }
-    if (world && world.character && world.character.soundManager) { try { if (isMuted) { world.character.soundManager.muteAll(); } else { world.character.soundManager.unmuteAll(); } } catch (e) { console.log(e); }}
-    if (world && world.soundManager) { try { if (isMuted) { world.soundManager.muteAll(); } else { world.soundManager.unmuteAll(); } } catch (e) { console.log(e); } }
-    if (globalSoundManager) { try { if (isMuted) { globalSoundManager.muteAll(); } else { globalSoundManager.unmuteAll(); } } catch (e) { console.log(e); } }
-}
-
-/**
- * Updates the mute icon.
- * @returns {void}
- */
-function updateMuteIcon() {
-    const icon = document.getElementById('muteIcon');
-    if (!icon) return;
-    if (isMuted) {
-        icon.src = 'components/img_pollo_loco/icons8-no-sound-50.png';
-        icon.alt = 'Unmute';
-        icon.title = 'Sound einschalten';
-    } else {
-        icon.src = 'components/img_pollo_loco/img/icons8-sound-50.png';
-        icon.alt = 'Mute';
-        icon.title = 'Sound ausschalten';
-    }
-}
-
-/**
- * Toggles the mute state.
- * @returns {void}
- */
-function toggleMute() {
-    isMuted = !isMuted;
-    saveMuteSettings();
-    if (backgroundMusic) {
-        try {backgroundMusic.muted = isMuted; if (!isMuted && gameState === 'playing') { backgroundMusic.play().catch((e) => {console.log(e); }); } } catch (e) { }
-    }
-    if (world && world.character && world.character.soundManager) {
-        try { if (isMuted) { world.character.soundManager.muteAll(); } else { world.character.soundManager.unmuteAll(); } } catch (e) { console.log(e); }
-    }
-    if (world && world.soundManager) {
-        try { if (isMuted) { world.soundManager.muteAll(); } else { world.soundManager.unmuteAll(); } } catch (e) { console.log(e); }
-    }
-    if (globalSoundManager) {
-        try { if (isMuted) { globalSoundManager.muteAll(); } else { globalSoundManager.unmuteAll(); } } catch (e) { console.log(e); }
-    }
-    updateMuteIcon();
-}
-
-/**
- * Initializes the rotate device overlay.
- * @returns {void}
- */
-function initRotateDeviceOverlay() {
-    checkOrientation();
-    window.addEventListener('orientationchange', () => {
-        setTimeout(checkOrientation, 100);
-    });
-    window.addEventListener('resize', checkOrientation);
-}
-
-/**
- * Checks the device orientation and shows/hides the rotate overlay.
- * @returns {void}
- */
-function checkOrientation() {
-    const overlay = document.getElementById('rotateDeviceOverlay');
-    const isPortrait = window.innerWidth < window.innerHeight;
-    if (isPortrait) { overlay.style.display = 'flex'; } else { overlay.style.display = 'none'; }
-}

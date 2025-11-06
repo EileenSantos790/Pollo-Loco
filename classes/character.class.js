@@ -113,7 +113,7 @@ class Character extends MoveableObject {
         setInterval(() => { this.handleIdleAnimations(); }, 160);
         setInterval(() => { this.handleIdleTimer(); }, 1000);
         setInterval(() => { this.handleJumpingAnimation(); }, 50);  
-        setInterval(() => { this.updateJumpAnimationFrame(); }, 150);
+        setInterval(() => { this.updateJumpAnimationFrame(); }, 100);
         setInterval(() => { this.handleDeathAnimation(); }, 150);
         setInterval(() => { this.updateDeathAnimationFrame(); }, 150);
         setInterval(() => { this.handleHurtAnimation(); }, 250);            
@@ -131,7 +131,7 @@ class Character extends MoveableObject {
         if (this.world.keyboard.LEFT && this.x > 0) { this.x -= this.speed; this.otherDirection = true; isMoving = true; }
         if (isMoving) { this.resetIdleState(); }
         this.world.camera_x = -this.x + 100;
-        if (this.world.keyboard.SPACE && !this.isAboveGround()) { this.jump(); }
+        if (this.world.keyboard.SPACE && !this.isAboveGround()) { this.jumpAnimationStarted = true; this.jumpAnimationIndex = 0; this.jump(); }
     }
 
 
@@ -209,27 +209,41 @@ class Character extends MoveableObject {
 
     /**
      * Handles the jumping animation for the character.
+     * Executa sequência J-31 até J-39 de forma sincronizada
      * @returns {void}
      */
     handleJumpingAnimation() {
         if (this.isDead()) return;
+        
         const currentlyAboveGround = this.isAboveGround();
-        if (currentlyAboveGround) { this.wasAboveGround = true;
-            if (!this.jumpAnimationStarted) { this.jumpAnimationStarted = true; this.jumpAnimationIndex = 0; }
-            if (this.jumpAnimationIndex < this.IMAGES_JUMP.length) { const path = this.IMAGES_JUMP[this.jumpAnimationIndex]; this.img = this.imageCache[path];
-            } else { const lastFramePath = this.IMAGES_JUMP[this.IMAGES_JUMP.length - 1]; this.img = this.imageCache[lastFramePath]; }
-        } else if (this.wasAboveGround && !currentlyAboveGround) { this.wasAboveGround = false; this.jumpAnimationStarted = false; this.jumpAnimationIndex = 0; this.resetIdleState(); this.isIdle = true; this.currentImageIndex = 0; }
+        const isJumping = this.jumpAnimationStarted;
+        
+        if (isJumping) {
+            if (currentlyAboveGround) {
+                this.wasAboveGround = true;
+            }
+
+            if (this.jumpAnimationIndex < this.IMAGES_JUMP.length) {
+                const path = this.IMAGES_JUMP[this.jumpAnimationIndex];
+                this.img = this.imageCache[path];
+            } else {
+                const lastFramePath = this.IMAGES_JUMP[this.IMAGES_JUMP.length - 1];
+                this.img = this.imageCache[lastFramePath];
+            }
+        }
+        if (this.wasAboveGround && !currentlyAboveGround && !this.world.keyboard.SPACE) { this.wasAboveGround = false; this.jumpAnimationStarted = false; this.jumpAnimationIndex = 0; this.resetIdleState(); this.isIdle = true; this.currentImageIndex = 0; }
     }
 
 
     /**
      * Updates the jump animation frame index if the jump animation is currently active.
-     * Increments the jumpAnimationIndex to progress through the jump animation frames,
-     * but only if the animation has started and hasn't exceeded the available frames.
+     * Avança pelos frames J-31 até J-39 de forma sequencial e controlada
      */
     updateJumpAnimationFrame() {
-        if (this.jumpAnimationStarted && this.jumpAnimationIndex < this.IMAGES_JUMP.length) {
-            this.jumpAnimationIndex++;
+        if (this.jumpAnimationStarted) {
+            if (this.jumpAnimationIndex < this.IMAGES_JUMP.length - 1) {
+                this.jumpAnimationIndex++;
+            }
         }
     }
 
@@ -262,19 +276,8 @@ class Character extends MoveableObject {
      */
     handleDeathAnimation() {
         if (this.isDead()) {
-            if (!this.deathAnimationStarted) {
-                this.deathAnimationStarted = true;
-                this.deathAnimationIndex = 0;
-                this.deathAnimationCompleted = false;
-            }
-            if (this.deathAnimationIndex < this.IMAGES_DEAD.length) {
-                const path = this.IMAGES_DEAD[this.deathAnimationIndex];
-                this.img = this.imageCache[path];
-            } else {
-                const lastFramePath = this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1];
-                this.img = this.imageCache[lastFramePath];
-                this.deathAnimationCompleted = true;
-            }
+            if (!this.deathAnimationStarted) { this.deathAnimationStarted = true; this.deathAnimationIndex = 0; this.deathAnimationCompleted = false; }
+            if (this.deathAnimationIndex < this.IMAGES_DEAD.length) { const path = this.IMAGES_DEAD[this.deathAnimationIndex]; this.img = this.imageCache[path]; } else { const lastFramePath = this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]; this.img = this.imageCache[lastFramePath]; this.deathAnimationCompleted = true; }
         }
     }
 
@@ -310,7 +313,6 @@ class Character extends MoveableObject {
     handleHurtAnimation() {
         if (!this.isDead() && this.isHurt()) {
             this.playAnimation(this.IMAGES_HURT);
-
             if (!this.soundManager.hasPlayed('hurt')) { this.soundManager.playSound('hurt'); }
         } else {
             this.soundManager.resetSoundState('hurt');
@@ -335,12 +337,7 @@ class Character extends MoveableObject {
      * @returns {void}
      */
     stopLongIdleAnimation() {
-        if (this.isLongIdle) {
-            this.isLongIdle = false;
-            this.isIdle = true;
-            this.currentImageIndex = 0;
-            this.soundManager.stopSound('snoring');
-        }
+        if (this.isLongIdle) { this.isLongIdle = false; this.isIdle = true; this.currentImageIndex = 0; this.soundManager.stopSound('snoring'); }
     }
 
 
