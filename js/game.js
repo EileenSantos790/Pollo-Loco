@@ -395,11 +395,9 @@ function checkOrientation() {
     const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     
     if (isPortrait) { 
-        // Portrait-Modus: Zeige Rotate-Overlay, verstecke Mobile Controls
         overlay.style.display = 'flex'; 
         if (mobileControls) mobileControls.style.display = 'none';
     } else { 
-        // Landscape-Modus: Verstecke Rotate-Overlay, zeige Mobile Controls (nur bei Touch-Geräten)
         overlay.style.display = 'none'; 
         if (mobileControls && isTouchDevice) {
             mobileControls.style.display = 'block';
