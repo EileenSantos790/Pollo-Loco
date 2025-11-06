@@ -32,13 +32,18 @@ class DrawableObject {
     /**
      * Loads multiple images from an array of paths.
      * @param {string[]} arr - The array of image paths.
-     * @returns {void}
+     * @returns {Promise} - Promise that resolves when all images are loaded.
      */
     loadImages(arr) {
-        arr.forEach(path => {
-            let img = new Image();
-            img.src = path;
-            this.imageCache[path] = img;
+        const promises = arr.map(path => {
+            return new Promise((resolve, reject) => {
+                let img = new Image();
+                img.onload = () => resolve();
+                img.onerror = () => resolve();
+                img.src = path;
+                this.imageCache[path] = img;
+            });
         });
+        return Promise.all(promises);
     }
 }

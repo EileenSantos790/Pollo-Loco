@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/style.css">
-    <link rel="stylesheet" href="./css/responsive.css">
     <link type="image/png" sizes="32x32" rel="icon" href="components/img_pollo_loco/img/icons8-sombrero-32.png">
 
     <script src="./classes/drawableObject.class.js" defer></script>
@@ -39,6 +38,19 @@
 </head>
 
 <body class="stardos-stencil-regular" onload="init()">
+
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-content">
+            <h1 class="loading-title">El Pollo Loco</h1>
+            <div class="loading-spinner">
+                <img src="components/img_pollo_loco/img/2_character_pepe/2_walk/W-21.png" alt="Loading" class="loading-pepe">
+            </div>
+            <div class="loading-bar-container">
+                <div id="loadingBar" class="loading-bar"></div>
+            </div>
+            <p id="loadingText" class="loading-text">Loading...</p>
+        </div>
+    </div>
 
     <div id="rotateDeviceOverlay" class="rotate-device-overlay">
         <div class="rotate-device-content">

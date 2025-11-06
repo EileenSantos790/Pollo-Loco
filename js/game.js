@@ -1,4 +1,94 @@
 let canvas; let world; let keyboard = new Keyboard(); let ctx; let gameState = 'start'; let startScreenImg; let gameOverImg; let winImg; let backgroundMusic; let globalSoundManager; let isMuted = false;
+let assetsToLoad = 0;
+let assetsLoaded = 0;
+
+/**
+ * Updates the loading progress bar and text.
+ * @returns {void}
+ */
+function updateLoadingProgress() {
+    const progress = assetsToLoad > 0 ? (assetsLoaded / assetsToLoad) * 100 : 0;
+    updateLoadingProgressValue(progress);
+    
+    if (progress >= 100) {
+        setTimeout(hideLoadingScreen, 500);
+    }
+}
+
+/**
+ * Hides the loading screen with a fade-out effect.
+ * @returns {void}
+ */
+function hideLoadingScreen() {
+    const loadingScreen = document.getElementById('loadingScreen');
+    if (loadingScreen) {
+        loadingScreen.classList.add('fade-out');
+        setTimeout(() => {
+            loadingScreen.classList.remove('active');
+            loadingScreen.classList.remove('fade-out');
+            loadingScreen.style.display = 'none';
+        }, 500);
+    }
+}
+
+/**
+ * Shows the loading screen.
+ * @returns {void}
+ */
+function showLoadingScreen() {
+    const loadingScreen = document.getElementById('loadingScreen');
+    const loadingBar = document.getElementById('loadingBar');
+    const loadingText = document.getElementById('loadingText');
+    
+    if (loadingScreen) {
+        loadingScreen.classList.add('active');
+        loadingScreen.style.display = 'flex';
+    }
+    if (loadingBar) {
+        loadingBar.style.width = '0%';
+    }
+    if (loadingText) {
+        loadingText.textContent = 'Laden... 0%';
+    }
+    
+    // Reset counters
+    assetsToLoad = 0;
+    assetsLoaded = 0;
+}
+
+/**
+ * Tracks loading of an image asset.
+ * @param {HTMLImageElement} img - The image element to track
+ * @returns {void}
+ */
+function trackImageLoad(img) {
+    assetsToLoad++;
+    img.onload = () => {
+        assetsLoaded++;
+        updateLoadingProgress();
+    };
+    img.onerror = () => {
+        assetsLoaded++;
+        updateLoadingProgress();
+    };
+}
+
+/**
+ * Tracks loading of an audio asset.
+ * @param {HTMLAudioElement} audio - The audio element to track
+ * @returns {void}
+ */
+function trackAudioLoad(audio) {
+    assetsToLoad++;
+    audio.addEventListener('canplaythrough', () => {
+        assetsLoaded++;
+        updateLoadingProgress();
+    }, { once: true });
+    audio.addEventListener('error', () => {
+        assetsLoaded++;
+        updateLoadingProgress();
+    }, { once: true });
+}
 
 /**
  * Initializes the game.
@@ -6,14 +96,29 @@ let canvas; let world; let keyboard = new Keyboard(); let ctx; let gameState = '
  */
 function init() {
     canvas = document.getElementById("gameCanvas"); ctx = canvas.getContext("2d");
+    
     startScreenImg = new Image();
     startScreenImg.src = 'components/img_pollo_loco/img/9_intro_outro_screens/start/startscreen_2.png';
-    startScreenImg.onload = function () { showStartScreen(); };
-    gameOverImg = new Image(); gameOverImg.src = 'components/img_pollo_loco/img/You won, you lost/Game over A.png';
-    winImg = new Image(); winImg.src = 'components/img_pollo_loco/img/You won, you lost/You Won B.png';
-    backgroundMusic = new Audio('components/audio/Run-Amok(chosic.com).mp3'); backgroundMusic.loop = true; backgroundMusic.volume = 0.5;
+    startScreenImg.onload = function () { 
+        showStartScreen(); 
+    };
+    
+    gameOverImg = new Image(); 
+    gameOverImg.src = 'components/img_pollo_loco/img/You won, you lost/Game over A.png';
+    
+    winImg = new Image(); 
+    winImg.src = 'components/img_pollo_loco/img/You won, you lost/You Won B.png';
+    
+    backgroundMusic = new Audio('components/audio/Run-Amok(chosic.com).mp3'); 
+    backgroundMusic.loop = true; 
+    backgroundMusic.volume = 0.5;
+    
     globalSoundManager = new SoundManager();
-    loadMuteSettings(); canvas.addEventListener('click', handleCanvasClick); initMobileControls(); initRotateDeviceOverlay();
+    
+    loadMuteSettings(); 
+    canvas.addEventListener('click', handleCanvasClick); 
+    initMobileControls(); 
+    initRotateDeviceOverlay();
 }
 
 /**
@@ -134,14 +239,106 @@ function handleCanvasClick() {
  * Starts the game.
  * @returns {void}
  */
-function startGame() {
+async function startGame() {
+    showLoadingScreen();
+    
     gameState = 'playing';
     canvas.removeEventListener('click', handleCanvasClick);
     canvas.classList.remove('start-screen');
-    if (backgroundMusic && !isMuted) { backgroundMusic.play().catch(e => { console.log('Autoplay wurde blockiert:', e); }); }
-    initLevel1();
-    world = new World(canvas, keyboard);
-    applyMuteSettings();
+    
+    try {
+        const musicPromise = new Promise((resolve) => {
+            if (backgroundMusic && !isMuted) {
+                backgroundMusic.addEventListener('canplaythrough', resolve, { once: true });
+                backgroundMusic.play().catch(e => { 
+                    console.log('Autoplay wurde blockiert:', e);
+                    resolve(); // Resolve anyway to not block
+                });
+            } else {
+                resolve();
+            }
+        });
+
+        initLevel1();
+        world = new World(canvas, keyboard);
+        const assetPromises = [];
+        if (world.character) {
+            assetPromises.push(
+                world.character.loadImages(world.character.IMAGES_WALKING),
+                world.character.loadImages(world.character.IMAGES_IDLE),
+                world.character.loadImages(world.character.IMAGES_LONG_IDLE),
+                world.character.loadImages(world.character.IMAGES_JUMP),
+                world.character.loadImages(world.character.IMAGES_DEAD),
+                world.character.loadImages(world.character.IMAGES_HURT)
+            );
+        }
+        
+        if (world.level && world.level.enemies) {
+            world.level.enemies.forEach(enemy => {
+                if (enemy.IMAGES_WALKING) assetPromises.push(enemy.loadImages(enemy.IMAGES_WALKING));
+                if (enemy.IMAGES_DEAD) assetPromises.push(enemy.loadImages(enemy.IMAGES_DEAD));
+                if (enemy.IMAGES_ALERT) assetPromises.push(enemy.loadImages(enemy.IMAGES_ALERT));
+                if (enemy.IMAGES_HURT) assetPromises.push(enemy.loadImages(enemy.IMAGES_HURT));
+            });
+        }
+        
+        if (world.level && world.level.backgroundObjects) {
+            world.level.backgroundObjects.forEach(bg => {
+                if (bg.img && bg.img.src) {
+                    assetPromises.push(new Promise((resolve) => {
+                        if (bg.img.complete) {
+                            resolve();
+                        } else {
+                            bg.img.onload = resolve;
+                            bg.img.onerror = resolve;
+                        }
+                    }));
+                }
+            });
+        }
+        
+        const totalAssets = assetPromises.length + 1; // +1 for music
+        let loadedAssets = 0;
+        
+        assetPromises.forEach(promise => {
+            promise.then(() => {
+                loadedAssets++;
+                const progress = (loadedAssets / totalAssets) * 100;
+                updateLoadingProgressValue(progress);
+            });
+        });
+        
+        await Promise.all([musicPromise, ...assetPromises]);
+        applyMuteSettings();
+        updateLoadingProgressValue(100);
+        await new Promise(resolve => setTimeout(resolve, 300));
+        hideLoadingScreen();
+    } catch (error) {
+        console.error('Error loading game assets:', error);
+        hideLoadingScreen();
+    }
+}
+
+/**
+ * Updates loading progress with a specific value.
+ * @param {number} progress - The progress percentage (0-100)
+ * @returns {void}
+ */
+function updateLoadingProgressValue(progress) {
+    const loadingBar = document.getElementById('loadingBar');
+    const loadingText = document.getElementById('loadingText');
+    
+    if (loadingBar) {
+        loadingBar.style.width = Math.min(progress, 100) + '%';
+    }
+    
+    if (loadingText) {
+        if (progress < 100) {
+            loadingText.textContent = `Loading... ${Math.round(progress)}%`;
+        } else {
+            loadingText.textContent = 'Ready!';
+        }
+    }
 }
 
 /**
@@ -330,9 +527,9 @@ function saveMuteSettings() {
  * @returns {void}
  */
 function applyMuteSettings() {
-    if (backgroundMusic) { try { backgroundMusic.muted = isMuted; } catch (e) { } }
-    if (world && world.character && world.character.soundManager) { try { if (isMuted) { world.character.soundManager.muteAll(); } else { world.character.soundManager.unmuteAll(); } } catch (e) { }}
-    if (globalSoundManager) { try { if (isMuted) { globalSoundManager.muteAll(); } else { globalSoundManager.unmuteAll(); } } catch (e) { } }
+    if (backgroundMusic) { try { backgroundMusic.muted = isMuted; } catch (e) { console.log(e) } }
+    if (world && world.character && world.character.soundManager) { try { if (isMuted) { world.character.soundManager.muteAll(); } else { world.character.soundManager.unmuteAll(); } } catch (e) { console.log(e); }}
+    if (globalSoundManager) { try { if (isMuted) { globalSoundManager.muteAll(); } else { globalSoundManager.unmuteAll(); } } catch (e) { console.log(e); } }
 }
 
 /**
@@ -361,13 +558,13 @@ function toggleMute() {
     isMuted = !isMuted;
     saveMuteSettings();
     if (backgroundMusic) {
-        try {backgroundMusic.muted = isMuted; if (!isMuted && gameState === 'playing') { backgroundMusic.play().catch(() => { }); } } catch (e) { }
+        try {backgroundMusic.muted = isMuted; if (!isMuted && gameState === 'playing') { backgroundMusic.play().catch((e) => {console.log(e); }); } } catch (e) { }
     }
     if (world && world.character && world.character.soundManager) {
-        try { if (isMuted) { world.character.soundManager.muteAll(); } else { world.character.soundManager.unmuteAll(); } } catch (e) { }
+        try { if (isMuted) { world.character.soundManager.muteAll(); } else { world.character.soundManager.unmuteAll(); } } catch (e) { console.log(e); }
     }
     if (globalSoundManager) {
-        try { if (isMuted) { globalSoundManager.muteAll(); } else { globalSoundManager.unmuteAll(); } } catch (e) { }
+        try { if (isMuted) { globalSoundManager.muteAll(); } else { globalSoundManager.unmuteAll(); } } catch (e) { console.log(e); }
     }
     updateMuteIcon();
 }
@@ -385,24 +582,11 @@ function initRotateDeviceOverlay() {
 }
 
 /**
- * Checks the device orientation and shows/hides the rotate overlay and mobile controls.
+ * Checks the device orientation and shows/hides the rotate overlay.
  * @returns {void}
  */
 function checkOrientation() {
     const overlay = document.getElementById('rotateDeviceOverlay');
-    const mobileControls = document.querySelector('.mobile-controls');
     const isPortrait = window.innerWidth < window.innerHeight;
-    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    
-    if (isPortrait) { 
-        overlay.style.display = 'flex'; 
-        if (mobileControls) mobileControls.style.display = 'none';
-    } else { 
-        overlay.style.display = 'none'; 
-        if (mobileControls && isTouchDevice) {
-            mobileControls.style.display = 'block';
-        } else if (mobileControls) {
-            mobileControls.style.display = 'none';
-        }
-    }
+    if (isPortrait) { overlay.style.display = 'flex'; } else { overlay.style.display = 'none'; }
 }

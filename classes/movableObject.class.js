@@ -110,7 +110,7 @@ class MoveableObject extends DrawableObject {
     hit(amount = 20) {
         if (this.isHurt()) { return; } 
         if (this instanceof Character) {
-            try { this.stopLongIdleAnimation(); this.idleTimer = 0; } catch (e) { }
+            try { this.stopLongIdleAnimation(); this.idleTimer = 0; } catch (e) { console.log(e); }
         }
         this.energy -= amount;
         if (this.energy < 0) {
