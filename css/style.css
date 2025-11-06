@@ -877,8 +877,30 @@ body:has(.legal-notice-container) {
   height: 100%;
   width: 0%;
   background: linear-gradient(90deg, #9ACD32 0%, #6B8E23 100%);
-  transition: width 0.3s ease;
+  transition: width 0.2s ease-out;
   box-shadow: 0 0 10px rgba(154, 205, 50, 0.5);
+  position: relative;
+}
+
+.loading-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
 .loading-text {
@@ -887,6 +909,8 @@ body:has(.legal-notice-container) {
   color: #654321;
   margin: 10px 0 0 0;
   font-weight: 500;
+  text-align: center;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 
