@@ -89,16 +89,101 @@ class MoveableObject extends DrawableObject {
      * @returns {boolean} - True if the objects are colliding, false otherwise.
      */
     isColliding(mo) {
-        let thisX = this.x; let thisY = this.y; let thisWidth = this.width; let thisHeight = this.height; let moX = mo.x; let moY = mo.y; let moWidth = mo.width; let moHeight = mo.height;
-        if (this instanceof Character) { thisX += 30; thisY += 120; thisWidth -= 60; thisHeight -= 140;
-        } else if (this instanceof smallChicken) { thisX += 4; thisY += 4; thisWidth -= 8; thisHeight -= 8;
-        } else if (this instanceof Chicken || this instanceof Endboss) { thisX += 10; thisY += 10; thisWidth -= 20; thisHeight -= 20;
-        } else if (this instanceof ThrowableObject) { thisX += 5; thisY += 5; thisWidth -= 10; thisHeight -= 10; }
-        if (mo instanceof Character) { moX += 30; moY += 120; moWidth -= 60; moHeight -= 140;
-        } else if (mo instanceof smallChicken) { moX += 4; moY += 4; moWidth -= 8; moHeight -= 8;
-        } else if (mo instanceof Chicken || mo instanceof Endboss) { moX += 10; moY += 10; moWidth -= 20; moHeight -= 20;
-        } else if (mo instanceof ThrowableObject) { moX += 5; moY += 5; moWidth -= 10; moHeight -= 10; }
-        return thisX + thisWidth > moX && thisY + thisHeight > moY && thisX < moX + moWidth && thisY < moY + moHeight;
+        const thisBounds = this.getAdjustedBounds();
+        const moBounds = this.getAdjustedBoundsForObject(mo);
+        
+        return thisBounds.x + thisBounds.width > moBounds.x && 
+               thisBounds.y + thisBounds.height > moBounds.y && 
+               thisBounds.x < moBounds.x + moBounds.width && 
+               thisBounds.y < moBounds.y + moBounds.height;
+    }
+
+    /**
+     * Gets adjusted bounds for this object.
+     * @returns {Object} - Object with x, y, width, height properties.
+     */
+    getAdjustedBounds() {
+        return this.getAdjustedBoundsForObject(this);
+    }
+
+    /**
+     * Gets adjusted bounds for a given object.
+     * @param {MoveableObject} obj - The object to get bounds for.
+     * @returns {Object} - Object with x, y, width, height properties.
+     */
+    getAdjustedBoundsForObject(obj) {
+        let bounds = { x: obj.x, y: obj.y, width: obj.width, height: obj.height };
+        if (obj instanceof Character) {
+            this.adjustCharacterBounds(bounds);
+        } else if (obj instanceof smallChicken) {
+            this.adjustSmallChickenBounds(bounds);
+        } else if (obj instanceof Chicken || obj instanceof Endboss) {
+            this.adjustChickenBounds(bounds);
+        } else if (obj instanceof ThrowableObject) {
+            this.adjustThrowableBounds(bounds);
+        } else if (obj instanceof CollectableObject) {
+            this.adjustCollectableBounds(bounds, obj);
+        }
+        return bounds;
+    }
+
+    /**
+     * Adjusts bounds for Character objects.
+     * @param {Object} bounds - Bounds object to modify.
+     */
+    adjustCharacterBounds(bounds) {
+        bounds.x += 30;
+        bounds.y += 120;
+        bounds.width -= 60;
+        bounds.height -= 140;
+    }
+
+    /**
+     * Adjusts bounds for small chicken objects.
+     * @param {Object} bounds - Bounds object to modify.
+     */
+    adjustSmallChickenBounds(bounds) {
+        bounds.x += 4;
+        bounds.y += 4;
+        bounds.width -= 8;
+        bounds.height -= 8;
+    }
+
+    /**
+     * Adjusts bounds for chicken objects.
+     * @param {Object} bounds - Bounds object to modify.
+     */
+    adjustChickenBounds(bounds) {
+        bounds.x += 10;
+        bounds.y += 10;
+        bounds.width -= 20;
+        bounds.height -= 20;
+    }
+
+    /**
+     * Adjusts bounds for throwable objects.
+     * @param {Object} bounds - Bounds object to modify.
+     */
+    adjustThrowableBounds(bounds) {
+        bounds.x += 5;
+        bounds.y += 5;
+        bounds.width -= 10;
+        bounds.height -= 10;
+    }
+
+    /**
+     * Adjusts bounds for collectable objects.
+     * @param {Object} bounds - Bounds object to modify.
+     * @param {CollectableObject} obj - The collectable object.
+     */
+    adjustCollectableBounds(bounds, obj) {
+        if (obj.type === 'coin') {
+            bounds.x += 25; bounds.y += 25; bounds.width -= 50; bounds.height -= 50;
+        } else if (obj.type === 'bottle') {
+            bounds.x += 28; bounds.y += 28; bounds.width -= 56; bounds.height -= 56;
+        } else {
+            bounds.x += 22; bounds.y += 22; bounds.width -= 44; bounds.height -= 44;
+        }
     }
 
 
