@@ -137,8 +137,12 @@ class World {
         const charCenter = charHitbox.x + charHitbox.w / 2;
         const bossCenter = bossHitbox.x + bossHitbox.w / 2;
         const buffer = 1;
-        if (charCenter < bossCenter) { const bossLeft = bossHitbox.x; ch.x = (bossLeft - buffer) - (ch.width - 30);
-        } else { const bossRight = bossHitbox.x + bossHitbox.w; ch.x = (bossRight + buffer) - 30; }
+        if (charCenter < bossCenter) {  const bossLeft = bossHitbox.x;  const newCharacterX = (bossLeft - buffer) - (ch.width - 30);
+            ch.x = Math.max(0, newCharacterX);
+        } else { 
+            const bossRight = bossHitbox.x + bossHitbox.w; 
+            ch.x = (bossRight + buffer) - 30; 
+        }
     }
 
     /**

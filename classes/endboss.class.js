@@ -105,6 +105,17 @@ class Endboss extends MoveableObject {
 
 
     /**
+     * Moves the endboss to the left, but prevents it from going beyond the left boundary.
+     * @returns {void}
+     */
+    moveLeft() {
+        if (this.x > 0) {
+            this.x -= this.speed;
+        }
+    }
+
+
+    /**
      * Handles the event when the end boss is hit by a bottle.
      * @returns {void}
      */
