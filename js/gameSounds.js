@@ -167,4 +167,10 @@ function stopAllSounds() {
         globalSoundManager.stopSound('gameOver');
         globalSoundManager.stopSound('win');
     }
+    if (window.world) {
+        try {
+            if (world.soundManager) world.soundManager.stopAll();
+            if (world.character && world.character.soundManager) world.character.soundManager.stopAll();
+        } catch (e) { }
+    }
 }

@@ -56,11 +56,11 @@ class CollectableObject extends MoveableObject {
      */
     animate() {
         if (this.type === 'coin') {
-            setInterval(() => {
+            this.animationInterval = setInterval(() => {
                 this.playAnimation(this.IMAGES_COINS);
             }, 300);
         } else if (this.type === 'bottle') {
-            setInterval(() => {
+            this.animationInterval = setInterval(() => {
                 this.playAnimation(this.IMAGES_BOTTLES);
             }, 400);
         }

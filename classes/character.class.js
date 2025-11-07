@@ -108,15 +108,15 @@ class Character extends MoveableObject {
      * @returns {void}
      */
     animate() {
-        setInterval(() => { this.handleMovement(); }, 1000 / 60);
-        setInterval(() => { this.handleWalkingAnimation(); }, 80);
-        setInterval(() => { this.handleIdleAnimations(); }, 160);
-        setInterval(() => { this.handleIdleTimer(); }, 1000);
-        setInterval(() => { this.handleJumpingAnimation(); }, 50);  
-        setInterval(() => { this.updateJumpAnimationFrame(); }, 100);
-        setInterval(() => { this.handleDeathAnimation(); }, 150);
-        setInterval(() => { this.updateDeathAnimationFrame(); }, 150);
-        setInterval(() => { this.handleHurtAnimation(); }, 250);            
+        this.movementInterval = setInterval(() => { this.handleMovement(); }, 1000 / 60);
+        this.walkingAnimationInterval = setInterval(() => { this.handleWalkingAnimation(); }, 80);
+        this.idleAnimationsInterval = setInterval(() => { this.handleIdleAnimations(); }, 160);
+        this.idleTimerInterval = setInterval(() => { this.handleIdleTimer(); }, 1000);
+        this.jumpingAnimationInterval = setInterval(() => { this.handleJumpingAnimation(); }, 50);  
+        this.updateJumpAnimationInterval = setInterval(() => { this.updateJumpAnimationFrame(); }, 100);
+        this.deathAnimationInterval = setInterval(() => { this.handleDeathAnimation(); }, 150);
+        this.updateDeathAnimationInterval = setInterval(() => { this.updateDeathAnimationFrame(); }, 150);
+        this.hurtAnimationInterval = setInterval(() => { this.handleHurtAnimation(); }, 250);            
     }
 
 
@@ -140,6 +140,7 @@ class Character extends MoveableObject {
      * @returns {void}
      */
     handleWalkingAnimation() {
+        if (typeof gameState !== 'undefined' && gameState !== 'playing') { this.soundManager.stopSound('walking'); return; }
         const moving = this.world.keyboard.RIGHT || this.world.keyboard.LEFT;
         if (!this.isDead() && !this.isHurt() && moving) {
             this.handleMovingAnimation();
@@ -213,14 +214,13 @@ class Character extends MoveableObject {
      * @returns {void}
      */
     handleJumpingAnimation() {
+        if (typeof gameState !== 'undefined' && gameState !== 'playing') { return; }
         if (this.isDead() || this.isHurt()) return;
         const currentlyAboveGround = this.isAboveGround();
         const isJumping = this.jumpAnimationStarted;
         if (isJumping) {
             if (currentlyAboveGround) { this.wasAboveGround = true; }
-            if (this.jumpAnimationIndex < this.IMAGES_JUMP.length) {
-                const path = this.IMAGES_JUMP[this.jumpAnimationIndex];
-                this.img = this.imageCache[path];
+            if (this.jumpAnimationIndex < this.IMAGES_JUMP.length) { const path = this.IMAGES_JUMP[this.jumpAnimationIndex]; this.img = this.imageCache[path];
             } else {
                 const lastFramePath = this.IMAGES_JUMP[this.IMAGES_JUMP.length - 1];
                 this.img = this.imageCache[lastFramePath];
@@ -252,6 +252,7 @@ class Character extends MoveableObject {
      * @returns {void}
      */
     handleIdleTimer() {
+        if (typeof gameState !== 'undefined' && gameState !== 'playing') { return; }
         if (!this.isDead() && !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.isAboveGround()) {
             this.idleTimer++;
             if (this.idleTimer === 2 && !this.isIdle) {  this.isIdle = true; this.currentImageIndex = 0; }
@@ -306,6 +307,7 @@ class Character extends MoveableObject {
      * @returns {void}
      */
     handleHurtAnimation() {
+        if (typeof gameState !== 'undefined' && gameState !== 'playing') { return; }
         if (!this.isDead() && this.isHurt()) {
             this.playAnimation(this.IMAGES_HURT);
             if (!this.soundManager.hasPlayed('hurt')) { this.soundManager.playSound('hurt'); }
@@ -387,5 +389,23 @@ class Character extends MoveableObject {
     jump() {
         this.soundManager.playSound('jump');
         super.jump();
+    }
+
+    /**
+     * Clears all character timers and stops its sounds.
+     * @returns {void}
+     */
+    destroy() {
+        try { if (this.movementInterval) clearInterval(this.movementInterval); } catch (e) { }
+        try { if (this.walkingAnimationInterval) clearInterval(this.walkingAnimationInterval); } catch (e) { }
+        try { if (this.idleAnimationsInterval) clearInterval(this.idleAnimationsInterval); } catch (e) { }
+        try { if (this.idleTimerInterval) clearInterval(this.idleTimerInterval); } catch (e) { }
+        try { if (this.jumpingAnimationInterval) clearInterval(this.jumpingAnimationInterval); } catch (e) { }
+        try { if (this.updateJumpAnimationInterval) clearInterval(this.updateJumpAnimationInterval); } catch (e) { }
+        try { if (this.deathAnimationInterval) clearInterval(this.deathAnimationInterval); } catch (e) { }
+        try { if (this.updateDeathAnimationInterval) clearInterval(this.updateDeathAnimationInterval); } catch (e) { }
+        try { if (this.hurtAnimationInterval) clearInterval(this.hurtAnimationInterval); } catch (e) { }
+        try { if (this.gravityInterval) clearInterval(this.gravityInterval); } catch (e) { }
+        try { if (this.soundManager) this.soundManager.stopAll(); } catch (e) { }
     }
 }

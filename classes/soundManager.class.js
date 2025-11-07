@@ -55,6 +55,34 @@ class SoundManager {
         } catch (error) { }
     }
 
+    /**
+     * Stops all registered sounds and resets their playback positions.
+     * @returns {void}
+     */
+    stopAll() {
+        Object.keys(this.sounds).forEach((name) => {
+            try {
+                const snd = this.sounds[name];
+                snd.pause();
+                snd.currentTime = 0;
+                if (this.soundStates[name]) {
+                    this.soundStates[name].isPlaying = false;
+                }
+            } catch (e) { }
+        });
+    }
+
+    /**
+     * Resets the hasPlayed flag for all sounds.
+     * @returns {void}
+     */
+    resetAllStates() {
+        Object.keys(this.soundStates).forEach((name) => {
+            this.soundStates[name].hasPlayed = false;
+            this.soundStates[name].isPlaying = false;
+        });
+    }
+
 
     /**
      * Plays a sound.

@@ -215,6 +215,9 @@ function createImageLoadPromise(img) {
 function restartGame() {
     gameState = 'start';
     stopAllSounds();
+    if (world && typeof world.destroy === 'function') {
+        try { world.destroy(); } catch (e) { console.log(e); }
+    }
     cleanupGameState();
     canvas.addEventListener('click', handleCanvasClick);
     showStartScreen();
@@ -222,6 +225,9 @@ function restartGame() {
 
 function restartGameDirectly() {
     stopAllSounds();
+    if (world && typeof world.destroy === 'function') {
+        try { world.destroy(); } catch (e) { console.log(e); }
+    }
     cleanupGameState();
     startGame();
 }

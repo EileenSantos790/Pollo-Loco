@@ -13,6 +13,8 @@ class World {
     throwableObjects = [];
     soundManager = new SoundManager();
     gameOverTriggered = false;
+    collisionInterval = null;
+    throwInterval = null;
 
 
     /**
@@ -44,12 +46,12 @@ class World {
      * @returns {void}
      */
     run() {
-        setInterval(() => {
+        this.collisionInterval = setInterval(() => {
             this.checkCollisions();
             this.checkBottleCollisions();
         }, 1000 / 60);
 
-        setInterval(() => {
+        this.throwInterval = setInterval(() => {
             this.checkThrowObjects();
         }, 100);
     }
@@ -316,4 +318,45 @@ class World {
         this.ctx.restore();
     }
 
+    /**
+     * Cleans up world resources: timers, sounds and child objects.
+     * @returns {void}
+     */
+    destroy() {
+        try { if (this.collisionInterval) clearInterval(this.collisionInterval); if (this.throwInterval) clearInterval(this.throwInterval); } catch (e) { }
+        try { if (this.soundManager) this.soundManager.stopAll(); } catch (e) { }
+        try { if (this.character && typeof this.character.destroy === 'function') this.character.destroy(); } catch (e) { }
+        this.destroyEnemies();
+        this.destroyClouds();
+        this.destroyCollectableObjects();
+        this.destroyThrowableObjects();
+    }
+
+    /**  * Destroys all enemy objects in the level.
+     * @returns {void}
+     */
+    destroyEnemies() {
+        try { if (this.level && Array.isArray(this.level.enemies)) { this.level.enemies.forEach(e => { try { if (e.walkInterval) clearInterval(e.walkInterval); if (e.animationInterval) clearInterval(e.animationInterval); } catch (_) {} }); } } catch (e) { }
+    }
+
+    /**  * Destroys all cloud objects in the level.
+     * @returns {void}
+     */
+    destroyClouds() {
+        try { if (this.level && Array.isArray(this.level.clouds)) { this.level.clouds.forEach(c => { try { if (c.moveInterval) clearInterval(c.moveInterval); } catch (_) {} }); } } catch (e) { }
+    }
+
+    /**  * Destroys all collectable objects in the level.
+     * @returns {void}
+     */
+    destroyCollectableObjects() {
+        try { if (this.level && Array.isArray(this.level.collectableObjects)) { this.level.collectableObjects.forEach(o => { try { if (o.animationInterval) clearInterval(o.animationInterval); } catch (_) {} }); } } catch (e) { }
+    }
+
+    /**  * Destroys all throwable objects in the level.
+     * @returns {void}
+     */
+    destroyThrowableObjects() {
+        try { if (Array.isArray(this.throwableObjects)) { this.throwableObjects.forEach(t => { try { if (t.throwInterval) clearInterval(t.throwInterval); if (t.splashInterval) clearInterval(t.splashInterval); } catch (_) {} }); } } catch (e) { }
+    }
 }
