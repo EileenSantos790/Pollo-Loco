@@ -715,23 +715,36 @@ body:has(.legal-notice-container) {
   display: none;
   position: absolute;
   bottom: -5px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: auto;
-  max-width: 280px;
+  left: 0;
+  right: 0;
+  width: 100%;
   padding: 8px 12px;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 10px;
-  backdrop-filter: blur(5px);
   z-index: 100;
 }
 
 .control-row {
   display: flex;
-  gap: 10px;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
+  width: 100%;
+}
+
+.control-group-left {
+  display: flex;
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  padding: 8px;
+  backdrop-filter: blur(5px);
+}
+
+.control-group-right {
+  display: flex;
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  padding: 8px;
+  backdrop-filter: blur(5px);
 }
 
 .control-btn {
@@ -1243,11 +1256,11 @@ body:has(.legal-notice-container) {
     /* Mobile Controls für allgemeine Querformat-Geräte */
     .mobile-controls {
         padding: 10px 15px;
-        max-width: 320px;
         bottom: 10px;
     }
 
-    .control-row {
+    .control-group-left,
+    .control-group-right {
         gap: 8px;
     }
 
@@ -1294,11 +1307,11 @@ body:has(.legal-notice-container) {
     /* Mobile Controls für Portrait-Modus auf Tablets */
     .mobile-controls {
         padding: 10px 15px;
-        max-width: 300px;
         bottom: 15px;
     }
 
-    .control-row {
+    .control-group-left,
+    .control-group-right {
         gap: 8px;
     }
 
@@ -1355,11 +1368,11 @@ body:has(.legal-notice-container) {
     /* Mobile Controls für iPhone XR im Querformat */
     .mobile-controls {
         padding: 8px 12px;
-        max-width: 300px;
         bottom: 8px;
     }
 
-    .control-row {
+    .control-group-left,
+    .control-group-right {
         gap: 6px;
     }
 
@@ -1471,11 +1484,11 @@ body:has(.legal-notice-container) {
     /* Mobile Controls für Galaxy S20 Ultra im Querformat */
     .mobile-controls {
         padding: 8px 12px;
-        max-width: 290px;
         bottom: 6px;
     }
 
-    .control-row {
+    .control-group-left,
+    .control-group-right {
         gap: 5px;
     }
 
@@ -1532,11 +1545,11 @@ body:has(.legal-notice-container) {
     /* Mobile Controls für kleinere mobile Geräte (iPhone SE) im Querformat */
     .mobile-controls {
         padding: 6px 10px;
-        max-width: 260px;
         bottom: 5px;
     }
 
-    .control-row {
+    .control-group-left,
+    .control-group-right {
         gap: 4px;
     }
 
