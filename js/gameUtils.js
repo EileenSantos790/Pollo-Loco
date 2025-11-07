@@ -23,7 +23,7 @@ function isMobile() {
  * @returns {boolean} True if mobile controls needed.
  */
 function shouldShowMobileControls() {
-    return isMobile() && window.innerWidth < 1024;
+    return isMobile();
 }
 
 /**
@@ -163,18 +163,16 @@ function initRotateDeviceOverlay() {
 }
 
 /**
- * Checks the device orientation and shows/hides the rotate overlay.
+ * Checks the device orientation and shows/hides the rotate overlay and mobile controls.
  * @returns {void}
  */
 function checkOrientation() {
     const overlay = document.getElementById('rotateDeviceOverlay');
-    if (!overlay) return;
-    
+    const mobileControls = document.querySelector('.mobile-controls');
     const isPortrait = window.innerWidth < window.innerHeight;
-    if (isPortrait) { 
-        overlay.style.display = 'flex'; 
-    } else { 
-        overlay.style.display = 'none'; 
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    if (isPortrait) { overlay.style.display = 'flex'; if (mobileControls) mobileControls.style.display = 'none';
+    } else { overlay.style.display = 'none'; if (mobileControls && isTouchDevice) { mobileControls.style.display = 'block'; } else if (mobileControls) { mobileControls.style.display = 'none'; }
     }
 }
 
