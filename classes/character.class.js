@@ -141,7 +141,7 @@ class Character extends MoveableObject {
      */
     handleWalkingAnimation() {
         const moving = this.world.keyboard.RIGHT || this.world.keyboard.LEFT;
-        if (!this.isDead() && moving) {
+        if (!this.isDead() && !this.isHurt() && moving) {
             this.handleMovingAnimation();
         } else {
             this.handleStoppedMoving();
@@ -198,7 +198,7 @@ class Character extends MoveableObject {
      * idle animations and stops any snoring sounds.
      */
     handleIdleAnimations() {
-        if (!this.isDead() && !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.isAboveGround() && gameState === 'playing') {
+        if (!this.isDead() && !this.isHurt() && !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.isAboveGround() && gameState === 'playing') {
             if (this.isLongIdle) {
                 this.playAnimation(this.IMAGES_LONG_IDLE);
                 if (!this.soundManager.isPlaying('snoring')) { this.soundManager.playSound('snoring'); }
@@ -213,16 +213,11 @@ class Character extends MoveableObject {
      * @returns {void}
      */
     handleJumpingAnimation() {
-        if (this.isDead()) return;
-        
+        if (this.isDead() || this.isHurt()) return;
         const currentlyAboveGround = this.isAboveGround();
         const isJumping = this.jumpAnimationStarted;
-        
         if (isJumping) {
-            if (currentlyAboveGround) {
-                this.wasAboveGround = true;
-            }
-
+            if (currentlyAboveGround) { this.wasAboveGround = true; }
             if (this.jumpAnimationIndex < this.IMAGES_JUMP.length) {
                 const path = this.IMAGES_JUMP[this.jumpAnimationIndex];
                 this.img = this.imageCache[path];
